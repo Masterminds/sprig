@@ -1,4 +1,3 @@
-package sprig
 /*
 Sprig: Template functions for Go.
 
@@ -70,6 +69,7 @@ Tests (Boolean Functions)
 - lte: Less than or equal to (integer)
 
 */
+package sprig
 
 import (
 	"html/template"
@@ -78,6 +78,12 @@ import (
 	"strconv"
 )
 
+// Produce the function map.
+//
+// Use this to pass the functions into the template engine:
+//
+// 	tpl := template.New("foo").Funcs(sprig.FuncMap))
+//
 func FuncMap() template.FuncMap {
 	return template.FuncMap{
 		"hello": func () string { return "Hello!" },
