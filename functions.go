@@ -15,58 +15,58 @@ Principles:
 The following principles were used in deciding on which functions to add, and
 determining how to implement them.
 
-- Template functions should be used to build layout. Therefore, the following
-  types of operations are within the domain of template functions:
-  - Formatting
-  - Layout
-  - Simple type conversions
-  - Utilities that assist in handling common formatting and layout needs (e.g. arithmetic)
-- Template functions should not return errors unless there is no way to print
-  a sensible value. For example, converting a string to an integer should not
-  produce an error if conversion fails. Instead, it should display a default
-  value that can be displayed.
-- Simple math is necessary for grid layouts, pagers, and so on. Complex math
-  (anything other than arithmetic) should be done outside of templates.
-- Template functins only deal with the data passed into them. They never retrieve
-  data from a source.
-- Finally, do not override core Go template functions.
+	- Template functions should be used to build layout. Therefore, the following
+	  types of operations are within the domain of template functions:
+	  - Formatting
+	  - Layout
+	  - Simple type conversions
+	  - Utilities that assist in handling common formatting and layout needs (e.g. arithmetic)
+	- Template functions should not return errors unless there is no way to print
+	  a sensible value. For example, converting a string to an integer should not
+	  produce an error if conversion fails. Instead, it should display a default
+	  value that can be displayed.
+	- Simple math is necessary for grid layouts, pagers, and so on. Complex math
+	  (anything other than arithmetic) should be done outside of templates.
+	- Template functins only deal with the data passed into them. They never retrieve
+	  data from a source.
+	- Finally, do not override core Go template functions.
 
 Date Functions
 
-- date: Format a date, where a date is an integer type or a time.Time type, and
-  format is a time.Format formatting string.
-- date_modify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
-parse, it returns the time unaltered. See `time.ParseDuration` for info on duration strings.
-- now: Current time.Time, for feeding into date-related functions.
+	- date: Format a date, where a date is an integer type or a time.Time type, and
+	  format is a time.Format formatting string.
+	- date_modify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
+	parse, it returns the time unaltered. See `time.ParseDuration` for info on duration strings.
+	- now: Current time.Time, for feeding into date-related functions.
 
 String Functions
 
-- trim: strings.TrimSpace
-- upper: strings.ToUpper
-- lower: strings.ToLower
-- title: strings.Title
-- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
+	- trim: strings.TrimSpace
+	- upper: strings.ToUpper
+	- lower: strings.ToLower
+	- title: strings.Title
+	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
 
 Conversions:
 
-- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
+	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
 
 Math Functions:
 
-- add1: Increment an integer by 1
-- add: Sum two integers
-- sub: Subtract the second integer from the first
-- div: Divide the first integer by the second
-- mod: Module of first integer divided by second
-- mul: Multiply two integers
-- biggest: Return the biggest of two integers
+	- add1: Increment an integer by 1
+	- add: Sum two integers
+	- sub: Subtract the second integer from the first
+	- div: Divide the first integer by the second
+	- mod: Module of first integer divided by second
+	- mul: Multiply two integers
+	- biggest: Return the biggest of two integers
 
 Tests (Boolean Functions)
 
-- gt: Greater than (integer)
-- lt: Less than (integer)
-- gte: Greater than or equal to (integer)
-- lte: Less than or equal to (integer)
+	- gt: Greater than (integer)
+	- lt: Less than (integer)
+	- gte: Greater than or equal to (integer)
+	- lte: Less than or equal to (integer)
 
 */
 package sprig
