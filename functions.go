@@ -10,7 +10,6 @@ To add these functions, use the `template.Funcs()` method:
 
 Note that you should add the function map before you parse any template files.
 
-
 Date Functions
 
 	- date: Format a date, where a date is an integer type or a time.Time type, and
