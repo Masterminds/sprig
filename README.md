@@ -10,6 +10,9 @@ It is inspired by the template functions found in
 
 ## Usage
 
+API documentation is available [at GoDoc.org](http://godoc.org/github.com/Masterminds/sprig), but
+read on for standard usage.
+
 ### Load the Sprig library
 
 To load the Sprig `FuncMap`:
@@ -31,4 +34,24 @@ tpl := template.Must(
 ```
 
 ### Call the functions inside of templates
+
+By convention, all functions are lowercase. This seems to follow the Go
+idiom for template functions (as opposed to template methods, which are
+TitleCase).
+
+
+Example:
+
+```
+{{ "hello!" | upper | repeat 5 }}
+
+```
+
+Produces:
+
+```
+HELLO!HELLO!HELLO!HELLO!HELLO!
+```
+
+
 
