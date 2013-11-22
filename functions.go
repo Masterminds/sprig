@@ -10,26 +10,6 @@ To add these functions, use the `template.Funcs()` method:
 
 Note that you should add the function map before you parse any template files.
 
-Principles:
-
-The following principles were used in deciding on which functions to add, and
-determining how to implement them.
-
-	- Template functions should be used to build layout. Therefore, the following
-	  types of operations are within the domain of template functions:
-	  - Formatting
-	  - Layout
-	  - Simple type conversions
-	  - Utilities that assist in handling common formatting and layout needs (e.g. arithmetic)
-	- Template functions should not return errors unless there is no way to print
-	  a sensible value. For example, converting a string to an integer should not
-	  produce an error if conversion fails. Instead, it should display a default
-	  value that can be displayed.
-	- Simple math is necessary for grid layouts, pagers, and so on. Complex math
-	  (anything other than arithmetic) should be done outside of templates.
-	- Template functins only deal with the data passed into them. They never retrieve
-	  data from a source.
-	- Finally, do not override core Go template functions.
 
 Date Functions
 
