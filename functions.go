@@ -40,7 +40,7 @@ Math Functions:
 	- mul: Multiply two integers
 	- biggest: Return the biggest of two integers
 
-Tests (Boolean Functions)
+REMOVED (implemented in Go 1.2)
 
 	- gt: Greater than (integer)
 	- lt: Less than (integer)
@@ -83,10 +83,10 @@ func FuncMap() template.FuncMap {
 		// Wrap Atoi to stop errors.
 		"atoi": func (a string) int { i, _ := strconv.Atoi(a); return i },
 
-		"gt": func(a, b int) bool {return a > b},
-		"gte": func(a, b int) bool {return a >= b},
-		"lt": func(a, b int) bool {return a < b},
-		"lte": func(a, b int) bool {return a <= b},
+		//"gt": func(a, b int) bool {return a > b},
+		//"gte": func(a, b int) bool {return a >= b},
+		//"lt": func(a, b int) bool {return a < b},
+		//"lte": func(a, b int) bool {return a <= b},
 
 
 		// VERY basic arithmetic.
