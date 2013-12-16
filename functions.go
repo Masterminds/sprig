@@ -69,6 +69,7 @@ func FuncMap() template.FuncMap {
 
 		// Date functions
 		"date": date,
+		"date_in_zone": dateInZone,
 		"date_modify": dateModify,
 		"now": func () time.Time { return time.Now() },
 
@@ -106,18 +107,30 @@ func FuncMap() template.FuncMap {
 // In the later case, it is treated as seconds since UNIX
 // epoch.
 func date(fmt string, date interface{}) string {
+	return dateInZone(fmt, date, "Local")
+}
+
+func dateInZone(fmt string, date interface{}, zone string) string {
+	var t time.Time
 	switch date := date.(type) {
 	default:
-		return time.Now().Format(fmt)
+		t = time.Now()
 	case time.Time:
-		return date.Format(fmt)
+		t = date
 	case int64:
-		return time.Unix(date, 0).Format(fmt)
+		t = time.Unix(date, 0)
 	case int:
-		return time.Unix(int64(date), 0).Format(fmt)
+		t = time.Unix(int64(date), 0)
 	case int32:
-		return time.Unix(int64(date), 0).Format(fmt)
+		t = time.Unix(int64(date), 0)
 	}
+
+	loc, err := time.LoadLocation(zone)
+	if err != nil {
+		loc, _ = time.LoadLocation("UTC")
+	}
+
+	return t.In(loc).Format(fmt)
 }
 
 func dateModify(fmt string, date time.Time) time.Time {
