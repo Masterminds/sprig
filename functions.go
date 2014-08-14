@@ -26,6 +26,10 @@ String Functions
 	- title: strings.Title
 	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
 
+String Slice Functions:
+
+	- join: strings.Join, but as `join SEP SLICE`
+
 Conversions:
 
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
