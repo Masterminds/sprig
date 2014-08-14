@@ -52,6 +52,7 @@ package sprig
 
 import (
 	"html/template"
+	ttemplate "text/template"
 	"time"
 	"strings"
 	"strconv"
@@ -64,41 +65,53 @@ import (
 // 	tpl := template.New("foo").Funcs(sprig.FuncMap))
 //
 func FuncMap() template.FuncMap {
-	return template.FuncMap{
-		"hello": func () string { return "Hello!" },
+	return template.FuncMap(genericMap)
+}
 
-		// Date functions
-		"date": date,
-		"date_in_zone": dateInZone,
-		"date_modify": dateModify,
-		"now": func () time.Time { return time.Now() },
+// TextFuncMap returns a 'text/template'.FuncMap
+func TxtFuncMap() ttemplate.FuncMap {
+	return ttemplate.FuncMap(genericMap)
+}
 
-		// Strings
-		"trim": strings.TrimSpace,
-		"upper": strings.ToUpper,
-		"lower": strings.ToLower,
-		"title": strings.Title,
-		// Switch or so that "foo" | repeat 5
-		"repeat": func (count int, str string) string { return strings.Repeat(str, count) },
+// HtmlFuncMap returns an 'html/template'.Funcmap
+func HtmlFuncMap() template.FuncMap {
+	return template.FuncMap(genericMap)
+}
 
-		// Wrap Atoi to stop errors.
-		"atoi": func (a string) int { i, _ := strconv.Atoi(a); return i },
+var  genericMap = map[string]interface{} {
+	"hello": func () string { return "Hello!" },
 
-		//"gt": func(a, b int) bool {return a > b},
-		//"gte": func(a, b int) bool {return a >= b},
-		//"lt": func(a, b int) bool {return a < b},
-		//"lte": func(a, b int) bool {return a <= b},
+	// Date functions
+	"date": date,
+	"date_in_zone": dateInZone,
+	"date_modify": dateModify,
+	"now": func () time.Time { return time.Now() },
+
+	// Strings
+	"trim": strings.TrimSpace,
+	"upper": strings.ToUpper,
+	"lower": strings.ToLower,
+	"title": strings.Title,
+	// Switch or so that "foo" | repeat 5
+	"repeat": func (count int, str string) string { return strings.Repeat(str, count) },
+
+	// Wrap Atoi to stop errors.
+	"atoi": func (a string) int { i, _ := strconv.Atoi(a); return i },
+
+	//"gt": func(a, b int) bool {return a > b},
+	//"gte": func(a, b int) bool {return a >= b},
+	//"lt": func(a, b int) bool {return a < b},
+	//"lte": func(a, b int) bool {return a <= b},
 
 
-		// VERY basic arithmetic.
-		"add1": func (i int) int {return i + 1},
-		"add": func (a, b int) int { return a + b },
-		"sub": func (a, b int) int { return a - b },
-		"div": func (a, b int) int { return a / b },
-		"mod": func (a, b int) int { return a % b },
-		"mul": func (a, b int) int { return a * b },
-		"biggest": biggest,
-	}
+	// VERY basic arithmetic.
+	"add1": func (i int) int {return i + 1},
+	"add": func (a, b int) int { return a + b },
+	"sub": func (a, b int) int { return a - b },
+	"div": func (a, b int) int { return a / b },
+	"mod": func (a, b int) int { return a % b },
+	"mul": func (a, b int) int { return a * b },
+	"biggest": biggest,
 }
 
 // Given a format and a date, format the date string.
