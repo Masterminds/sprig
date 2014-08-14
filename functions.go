@@ -112,6 +112,10 @@ var  genericMap = map[string]interface{} {
 	"mod": func (a, b int) int { return a % b },
 	"mul": func (a, b int) int { return a * b },
 	"biggest": biggest,
+
+	// string slices. Note that we reverse the order b/c that's better
+	// for template processing.
+	"join": func(sep string, ss []string) string {return strings.Join(ss, sep)},
 }
 
 // Given a format and a date, format the date string.
