@@ -21,10 +21,12 @@ Date Functions
 String Functions
 
 	- trim: strings.TrimSpace
+	- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
 	- upper: strings.ToUpper
 	- lower: strings.ToLower
 	- title: strings.Title
 	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
+	- substr: Given string, start, and length, return a substr.
 
 String Slice Functions:
 
@@ -56,10 +58,10 @@ package sprig
 
 import (
 	"html/template"
+	"strconv"
+	"strings"
 	ttemplate "text/template"
 	"time"
-	"strings"
-	"strconv"
 )
 
 // Produce the function map.
@@ -82,44 +84,63 @@ func HtmlFuncMap() template.FuncMap {
 	return template.FuncMap(genericMap)
 }
 
-var  genericMap = map[string]interface{} {
-	"hello": func () string { return "Hello!" },
+var genericMap = map[string]interface{}{
+	"hello": func() string { return "Hello!" },
 
 	// Date functions
-	"date": date,
+	"date":         date,
 	"date_in_zone": dateInZone,
-	"date_modify": dateModify,
-	"now": func () time.Time { return time.Now() },
+	"date_modify":  dateModify,
+	"now":          func() time.Time { return time.Now() },
 
 	// Strings
-	"trim": strings.TrimSpace,
-	"upper": strings.ToUpper,
-	"lower": strings.ToLower,
-	"title": strings.Title,
-	// Switch or so that "foo" | repeat 5
-	"repeat": func (count int, str string) string { return strings.Repeat(str, count) },
+	"trim":   strings.TrimSpace,
+	"upper":  strings.ToUpper,
+	"lower":  strings.ToLower,
+	"title":  strings.Title,
+	"substr": substring,
+	// Switch order so that "foo" | repeat 5
+	"repeat": func(count int, str string) string { return strings.Repeat(str, count) },
+	// Switch order so that "$foo" | trimall "$"
+	"trimall": func(a, b string) string { return strings.Trim(b, a) },
 
 	// Wrap Atoi to stop errors.
-	"atoi": func (a string) int { i, _ := strconv.Atoi(a); return i },
+	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
 	//"lt": func(a, b int) bool {return a < b},
 	//"lte": func(a, b int) bool {return a <= b},
 
-
 	// VERY basic arithmetic.
-	"add1": func (i int) int {return i + 1},
-	"add": func (a, b int) int { return a + b },
-	"sub": func (a, b int) int { return a - b },
-	"div": func (a, b int) int { return a / b },
-	"mod": func (a, b int) int { return a % b },
-	"mul": func (a, b int) int { return a * b },
+	"add1":    func(i int) int { return i + 1 },
+	"add":     func(a, b int) int { return a + b },
+	"sub":     func(a, b int) int { return a - b },
+	"div":     func(a, b int) int { return a / b },
+	"mod":     func(a, b int) int { return a % b },
+	"mul":     func(a, b int) int { return a * b },
 	"biggest": biggest,
 
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
-	"join": func(sep string, ss []string) string {return strings.Join(ss, sep)},
+	"join": func(sep string, ss []string) string { return strings.Join(ss, sep) },
+}
+
+// substring creates a substring of the given string.
+//
+// If start is < 0, this calls string[:length].
+//
+// If start is >= 0 and length < 0, this calls string[start:]
+//
+// Otherwise, this calls string[start, length].
+func substring(start, length int, s string) string {
+	if start < 0 {
+		return s[:length]
+	}
+	if length < 0 {
+		return s[start:]
+	}
+	return s[start:length]
 }
 
 // Given a format and a date, format the date string.
