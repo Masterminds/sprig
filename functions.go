@@ -31,6 +31,9 @@ String Functions
 String Slice Functions:
 
 	- join: strings.Join, but as `join SEP SLICE`
+	- split: strings.Split, but as `split SEP STRING`. The results are returned
+	  as a map with the indexes set to _N, where N is an integer starting from 0.
+	  Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
 
 Conversions:
 
@@ -112,6 +115,9 @@ var genericMap = map[string]interface{}{
 	//"lt": func(a, b int) bool {return a < b},
 	//"lte": func(a, b int) bool {return a <= b},
 
+	// split "/" foo/bar returns map[int]string{0: foo, 1: bar}
+	"split": split,
+
 	// VERY basic arithmetic.
 	"add1":    func(i int) int { return i + 1 },
 	"add":     func(a, b int) int { return a + b },
@@ -124,6 +130,15 @@ var genericMap = map[string]interface{}{
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
 	"join": func(sep string, ss []string) string { return strings.Join(ss, sep) },
+}
+
+func split(sep, orig string) map[string]string {
+	parts := strings.Split(orig, sep)
+	res := make(map[string]string, len(parts))
+	for i, v := range parts {
+		res["_"+strconv.Itoa(i)] = v
+	}
+	return res
 }
 
 // substring creates a substring of the given string.

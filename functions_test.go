@@ -23,6 +23,13 @@ func TestTrimall(t *testing.T) {
 	}
 }
 
+func TestSplit(t *testing.T) {
+	tpl := `{{$v := "foo$bar$baz" | split "$"}}{{$v._0}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	fmap := TxtFuncMap()
 	t := template.Must(template.New("test").Funcs(fmap).Parse(tpl))
