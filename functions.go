@@ -42,7 +42,11 @@ Conversions:
 Defaults:
 
 	- default: Give a default value. Used like this: trim "   "| default "empty".
-	  Since trim produces an empty string, the default value is returned.
+	  Since trim produces an empty string, the default value is returned. For
+	  things with a length (strings, slices, maps), len(0) will trigger the default.
+	  For numbers, the value 0 will trigger the default. For booleans, false will
+	  trigger the default. For structs, the default is never returned (there is
+	  no clear empty condition). For everything else, nil value triggers a default.
 
 Math Functions:
 
@@ -66,6 +70,7 @@ package sprig
 
 import (
 	"html/template"
+	"reflect"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
@@ -213,53 +218,47 @@ func biggest(a, b int) int {
 	return b
 }
 
-func dfault(d, g interface{}) interface{} {
-	switch g := g.(type) {
-	default:
-		if g != nil {
-			return g
-		}
-		return d
-	case string:
-		if len(g) > 0 {
-			return g
-		}
-		return d
-	case int:
-		// This gets pretty repetitive because of the way type switches work.
-		if g != 0 {
-			return g
-		}
-		return d
-	case int8:
-		if g != 0 {
-			return g
-		}
-		return d
-	case int16:
-		if g != 0 {
-			return g
-		}
-		return d
-	case int32:
-		if g != 0 {
-			return g
-		}
-		return d
-	case int64:
-		if g != 0 {
-			return g
-		}
-		return d
-	case float32:
-		if g != 0 {
-			return g
-		}
-		return d
-	case float64:
-		if g != 0 {
-			return g
-		}
+// dfault checks whether `given` is set, and returns default if not set.
+//
+// This returns `d` if `given` appears not to be set, and `given` otherwise.
+//
+// For numeric types 0 is unset.
+// For strings, maps, arrays, and slices, len() = 0 is considered unset.
+// For bool, false is unset.
+// Structs are never considered unset.
+//
+// For everything else, including pointers, a nil value is unset.
+func dfault(d, given interface{}) interface{} {
+
+	g := reflect.ValueOf(given)
+	if !g.IsValid() {
 		return d
 	}
+
+	set := false
+
+	// Basically adapted from text/template.isTrue
+	switch g.Kind() {
+	default:
+		set = !g.IsNil()
+	case reflect.Array, reflect.Slice, reflect.Map, reflect.String:
+		set = g.Len() != 0
+	case reflect.Bool:
+		set = g.Bool()
+	case reflect.Complex64, reflect.Complex128:
+		set = g.Complex() != 0
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		set = g.Int() != 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		set = g.Uint() != 0
+	case reflect.Float32, reflect.Float64:
+		set = g.Float() != 0
+	case reflect.Struct:
+		set = true
+	}
+
+	if set {
+		return given
+	}
+	return d
 }
