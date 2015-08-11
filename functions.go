@@ -39,6 +39,11 @@ Conversions:
 
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
 
+Defaults:
+
+	- default: Give a default value. Used like this: trim "   "| default "empty".
+	  Since trim produces an empty string, the default value is returned.
+
 Math Functions:
 
 	- add1: Increment an integer by 1
@@ -130,6 +135,9 @@ var genericMap = map[string]interface{}{
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
 	"join": func(sep string, ss []string) string { return strings.Join(ss, sep) },
+
+	// Defaults
+	"default": dfault,
 }
 
 func split(sep, orig string) map[string]string {
@@ -203,4 +211,55 @@ func biggest(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func dfault(d, g interface{}) interface{} {
+	switch g := g.(type) {
+	default:
+		if g != nil {
+			return g
+		}
+		return d
+	case string:
+		if len(g) > 0 {
+			return g
+		}
+		return d
+	case int:
+		// This gets pretty repetitive because of the way type switches work.
+		if g != 0 {
+			return g
+		}
+		return d
+	case int8:
+		if g != 0 {
+			return g
+		}
+		return d
+	case int16:
+		if g != 0 {
+			return g
+		}
+		return d
+	case int32:
+		if g != 0 {
+			return g
+		}
+		return d
+	case int64:
+		if g != 0 {
+			return g
+		}
+		return d
+	case float32:
+		if g != 0 {
+			return g
+		}
+		return d
+	case float64:
+		if g != 0 {
+			return g
+		}
+		return d
+	}
 }
