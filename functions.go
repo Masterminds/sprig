@@ -48,6 +48,12 @@ Defaults:
 	  trigger the default. For structs, the default is never returned (there is
 	  no clear empty condition). For everything else, nil value triggers a default.
 
+Reflection:
+
+	- typeOf: Takes an interface and returns a string representation of the type.
+	- typeIs: Compares an interface with a string name, and returns true if they match.
+
+
 Math Functions:
 
 	- add1: Increment an integer by 1
@@ -69,6 +75,7 @@ REMOVED (implemented in Go 1.2)
 package sprig
 
 import (
+	"fmt"
 	"html/template"
 	"reflect"
 	"strconv"
@@ -143,6 +150,10 @@ var genericMap = map[string]interface{}{
 
 	// Defaults
 	"default": dfault,
+
+	// Reflection
+	"typeOf": typeOf,
+	"typeIs": typeIs,
 }
 
 func split(sep, orig string) map[string]string {
@@ -261,4 +272,13 @@ func dfault(d, given interface{}) interface{} {
 		return given
 	}
 	return d
+}
+
+// typeIs returns true if the src is the type named in target.
+func typeIs(target string, src interface{}) bool {
+	return target == typeOf(src)
+}
+
+func typeOf(src interface{}) string {
+	return fmt.Sprintf("%T", src)
 }
