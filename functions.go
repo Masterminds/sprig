@@ -60,6 +60,10 @@ Reflection:
 	- typeIs: Compares an interface with a string name, and returns true if they match.
 	  Note that a pointer will not match a reference. For example `*Foo` will not
 	  match `Foo`.
+	- typeIsLike: Compares an interface with a string name and returns true if
+	  the interface is that `name` or that `*name`. In other words, if the given
+	  value matches the given type or is a pointer to the given type, this returns
+	  true.
 	- kindOf: Takes an interface and returns a string representation of its kind.
 	- kindIs: Returns true if the given string matches the kind of the given interface.
 
@@ -166,10 +170,11 @@ var genericMap = map[string]interface{}{
 	"default": dfault,
 
 	// Reflection
-	"typeOf": typeOf,
-	"typeIs": typeIs,
-	"kindOf": kindOf,
-	"kindIs": kindIs,
+	"typeOf":     typeOf,
+	"typeIs":     typeIs,
+	"typeIsLike": typeIsLike,
+	"kindOf":     kindOf,
+	"kindIs":     kindIs,
 }
 
 func split(sep, orig string) map[string]string {
@@ -293,6 +298,11 @@ func dfault(d, given interface{}) interface{} {
 // typeIs returns true if the src is the type named in target.
 func typeIs(target string, src interface{}) bool {
 	return target == typeOf(src)
+}
+
+func typeIsLike(target string, src interface{}) bool {
+	t := typeOf(src)
+	return target == t || "*"+target == t
 }
 
 func typeOf(src interface{}) string {

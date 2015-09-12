@@ -100,6 +100,8 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 	- typeIs: Compares an interface with a string name, and returns true if they match.
 	  Note that a pointer will not match a reference. For example `*Foo` will not
 	  match `Foo`.
+  - typeIsLike: returns true if the interface is of the given type, or
+    is a pointer to the given type.
 	- kindOf: Takes an interface and returns a string representation of its kind.
 	- kindIs: Returns true if the given string matches the kind of the given interface.
 

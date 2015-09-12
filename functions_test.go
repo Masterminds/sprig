@@ -88,6 +88,19 @@ func TestTypeIs(t *testing.T) {
 		t.Error(err)
 	}
 }
+func TestTypeIsLike(t *testing.T) {
+	f := "foo"
+	tpl := `{{if typeIsLike "string" .}}t{{else}}f{{end}}`
+	if err := runtv(tpl, "t", f); err != nil {
+		t.Error(err)
+	}
+
+	// Now make a pointer. Should still match.
+	f2 := &f
+	if err := runtv(tpl, "t", f2); err != nil {
+		t.Error(err)
+	}
+}
 func TestKindIs(t *testing.T) {
 	f := &fixtureTO{"hello", "world"}
 	tpl := `{{if kindIs "ptr" .}}t{{else}}f{{end}}`
