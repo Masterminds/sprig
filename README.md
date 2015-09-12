@@ -52,6 +52,72 @@ Produces:
 HELLO!HELLO!HELLO!HELLO!HELLO!
 ```
 
+## Functions
+
+### Date Functions
+
+	- date: Format a date, where a date is an integer type or a time.Time type, and
+	  format is a time.Format formatting string.
+	- date_modify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
+	parse, it returns the time unaltered. See `time.ParseDuration` for info on duration strings.
+	- now: Current time.Time, for feeding into date-related functions.
+
+### String Functions
+
+	- trim: strings.TrimSpace
+	- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
+	- upper: strings.ToUpper
+	- lower: strings.ToLower
+	- title: strings.Title
+	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
+	- substr: Given string, start, and length, return a substr.
+
+### String Slice Functions:
+
+	- join: strings.Join, but as `join SEP SLICE`
+	- split: strings.Split, but as `split SEP STRING`. The results are returned
+	  as a map with the indexes set to _N, where N is an integer starting from 0.
+	  Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
+
+### Conversions:
+
+	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
+
+### Defaults:
+
+	- default: Give a default value. Used like this: trim "   "| default "empty".
+	  Since trim produces an empty string, the default value is returned. For
+	  things with a length (strings, slices, maps), len(0) will trigger the default.
+	  For numbers, the value 0 will trigger the default. For booleans, false will
+	  trigger the default. For structs, the default is never returned (there is
+	  no clear empty condition). For everything else, nil value triggers a default.
+
+### Reflection:
+
+	- typeOf: Takes an interface and returns a string representation of the type.
+	  For pointers, this will return a type prefixed with an asterisk(`*`). So
+	  a pointer to type `Foo` will be `*Foo`.
+	- typeIs: Compares an interface with a string name, and returns true if they match.
+	  Note that a pointer will not match a reference. For example `*Foo` will not
+	  match `Foo`.
+	- kindOf: Takes an interface and returns a string representation of its kind.
+	- kindIs: Returns true if the given string matches the kind of the given interface.
+
+	Note: None of these can test whether or not something implements a given
+	interface, since doing so would require compiling the interface in ahead of
+	time.
+
+
+### Math Functions:
+
+	- add1: Increment an integer by 1
+	- add: Sum two integers
+	- sub: Subtract the second integer from the first
+	- div: Divide the first integer by the second
+	- mod: Module of first integer divided by second
+	- mul: Multiply two integers
+	- biggest: Return the biggest of two integers
+
 
 ## Principles:
 

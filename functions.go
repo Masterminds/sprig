@@ -51,7 +51,17 @@ Defaults:
 Reflection:
 
 	- typeOf: Takes an interface and returns a string representation of the type.
+	  For pointers, this will return a type prefixed with an asterisk(`*`). So
+	  a pointer to type `Foo` will be `*Foo`.
 	- typeIs: Compares an interface with a string name, and returns true if they match.
+	  Note that a pointer will not match a reference. For example `*Foo` will not
+	  match `Foo`.
+	- kindOf: Takes an interface and returns a string representation of its kind.
+	- kindIs: Returns true if the given string matches the kind of the given interface.
+
+	Note: None of these can test whether or not something implements a given
+	interface, since doing so would require compiling the interface in ahead of
+	time.
 
 
 Math Functions:
@@ -154,6 +164,8 @@ var genericMap = map[string]interface{}{
 	// Reflection
 	"typeOf": typeOf,
 	"typeIs": typeIs,
+	"kindOf": kindOf,
+	"kindIs": kindIs,
 }
 
 func split(sep, orig string) map[string]string {
@@ -281,4 +293,12 @@ func typeIs(target string, src interface{}) bool {
 
 func typeOf(src interface{}) string {
 	return fmt.Sprintf("%T", src)
+}
+
+func kindIs(target string, src interface{}) bool {
+	return target == kindOf(src)
+}
+
+func kindOf(src interface{}) string {
+	return reflect.ValueOf(src).Kind().String()
 }
