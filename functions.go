@@ -10,6 +10,10 @@ To add these functions, use the `template.Funcs()` method:
 
 Note that you should add the function map before you parse any template files.
 
+	In several cases, Sprig reverses the order of arguments from the way they
+	appear in the standard library. This is to make it easier to pipe
+	arguments into functions.
+
 Date Functions
 
 	- date: Format a date, where a date is an integer type or a time.Time type, and
