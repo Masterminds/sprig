@@ -85,7 +85,7 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 
 ### Defaults:
 
-	- default: Give a default value. Used like this: trim "   "| default "empty".
+	- default: Give a default value. Used like this: {{trim "   "| default "empty"}}.
 	  Since trim produces an empty string, the default value is returned. For
 	  things with a length (strings, slices, maps), len(0) will trigger the default.
 	  For numbers, the value 0 will trigger the default. For booleans, false will
