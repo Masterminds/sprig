@@ -92,6 +92,11 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 	  trigger the default. For structs, the default is never returned (there is
 	  no clear empty condition). For everything else, nil value triggers a default.
 
+### OS:
+
+  - env: Read an environment variable.
+  - expandenv: Expand all environment variables in a string.
+
 ### Reflection:
 
 	- typeOf: Takes an interface and returns a string representation of the type.
