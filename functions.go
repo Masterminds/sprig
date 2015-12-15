@@ -52,6 +52,10 @@ Defaults:
 	  trigger the default. For structs, the default is never returned (there is
 	  no clear empty condition). For everything else, nil value triggers a default.
 
+OS:
+	- env: Resolve an environment variable
+	- expandenv: Expand a string through the environment
+
 Reflection:
 
 	- typeOf: Takes an interface and returns a string representation of the type.
@@ -95,6 +99,7 @@ package sprig
 import (
 	"fmt"
 	"html/template"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -175,6 +180,10 @@ var genericMap = map[string]interface{}{
 	"typeIsLike": typeIsLike,
 	"kindOf":     kindOf,
 	"kindIs":     kindIs,
+
+	// OS:
+	"env":       func(s string) string { return os.Getenv(s) },
+	"expandenv": func(s string) string { return os.ExpandEnv(s) },
 }
 
 func split(sep, orig string) map[string]string {

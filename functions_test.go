@@ -3,6 +3,7 @@ package sprig
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"testing"
 	"text/template"
 )
@@ -109,6 +110,22 @@ func TestKindIs(t *testing.T) {
 	}
 	f2 := "hello"
 	if err := runtv(tpl, "f", f2); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestEnv(t *testing.T) {
+	os.Setenv("FOO", "bar")
+	tpl := `{{env "FOO"}}`
+	if err := runt(tpl, "bar"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestExpandEnv(t *testing.T) {
+	os.Setenv("FOO", "bar")
+	tpl := `{{expandenv "Hello $FOO"}}`
+	if err := runt(tpl, "Hello bar"); err != nil {
 		t.Error(err)
 	}
 }
