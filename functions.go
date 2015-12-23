@@ -166,16 +166,16 @@ var genericMap = map[string]interface{}{
 	// Switch order so that "foo" | repeat 5
 	"repeat": func(count int, str string) string { return strings.Repeat(str, count) },
 	// Switch order so that "$foo" | trimall "$"
-	"trimall":        func(a, b string) string { return strings.Trim(b, a) },
-	"nospace":        util.DeleteWhiteSpace,
-	"initials":       initials,
-	"randomAlphaNum": randAlphaNumeric,
-	"randAlpha":      randAlpha,
-	"randAscii":      randAscii,
-	"randNumeric":    randNumeric,
-	"swapcase":       util.SwapCase,
-	"wrap":           func(l int, s string) string { return util.Wrap(s, l) },
-	"wrapWith":       func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
+	"trimall":      func(a, b string) string { return strings.Trim(b, a) },
+	"nospace":      util.DeleteWhiteSpace,
+	"initials":     initials,
+	"randAlphaNum": randAlphaNumeric,
+	"randAlpha":    randAlpha,
+	"randAscii":    randAscii,
+	"randNumeric":  randNumeric,
+	"swapcase":     util.SwapCase,
+	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
+	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 
 	// Wrap Atoi to stop errors.
 	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },

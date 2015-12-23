@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"math/rand"
 	"os"
 	"testing"
 	"text/template"
+
+	"github.com/aokoli/goutils"
 )
 
 // This is woefully incomplete. Please help.
@@ -165,6 +168,27 @@ func TestGoutils(t *testing.T) {
 			t.Errorf("Error on tpl %s: %s", err)
 		}
 	}
+}
+
+func TestRandom(t *testing.T) {
+	// One of the things I love about Go:
+	goutils.RANDOM = rand.New(rand.NewSource(1))
+
+	// Because we're using a random number generator, we need these to go in
+	// a predictable sequence:
+	if err := runt(`{{randAlphaNum 5}}`, "9bzRv"); err != nil {
+		t.Errorf("Error on tpl %s: %s", err)
+	}
+	if err := runt(`{{randAlpha 5}}`, "VjwGe"); err != nil {
+		t.Errorf("Error on tpl %s: %s", err)
+	}
+	if err := runt(`{{randAscii 5}}`, "1KA5p"); err != nil {
+		t.Errorf("Error on tpl %s: %s", err)
+	}
+	if err := runt(`{{randNumeric 5}}`, "26018"); err != nil {
+		t.Errorf("Error on tpl %s: %s", err)
+	}
+
 }
 
 func runt(tpl, expect string) error {
