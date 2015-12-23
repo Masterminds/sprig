@@ -56,6 +56,10 @@ OS:
 	- env: Resolve an environment variable
 	- expandenv: Expand a string through the environment
 
+Encoding:
+	- b64enc: Base 64 encode a string.
+	- b64dec: Base 64 decode a string.
+
 Reflection:
 
 	- typeOf: Takes an interface and returns a string representation of the type.
@@ -97,6 +101,7 @@ REMOVED (implemented in Go 1.2)
 package sprig
 
 import (
+	"encoding/base64"
 	"fmt"
 	"html/template"
 	"os"
@@ -184,6 +189,10 @@ var genericMap = map[string]interface{}{
 	// OS:
 	"env":       func(s string) string { return os.Getenv(s) },
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
+
+	// Encoding:
+	"b64enc": base64encode,
+	"b64dec": base64decode,
 }
 
 func split(sep, orig string) map[string]string {
@@ -324,4 +333,16 @@ func kindIs(target string, src interface{}) bool {
 
 func kindOf(src interface{}) string {
 	return reflect.ValueOf(src).Kind().String()
+}
+
+func base64encode(v string) string {
+	return base64.StdEncoding.EncodeToString([]byte(v))
+}
+
+func base64decode(v string) string {
+	data, err := base64.StdEncoding.DecodeString(v)
+	if err != nil {
+		return err.Error()
+	}
+	return string(data)
 }

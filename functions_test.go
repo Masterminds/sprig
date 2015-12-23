@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"testing"
@@ -126,6 +127,24 @@ func TestExpandEnv(t *testing.T) {
 	os.Setenv("FOO", "bar")
 	tpl := `{{expandenv "Hello $FOO"}}`
 	if err := runt(tpl, "Hello bar"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestBase64EncodeDecode(t *testing.T) {
+	magicWord := "coffee"
+	expect := base64.StdEncoding.EncodeToString([]byte(magicWord))
+
+	if expect == magicWord {
+		t.Fatal("Encoder doesn't work.")
+	}
+
+	tpl := `{{b64enc "coffee"}}`
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+	tpl = fmt.Sprintf("{{b64dec %q}}", expect)
+	if err := runt(tpl, magicWord); err != nil {
 		t.Error(err)
 	}
 }
