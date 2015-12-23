@@ -1,0 +1,3 @@
+package: github.com/Masterminds/sprig
+import:
+- package: github.com/aokoli/goutils

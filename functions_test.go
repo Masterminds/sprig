@@ -149,6 +149,24 @@ func TestBase64EncodeDecode(t *testing.T) {
 	}
 }
 
+func TestGoutils(t *testing.T) {
+	tests := map[string]string{
+		`{{abbrev 5 "hello world"}}`:           "he...",
+		`{{abbrevboth 5 10 "1234 5678 9123"}}`: "...5678...",
+		`{{nospace "h e l l o "}}`:             "hello",
+		`{{untitle "First Try"}}`:              "first try", //https://youtu.be/44-RsrF_V_w
+		`{{initials "First Try"}}`:             "FT",
+		`{{wrap 5 "Hello World"}}`:             "Hello\nWorld",
+		`{{wrapWith 5 "\t" "Hello World"}}`:    "Hello\tWorld",
+	}
+	for k, v := range tests {
+		t.Log(k)
+		if err := runt(k, v); err != nil {
+			t.Errorf("Error on tpl %s: %s", err)
+		}
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

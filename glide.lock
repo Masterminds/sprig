@@ -1,0 +1,6 @@
+hash: e3e0c601d62e05e5e182697a6c20bdd7ea534577ae8e08b7196f33ca5378acc4
+updated: 2015-12-23T07:41:07.419749413-07:00
+imports:
+- name: github.com/aokoli/goutils
+  version: 9c37978a95bd5c709a15883b6242714ea6709e64
+devImports: []

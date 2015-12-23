@@ -24,13 +24,24 @@ Date Functions
 
 String Functions
 
+	- abbrev: Truncate a string with ellipses. `abbrev 5 "hello world"` yields "he..."
+	- abbrevboth: Abbreviate from both sides, yielding "...lo wo..."
 	- trim: strings.TrimSpace
 	- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
 	- upper: strings.ToUpper
 	- lower: strings.ToLower
+	- nospace: Remove all space characters from a string. `nospace "h e l l o"` becomes "hello"
 	- title: strings.Title
+	- untitle: Remove title casing
 	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
 	- substr: Given string, start, and length, return a substr.
+	- initials: Given a multi-word string, return the initials. `initials "Matt Butcher"` returns "MB"
+	- randAlphaNum: Given a length, generate a random alphanumeric sequence
+	- randAlpha: Given a length, generate an alphabetic string
+	- randAscii: Given a length, generate a random ASCII string (symbols included)
+	- randNumeric: Given a length, generate a string of digits.
+	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
+	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
 
 String Slice Functions:
 
@@ -110,6 +121,8 @@ import (
 	"strings"
 	ttemplate "text/template"
 	"time"
+
+	util "github.com/aokoli/goutils"
 )
 
 // Produce the function map.
@@ -142,15 +155,27 @@ var genericMap = map[string]interface{}{
 	"now":          func() time.Time { return time.Now() },
 
 	// Strings
-	"trim":   strings.TrimSpace,
-	"upper":  strings.ToUpper,
-	"lower":  strings.ToLower,
-	"title":  strings.Title,
-	"substr": substring,
+	"abbrev":     abbrev,
+	"abbrevboth": abbrevboth,
+	"trim":       strings.TrimSpace,
+	"upper":      strings.ToUpper,
+	"lower":      strings.ToLower,
+	"title":      strings.Title,
+	"untitle":    untitle,
+	"substr":     substring,
 	// Switch order so that "foo" | repeat 5
 	"repeat": func(count int, str string) string { return strings.Repeat(str, count) },
 	// Switch order so that "$foo" | trimall "$"
-	"trimall": func(a, b string) string { return strings.Trim(b, a) },
+	"trimall":        func(a, b string) string { return strings.Trim(b, a) },
+	"nospace":        util.DeleteWhiteSpace,
+	"initials":       initials,
+	"randomAlphaNum": randAlphaNumeric,
+	"randAlpha":      randAlpha,
+	"randAscii":      randAscii,
+	"randNumeric":    randNumeric,
+	"swapcase":       util.SwapCase,
+	"wrap":           func(l int, s string) string { return util.Wrap(s, l) },
+	"wrapWith":       func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 
 	// Wrap Atoi to stop errors.
 	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -345,4 +370,49 @@ func base64decode(v string) string {
 		return err.Error()
 	}
 	return string(data)
+}
+
+func abbrev(width int, s string) string {
+	if width < 4 {
+		return s
+	}
+	r, _ := util.Abbreviate(s, width)
+	return r
+}
+
+func abbrevboth(left, right int, s string) string {
+	if right < 4 || left > 0 && right < 7 {
+		return s
+	}
+	r, _ := util.AbbreviateFull(s, left, right)
+	return r
+}
+func initials(s string) string {
+	// Wrap this just to eliminate the var args, which templates don't do well.
+	return util.Initials(s)
+}
+
+func randAlphaNumeric(count int) string {
+	// It is not possible, it appears, to actually generate an error here.
+	r, _ := util.RandomAlphaNumeric(count)
+	return r
+}
+
+func randAlpha(count int) string {
+	r, _ := util.RandomAlphabetic(count)
+	return r
+}
+
+func randAscii(count int) string {
+	r, _ := util.RandomAscii(count)
+	return r
+}
+
+func randNumeric(count int) string {
+	r, _ := util.RandomNumeric(count)
+	return r
+}
+
+func untitle(str string) string {
+	return util.Uncapitalize(str)
 }

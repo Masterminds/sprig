@@ -71,6 +71,20 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 	- title: strings.Title
 	- repeat: strings.Repeat, but with the arguments switched: `repeat count str`. (This simplifies common pipelines)
 	- substr: Given string, start, and length, return a substr.
+  - nospace: Remove all spaces from a string. `h e l l o` becomes
+    `hello`.
+  - abbrev: Truncate a string with ellipses
+  - abbrevboth: Truncate both sides of a string with ellipses
+  - untitle: Remove title case
+  - intials: Given multiple words, return the first letter of each
+    word
+  - randAlphaNum: Generate a random alpha-numeric string
+  - randAlpha: Generate a random alphabetic string
+  - randAscii: Generate a random ASCII string, including symbols
+  - randNumeric: Generate a random numeric string
+  - wrap: Wrap text at the given column count
+  - wrapWith: Wrap text at the given column count, and with the given
+    string for a line terminator: `wrap 50 "\n\t" $string`
 
 ### String Slice Functions:
 
@@ -96,6 +110,10 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 
   - env: Read an environment variable.
   - expandenv: Expand all environment variables in a string.
+
+### Encoding:
+  - b64enc: Encode a string into a Base64 string
+  - b64dec: Decode a string from a Base64 string
 
 ### Reflection:
 
