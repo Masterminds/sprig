@@ -29,7 +29,7 @@ import (
 // This example illustrates that the FuncMap *must* be set before the
 // templates themselves are loaded.
 tpl := template.Must(
-  template.New("base").FuncMap(sprig.FuncMap()).ParseGlob("*.html")
+  template.New("base").Funcs(sprig.FuncMap()).ParseGlob("*.html")
 )
 
 
