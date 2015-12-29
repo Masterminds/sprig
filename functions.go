@@ -42,6 +42,7 @@ String Functions
 	- randNumeric: Given a length, generate a string of digits.
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
+	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
 
 String Slice Functions:
 
@@ -176,6 +177,8 @@ var genericMap = map[string]interface{}{
 	"swapcase":     util.SwapCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
+	// Switch order so that "foobar" | contains "foo"
+	"contains": func(substr string, str string) bool { return strings.Contains(str, substr) },
 
 	// Wrap Atoi to stop errors.
 	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },
