@@ -191,6 +191,13 @@ func TestRandom(t *testing.T) {
 
 }
 
+func TestContains(t *testing.T) {
+	tpl := `{{"foobar" | contains "foo"}}`
+	if err := runt(tpl, "true"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

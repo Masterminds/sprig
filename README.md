@@ -87,6 +87,7 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
   - wrap: Wrap text at the given column count
   - wrapWith: Wrap text at the given column count, and with the given
     string for a line terminator: `wrap 50 "\n\t" $string`
+  - contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
 
 ### String Slice Functions:
 
