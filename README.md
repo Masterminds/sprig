@@ -8,6 +8,8 @@ used template functions.
 It is inspired by the template functions found in
 [Twig](http://twig.sensiolabs.org/documentation).
 
+[![Build Status](https://travis-ci.org/Masterminds/sprig.svg?branch=master)](https://travis-ci.org/Masterminds/sprig)
+
 ## Usage
 
 API documentation is available [at GoDoc.org](http://godoc.org/github.com/Masterminds/sprig), but
@@ -164,4 +166,3 @@ determining how to implement them.
 - Template functins only deal with the data passed into them. They never retrieve
   data from a source.
 - Finally, do not override core Go template functions.
-
