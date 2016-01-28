@@ -113,6 +113,7 @@ REMOVED (implemented in Go 1.2)
 package sprig
 
 import (
+	"encoding/base32"
 	"encoding/base64"
 	"fmt"
 	"html/template"
@@ -221,6 +222,8 @@ var genericMap = map[string]interface{}{
 	// Encoding:
 	"b64enc": base64encode,
 	"b64dec": base64decode,
+	"b32enc": base32encode,
+	"b32dec": base32decode,
 }
 
 func split(sep, orig string) map[string]string {
@@ -369,6 +372,18 @@ func base64encode(v string) string {
 
 func base64decode(v string) string {
 	data, err := base64.StdEncoding.DecodeString(v)
+	if err != nil {
+		return err.Error()
+	}
+	return string(data)
+}
+
+func base32encode(v string) string {
+	return base32.StdEncoding.EncodeToString([]byte(v))
+}
+
+func base32decode(v string) string {
+	data, err := base32.StdEncoding.DecodeString(v)
 	if err != nil {
 		return err.Error()
 	}

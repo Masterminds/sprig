@@ -115,6 +115,8 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
   - expandenv: Expand all environment variables in a string.
 
 ### Encoding:
+  - b32enc: Encode a string into a Base32 string
+  - b32dec: Decode a string from a Base32 string
   - b64enc: Encode a string into a Base64 string
   - b64dec: Decode a string from a Base64 string
 
