@@ -22,6 +22,38 @@ func TestSubstr(t *testing.T) {
 	}
 }
 
+func TestQuote(t *testing.T) {
+	tpl := `{{quote "a" "b" "c"}}`
+	if err := runt(tpl, `"a" "b" "c"`); err != nil {
+		t.Error(err)
+	}
+}
+func TestSquote(t *testing.T) {
+	tpl := `{{squote "a" "b" "c"}}`
+	if err := runt(tpl, `'a' 'b' 'c'`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAdd(t *testing.T) {
+	tpl := `{{ 3 | add 1 2}}`
+	if err := runt(tpl, `6`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestBiggest(t *testing.T) {
+	tpl := `{{ biggest 1 2 3 345 5 6 7}}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ biggest 345}}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTrimall(t *testing.T) {
 	tpl := `{{"$foo$" | trimall "$"}}`
 	if err := runt(tpl, "foo"); err != nil {

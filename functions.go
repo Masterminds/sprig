@@ -43,6 +43,8 @@ String Functions
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
+	- quote: Wrap string(s) in double quotation marks.
+	- squote: Wrap string(s) in double quotation marks.
 
 String Slice Functions:
 
@@ -95,12 +97,12 @@ Reflection:
 Math Functions:
 
 	- add1: Increment an integer by 1
-	- add: Sum two integers
+	- add: Sum an arbitrary number of integers
 	- sub: Subtract the second integer from the first
 	- div: Divide the first integer by the second
 	- mod: Module of first integer divided by second
 	- mul: Multiply two integers
-	- biggest: Return the biggest of two integers
+	- biggest: Return the biggest of a series of one or more integers
 
 REMOVED (implemented in Go 1.2)
 
@@ -180,6 +182,8 @@ var genericMap = map[string]interface{}{
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
 	"contains": func(substr string, str string) bool { return strings.Contains(str, substr) },
+	"quote":    quote,
+	"squote":   squote,
 
 	// Wrap Atoi to stop errors.
 	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -193,8 +197,14 @@ var genericMap = map[string]interface{}{
 	"split": split,
 
 	// VERY basic arithmetic.
-	"add1":    func(i int) int { return i + 1 },
-	"add":     func(a, b int) int { return a + b },
+	"add1": func(i int) int { return i + 1 },
+	"add": func(i ...int) int {
+		a := 0
+		for _, b := range i {
+			a += b
+		}
+		return a
+	},
 	"sub":     func(a, b int) int { return a - b },
 	"div":     func(a, b int) int { return a / b },
 	"mod":     func(a, b int) int { return a % b },
@@ -292,11 +302,13 @@ func dateModify(fmt string, date time.Time) time.Time {
 	return date.Add(d)
 }
 
-func biggest(a, b int) int {
-	if a > b {
-		return a
+func biggest(a int, i ...int) int {
+	for _, b := range i {
+		if b > a {
+			a = b
+		}
 	}
-	return b
+	return a
 }
 
 // dfault checks whether `given` is set, and returns default if not set.
@@ -433,4 +445,18 @@ func randNumeric(count int) string {
 
 func untitle(str string) string {
 	return util.Uncapitalize(str)
+}
+
+func quote(str ...string) string {
+	for i, s := range str {
+		str[i] = fmt.Sprintf("%q", s)
+	}
+	return strings.Join(str, " ")
+}
+
+func squote(str ...string) string {
+	for i, s := range str {
+		str[i] = fmt.Sprintf("'%s'", s)
+	}
+	return strings.Join(str, " ")
 }

@@ -88,6 +88,9 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
   - wrapWith: Wrap text at the given column count, and with the given
     string for a line terminator: `wrap 50 "\n\t" $string`
   - contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
+  - quote: Wrap strings in double quotes. `quote "a" "b"` returns `"a"
+    "b"`
+  - squote: Wrap strings in single quotes.
 
 ### String Slice Functions:
 
@@ -141,12 +144,13 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 ### Math Functions:
 
 	- add1: Increment an integer by 1
-	- add: Sum two integers
+	- add: Sum integers. `add 1 2 3` renders `6`
 	- sub: Subtract the second integer from the first
 	- div: Divide the first integer by the second
 	- mod: Module of first integer divided by second
 	- mul: Multiply two integers
-	- biggest: Return the biggest of two integers
+	- biggest: Return the biggest of a series of integers. `biggest 1 2 3`
+	  returns `3`.
 
 
 ## Principles:
