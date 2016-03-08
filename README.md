@@ -155,14 +155,14 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 
 ### Math Functions:
 
-	- add1: Increment an integer by 1
-	- add: Sum integers. `add 1 2 3` renders `6`
-	- sub: Subtract the second integer from the first
-	- div: Divide the first integer by the second
-	- mod: Module of first integer divided by second
-	- mul: Multiply two integers
-	- biggest: Return the biggest of a series of integers. `biggest 1 2 3`
-	  returns `3`.
+- add1: Increment an integer by 1
+- add: Sum integers. `add 1 2 3` renders `6`
+- sub: Subtract the second integer from the first
+- div: Divide the first integer by the second
+- mod: Module of first integer divided by second
+- mul: Multiply two integers
+- biggest: Return the biggest of a series of integers. `biggest 1 2 3`
+  returns `3`.
 
 
 ## Principles:
@@ -182,6 +182,6 @@ determining how to implement them.
   value that can be displayed.
 - Simple math is necessary for grid layouts, pagers, and so on. Complex math
   (anything other than arithmetic) should be done outside of templates.
-- Template functins only deal with the data passed into them. They never retrieve
+- Template functions only deal with the data passed into them. They never retrieve
   data from a source.
 - Finally, do not override core Go template functions.
