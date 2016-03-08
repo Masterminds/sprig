@@ -248,6 +248,13 @@ func TestContains(t *testing.T) {
 	}
 }
 
+func TestTuple(t *testing.T) {
+	tpl := `{{$t := tuple 1 "a" "foo"}}{{index $t 2}}{{index $t 0 }}{{index $t 1}}`
+	if err := runt(tpl, "foo1a"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }

@@ -93,6 +93,11 @@ Reflection:
 	interface, since doing so would require compiling the interface in ahead of
 	time.
 
+Data Structures:
+
+	- tuple: Takes an arbitrary list of items and returns a slice of items. Its
+	  tuple-ish properties are mainly gained through the template idiom, and not
+	  through an API provided here.
 
 Math Functions:
 
@@ -234,6 +239,9 @@ var genericMap = map[string]interface{}{
 	"b64dec": base64decode,
 	"b32enc": base32encode,
 	"b32dec": base32decode,
+
+	// Data Structures:
+	"tuple": tuple,
 }
 
 func split(sep, orig string) map[string]string {
@@ -459,4 +467,8 @@ func squote(str ...string) string {
 		str[i] = fmt.Sprintf("'%s'", s)
 	}
 	return strings.Join(str, " ")
+}
+
+func tuple(v ...interface{}) []interface{} {
+	return v
 }
