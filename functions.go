@@ -289,11 +289,11 @@ func date(fmt string, date interface{}) string {
 }
 
 func htmlDate(date interface{}) string {
-	return dateInZone("01/02/2006", date, "Local")
+	return dateInZone("2006-01-02", date, "Local")
 }
 
 func htmlDateInZone(date interface{}, zone string) string {
-	return dateInZone("01/02/2006", date, zone)
+	return dateInZone("2006-01-02", date, zone)
 }
 
 func dateInZone(fmt string, date interface{}, zone string) string {

@@ -44,7 +44,7 @@ func TestAdd(t *testing.T) {
 
 func TestHtmlDate(t *testing.T) {
 	tpl := `{{ htmlDate 0 }}`
-	if err := runt(tpl, "12/31/1969"); err != nil {
+	if err := runt(tpl, "1969-12-31"); err != nil {
 		t.Error(err)
 	}
 }
