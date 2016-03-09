@@ -60,9 +60,14 @@ HELLO!HELLO!HELLO!HELLO!HELLO!
 
 - date: Format a date, where a date is an integer type or a time.Time type, and
   format is a time.Format formatting string.
-- date_modify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
+- dateModify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
 parse, it returns the time unaltered. See `time.ParseDuration` for info on duration strings.
 - now: Current time.Time, for feeding into date-related functions.
+- htmlDate: Format a date for use in the value field of an HTML "date" form element.
+- dateInZone: Like date, but takes three arguments: format, timestamp,
+  timezone.
+- htmlDateInZone: Like htmlDate, but takes two arguments: timestamp,
+  timezone.
 
 ### String Functions
 

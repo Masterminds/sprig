@@ -42,6 +42,13 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+func TestHtmlDate(t *testing.T) {
+	tpl := `{{ htmlDate 0 }}`
+	if err := runt(tpl, "12/31/1969"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestBiggest(t *testing.T) {
 	tpl := `{{ biggest 1 2 3 345 5 6 7}}`
 	if err := runt(tpl, `345`); err != nil {

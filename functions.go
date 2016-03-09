@@ -16,11 +16,16 @@ Note that you should add the function map before you parse any template files.
 
 Date Functions
 
-	- date: Format a date, where a date is an integer type or a time.Time type, and
+	- date FORMAT TIME: Format a date, where a date is an integer type or a time.Time type, and
 	  format is a time.Format formatting string.
-	- date_modify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
+	- dateModify: Given a date, modify it with a duration: `date_modify "-1.5h" now`. If the duration doesn't
 	parse, it returns the time unaltered. See `time.ParseDuration` for info on duration strings.
 	- now: Current time.Time, for feeding into date-related functions.
+	- htmlDate TIME: Format a date for use in the value field of an HTML "date" form element.
+	- dateInZone FORMAT TIME TZ: Like date, but takes three arguments: format, timestamp,
+	  timezone.
+	- htmlDateInZone TIME TZ: Like htmlDate, but takes two arguments: timestamp,
+	  timezone.
 
 String Functions
 
@@ -158,10 +163,14 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-	"date":         date,
-	"date_in_zone": dateInZone,
-	"date_modify":  dateModify,
-	"now":          func() time.Time { return time.Now() },
+	"date":           date,
+	"date_in_zone":   dateInZone,
+	"date_modify":    dateModify,
+	"now":            func() time.Time { return time.Now() },
+	"htmlDate":       htmlDate,
+	"htmlDateInZone": htmlDateInZone,
+	"dateInZone":     dateInZone,
+	"dateModify":     dateModify,
 
 	// Strings
 	"abbrev":     abbrev,
@@ -277,6 +286,14 @@ func substring(start, length int, s string) string {
 // epoch.
 func date(fmt string, date interface{}) string {
 	return dateInZone(fmt, date, "Local")
+}
+
+func htmlDate(date interface{}) string {
+	return dateInZone("01/02/2006", date, "Local")
+}
+
+func htmlDateInZone(date interface{}, zone string) string {
+	return dateInZone("01/02/2006", date, zone)
 }
 
 func dateInZone(fmt string, date interface{}, zone string) string {
