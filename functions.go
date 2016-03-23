@@ -112,7 +112,9 @@ Math Functions:
 	- div: Divide the first integer by the second
 	- mod: Module of first integer divided by second
 	- mul: Multiply two integers
-	- biggest: Return the biggest of a series of one or more integers
+	- max: Return the biggest of a series of one or more integers
+	- min: Return the smallest of a series of one or more integers
+	- biggest: DEPRECATED. Return the biggest of a series of one or more integers
 
 REMOVED (implemented in Go 1.2)
 
@@ -211,19 +213,21 @@ var genericMap = map[string]interface{}{
 	"split": split,
 
 	// VERY basic arithmetic.
-	"add1": func(i int) int { return i + 1 },
-	"add": func(i ...int) int {
-		a := 0
+	"add1": func(i interface{}) int64 { return toInt64(i) + 1 },
+	"add": func(i ...interface{}) int64 {
+		var a int64 = 0
 		for _, b := range i {
-			a += b
+			a += toInt64(b)
 		}
 		return a
 	},
-	"sub":     func(a, b int) int { return a - b },
-	"div":     func(a, b int) int { return a / b },
-	"mod":     func(a, b int) int { return a % b },
-	"mul":     func(a, b int) int { return a * b },
-	"biggest": biggest,
+	"sub":     func(a, b interface{}) int64 { return toInt64(a) - toInt64(b) },
+	"div":     func(a, b interface{}) int64 { return toInt64(a) / toInt64(b) },
+	"mod":     func(a, b interface{}) int64 { return toInt64(a) % toInt64(b) },
+	"mul":     func(a, b interface{}) int64 { return toInt64(a) * toInt64(b) },
+	"biggest": max,
+	"max":     max,
+	"min":     min,
 
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
@@ -327,13 +331,26 @@ func dateModify(fmt string, date time.Time) time.Time {
 	return date.Add(d)
 }
 
-func biggest(a int, i ...int) int {
+func max(a interface{}, i ...interface{}) int64 {
+	aa := toInt64(a)
 	for _, b := range i {
-		if b > a {
-			a = b
+		bb := toInt64(b)
+		if bb > aa {
+			aa = bb
 		}
 	}
-	return a
+	return aa
+}
+
+func min(a interface{}, i ...interface{}) int64 {
+	aa := toInt64(a)
+	for _, b := range i {
+		bb := toInt64(b)
+		if bb < aa {
+			aa = bb
+		}
+	}
+	return aa
 }
 
 // dfault checks whether `given` is set, and returns default if not set.
@@ -488,4 +505,10 @@ func squote(str ...string) string {
 
 func tuple(v ...interface{}) []interface{} {
 	return v
+}
+
+// toInt64 converts integer types to 64-bit integers
+func toInt64(v interface{}) int64 {
+	val := reflect.Indirect(reflect.ValueOf(v))
+	return val.Int()
 }

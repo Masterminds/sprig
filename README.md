@@ -166,8 +166,10 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - div: Divide the first integer by the second
 - mod: Module of first integer divided by second
 - mul: Multiply two integers
-- biggest: Return the biggest of a series of integers. `biggest 1 2 3`
+- max (biggest): Return the biggest of a series of integers. `max 1 2 3`
   returns `3`.
+- min: Return the smallest of a series of integers. `min 1 2 3` returns
+  `1`.
 
 
 ## Principles:
