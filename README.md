@@ -116,6 +116,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   For numbers, the value 0 will trigger the default. For booleans, false will
   trigger the default. For structs, the default is never returned (there is
   no clear empty condition). For everything else, nil value triggers a default.
+- empty: Returns true if the given value is the zero value for that
+  type. Structs are always non-empty.
 
 ### OS:
 

@@ -70,6 +70,9 @@ Defaults:
 	  For numbers, the value 0 will trigger the default. For booleans, false will
 	  trigger the default. For structs, the default is never returned (there is
 	  no clear empty condition). For everything else, nil value triggers a default.
+	- empty: Return true if the given value is the zero value for its type.
+	  Caveats: structs are always non-empty. This should match the behavior of
+	  {{if pipeline}}, but can be used inside of a pipeline.
 
 OS:
 	- env: Resolve an environment variable
@@ -235,6 +238,7 @@ var genericMap = map[string]interface{}{
 
 	// Defaults
 	"default": dfault,
+	"empty":   empty,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -365,37 +369,39 @@ func min(a interface{}, i ...interface{}) int64 {
 // For everything else, including pointers, a nil value is unset.
 func dfault(d, given interface{}) interface{} {
 
-	g := reflect.ValueOf(given)
-	if !g.IsValid() {
+	if empty(given) {
 		return d
 	}
+	return given
+}
 
-	set := false
+// empty returns true if the given value has the zero value for its type.
+func empty(given interface{}) bool {
+	g := reflect.ValueOf(given)
+	if !g.IsValid() {
+		return true
+	}
 
 	// Basically adapted from text/template.isTrue
 	switch g.Kind() {
 	default:
-		set = !g.IsNil()
+		return g.IsNil()
 	case reflect.Array, reflect.Slice, reflect.Map, reflect.String:
-		set = g.Len() != 0
+		return g.Len() == 0
 	case reflect.Bool:
-		set = g.Bool()
+		return g.Bool() == false
 	case reflect.Complex64, reflect.Complex128:
-		set = g.Complex() != 0
+		return g.Complex() == 0
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		set = g.Int() != 0
+		return g.Int() == 0
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		set = g.Uint() != 0
+		return g.Uint() == 0
 	case reflect.Float32, reflect.Float64:
-		set = g.Float() != 0
+		return g.Float() == 0
 	case reflect.Struct:
-		set = true
+		return false
 	}
-
-	if set {
-		return given
-	}
-	return d
+	return true
 }
 
 // typeIs returns true if the src is the type named in target.

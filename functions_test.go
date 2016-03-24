@@ -95,6 +95,30 @@ func TestDefault(t *testing.T) {
 	}
 }
 
+func TestEmpty(t *testing.T) {
+	tpl := `{{if empty 1}}1{{else}}0{{end}}`
+	if err := runt(tpl, "0"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{if empty 0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if empty ""}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if empty 0.0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if empty false}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestSplit(t *testing.T) {
 	tpl := `{{$v := "foo$bar$baz" | split "$"}}{{$v._0}}`
 	if err := runt(tpl, "foo"); err != nil {
