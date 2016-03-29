@@ -126,7 +126,7 @@ string is passed in, functions will attempt to convert with
 	- sub: Subtract the second integer from the first
 	- div: Divide the first integer by the second
 	- mod: Module of first integer divided by second
-	- mul: Multiply two integers
+	- mul: Multiply integers
 	- max: Return the biggest of a series of one or more integers
 	- min: Return the smallest of a series of one or more integers
 	- biggest: DEPRECATED. Return the biggest of a series of one or more integers
