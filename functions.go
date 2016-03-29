@@ -106,8 +106,20 @@ Data Structures:
 	- tuple: Takes an arbitrary list of items and returns a slice of items. Its
 	  tuple-ish properties are mainly gained through the template idiom, and not
 	  through an API provided here.
+	- dict: Takes a list of name/values and returns a map[string]interface{}.
+	  The first parameter is converted to a string and stored as a key, the
+	  second parameter is treated as the value. And so on, with odds as keys and
+	  evens as values. If the function call ends with an odd, the last key will
+	  be assigned the empty string. Non-string keys are converted to strings as
+	  follows: []byte are converted, fmt.Stringers will have String() called.
+	  errors will have Error() called. All others will be passed through
+	  fmt.Sprtinf("%v").
 
 Math Functions:
+
+Integer functions will convert integers of any width to `int64`. If a
+string is passed in, functions will attempt to convert with
+`strconv.ParseInt(s, 1064)`. If this fails, the value will be treated as 0.
 
 	- add1: Increment an integer by 1
 	- add: Sum an arbitrary number of integers
@@ -134,6 +146,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"html/template"
+	"math"
 	"os"
 	"reflect"
 	"strconv"
@@ -224,10 +237,16 @@ var genericMap = map[string]interface{}{
 		}
 		return a
 	},
-	"sub":     func(a, b interface{}) int64 { return toInt64(a) - toInt64(b) },
-	"div":     func(a, b interface{}) int64 { return toInt64(a) / toInt64(b) },
-	"mod":     func(a, b interface{}) int64 { return toInt64(a) % toInt64(b) },
-	"mul":     func(a, b interface{}) int64 { return toInt64(a) * toInt64(b) },
+	"sub": func(a, b interface{}) int64 { return toInt64(a) - toInt64(b) },
+	"div": func(a, b interface{}) int64 { return toInt64(a) / toInt64(b) },
+	"mod": func(a, b interface{}) int64 { return toInt64(a) % toInt64(b) },
+	"mul": func(a interface{}, v ...interface{}) int64 {
+		val := toInt64(a)
+		for _, b := range v {
+			val = val * toInt64(b)
+		}
+		return val
+	},
 	"biggest": max,
 	"max":     max,
 	"min":     min,
@@ -259,6 +278,7 @@ var genericMap = map[string]interface{}{
 
 	// Data Structures:
 	"tuple": tuple,
+	"dict":  dict,
 }
 
 func split(sep, orig string) map[string]string {
@@ -513,8 +533,67 @@ func tuple(v ...interface{}) []interface{} {
 	return v
 }
 
+func dict(v ...interface{}) map[string]interface{} {
+	dict := map[string]interface{}{}
+	lenv := len(v)
+	for i := 0; i < lenv; i += 2 {
+		key := strval(v[i])
+		if i+1 >= lenv {
+			dict[key] = ""
+			continue
+		}
+		dict[key] = v[i+1]
+	}
+	return dict
+}
+
+func strval(v interface{}) string {
+	switch v := v.(type) {
+	case string:
+		return v
+	case []byte:
+		return string(v)
+	case error:
+		return v.Error()
+	case fmt.Stringer:
+		return v.String()
+	default:
+		return fmt.Sprintf("%v", v)
+	}
+}
+
 // toInt64 converts integer types to 64-bit integers
 func toInt64(v interface{}) int64 {
+
+	if str, ok := v.(string); ok {
+		iv, err := strconv.ParseInt(str, 10, 64)
+		if err != nil {
+			return 0
+		}
+		return iv
+	}
+
 	val := reflect.Indirect(reflect.ValueOf(v))
-	return val.Int()
+	switch val.Kind() {
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
+		return val.Int()
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32:
+		return int64(val.Uint())
+	case reflect.Uint, reflect.Uint64:
+		tv := val.Uint()
+		if tv <= math.MaxInt64 {
+			return int64(tv)
+		}
+		// TODO: What is the sensible thing to do here?
+		return math.MaxInt64
+	case reflect.Float32, reflect.Float64:
+		return int64(val.Float())
+	case reflect.Bool:
+		if val.Bool() == true {
+			return 1
+		}
+		return 0
+	default:
+		return 0
+	}
 }

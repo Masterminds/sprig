@@ -135,6 +135,14 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 
 - tuple: A sequence of related objects. It is implemented as a
   `[]interface{}`, where each item can be accessed using `index`.
+- dict: Takes a list of name/values and returns a map[string]interface{}.
+  The first parameter is converted to a string and stored as a key, the
+  second parameter is treated as the value. And so on, with odds as keys and
+  evens as values. If the function call ends with an odd, the last key will
+  be assigned the empty string. Non-string keys are converted to strings as
+  follows: []byte are converted, fmt.Stringers will have String() called.
+  errors will have Error() called. All others will be passed through
+  fmt.Sprtinf("%v").
 
 ```
 {{$t := tuple 1 "a" "foo"}}
@@ -162,12 +170,16 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 
 ### Math Functions:
 
+Integer functions will convert integers of any width to `int64`. If a
+string is passed in, functions will attempt to conver with
+`strconv.ParseInt(s, 1064)`. If this fails, the value will be treated as 0.
+
 - add1: Increment an integer by 1
 - add: Sum integers. `add 1 2 3` renders `6`
 - sub: Subtract the second integer from the first
 - div: Divide the first integer by the second
 - mod: Module of first integer divided by second
-- mul: Multiply two integers
+- mul: Multiply integers integers
 - max (biggest): Return the biggest of a series of integers. `max 1 2 3`
   returns `3`.
 - min: Return the smallest of a series of integers. `min 1 2 3` returns

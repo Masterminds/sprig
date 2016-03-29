@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strings"
 	"testing"
 	"text/template"
 
@@ -38,6 +39,13 @@ func TestSquote(t *testing.T) {
 func TestAdd(t *testing.T) {
 	tpl := `{{ 3 | add 1 2}}`
 	if err := runt(tpl, `6`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMul(t *testing.T) {
+	tpl := `{{ 1 | mul "2" 3 "4"}}`
+	if err := runt(tpl, `24`); err != nil {
 		t.Error(err)
 	}
 }
@@ -92,6 +100,43 @@ func TestDefault(t *testing.T) {
 	tpl = `{{default "foo" 2.34}}`
 	if err := runt(tpl, "2.34"); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestToInt64(t *testing.T) {
+	target := int64(102)
+	if target != toInt64(int8(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(int(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(int32(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(int16(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(int64(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64("102") {
+		t.Errorf("Expected 102")
+	}
+	if 0 != toInt64("frankie") {
+		t.Errorf("Expected 0")
+	}
+	if target != toInt64(uint16(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(uint64(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt64(float64(102.1234)) {
+		t.Errorf("Expected 102")
+	}
+	if 1 != toInt64(true) {
+		t.Errorf("Expected 102")
 	}
 }
 
@@ -298,6 +343,39 @@ func TestTuple(t *testing.T) {
 	}
 }
 
+func TestDict(t *testing.T) {
+	tpl := `{{$d := dict 1 2 "three" "four" 5}}{{range $k, $v := $d}}{{$k}}{{$v}}{{end}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(out) != 12 {
+		t.Errorf("Expected length 12, got %d", len(out))
+	}
+	// dict does not guarantee ordering because it is backed by a map.
+	if !strings.Contains(out, "12") {
+		t.Error("Expected grouping 12")
+	}
+	if !strings.Contains(out, "threefour") {
+		t.Error("Expected grouping threefour")
+	}
+	if !strings.Contains(out, "5") {
+		t.Error("Expected 5")
+	}
+	tpl = `{{$t := dict "I" "shot" "the" "albatross"}}{{$t.the}} {{$t.I}}`
+	if err := runt(tpl, "albatross shot"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestDelete(t *testing.T) {
+	fmap := TxtFuncMap()
+	delete(fmap, "split")
+	if _, ok := fmap["split"]; ok {
+		t.Error("Failed to delete split from map")
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, "")
 }
@@ -313,4 +391,14 @@ func runtv(tpl, expect string, vars interface{}) error {
 		return fmt.Errorf("Expected '%s', got '%s'", expect, b.String())
 	}
 	return nil
+}
+func runRaw(tpl string, vars interface{}) (string, error) {
+	fmap := TxtFuncMap()
+	t := template.Must(template.New("test").Funcs(fmap).Parse(tpl))
+	var b bytes.Buffer
+	err := t.Execute(&b, vars)
+	if err != nil {
+		return "", err
+	}
+	return b.String(), nil
 }
