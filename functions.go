@@ -61,6 +61,7 @@ String Slice Functions:
 Conversions:
 
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
+	- toInt64: Convert a string or another numeric type to an int64.
 
 Defaults:
 
@@ -218,7 +219,8 @@ var genericMap = map[string]interface{}{
 	"squote":   squote,
 
 	// Wrap Atoi to stop errors.
-	"atoi": func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"int64": toInt64,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
@@ -387,12 +389,12 @@ func min(a interface{}, i ...interface{}) int64 {
 // Structs are never considered unset.
 //
 // For everything else, including pointers, a nil value is unset.
-func dfault(d, given interface{}) interface{} {
+func dfault(d interface{}, given ...interface{}) interface{} {
 
-	if empty(given) {
+	if empty(given) || empty(given[0]) {
 		return d
 	}
-	return given
+	return given[0]
 }
 
 // empty returns true if the given value has the zero value for its type.

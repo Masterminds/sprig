@@ -101,6 +101,15 @@ func TestDefault(t *testing.T) {
 	if err := runt(tpl, "2.34"); err != nil {
 		t.Error(err)
 	}
+
+	tpl = `{{ .Nothing | default "123" }}`
+	if err := runt(tpl, "123"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ default "123" }}`
+	if err := runt(tpl, "123"); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestToInt64(t *testing.T) {
@@ -377,7 +386,7 @@ func TestDelete(t *testing.T) {
 }
 
 func runt(tpl, expect string) error {
-	return runtv(tpl, expect, "")
+	return runtv(tpl, expect, map[string]string{})
 }
 func runtv(tpl, expect string, vars interface{}) error {
 	fmap := TxtFuncMap()
