@@ -14,6 +14,22 @@ import (
 	"github.com/aokoli/goutils"
 )
 
+func Example() {
+	vars := map[string]interface{}{"Name": "  John Jacob Jingleheimer Schmidt "}
+	tpl := `Hello {{.Name | trim | lower}}`
+	fmap := TxtFuncMap()
+	t := template.Must(template.New("test").Funcs(fmap).Parse(tpl))
+	var b bytes.Buffer
+	err := t.Execute(&b, vars)
+	if err != nil {
+		fmt.Printf("Error during template execution: %s", err)
+		return
+	}
+	fmt.Println(b.String())
+	// Output:
+	// Hello john jacob jingleheimer schmidt
+}
+
 // This is woefully incomplete. Please help.
 
 func TestSubstr(t *testing.T) {
