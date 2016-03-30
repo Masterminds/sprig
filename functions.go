@@ -151,7 +151,25 @@ import (
 // 	tpl := template.New("foo").Funcs(sprig.FuncMap))
 //
 func FuncMap() template.FuncMap {
-	return template.FuncMap(genericMap)
+	return HtmlFuncMap()
+}
+
+// HermeticTextFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
+func HermeticTxtFuncMap() ttemplate.FuncMap {
+	r := TxtFuncMap()
+	for _, name := range nonhermeticFunctions {
+		delete(r, name)
+	}
+	return r
+}
+
+// HermeticHtmlFuncMap returns an 'html/template'.Funcmap with only repeatable functions.
+func HermeticHtmlFuncMap() template.FuncMap {
+	r := HtmlFuncMap()
+	for _, name := range nonhermeticFunctions {
+		delete(r, name)
+	}
+	return r
 }
 
 // TextFuncMap returns a 'text/template'.FuncMap
@@ -162,6 +180,30 @@ func TxtFuncMap() ttemplate.FuncMap {
 // HtmlFuncMap returns an 'html/template'.Funcmap
 func HtmlFuncMap() template.FuncMap {
 	return template.FuncMap(genericMap)
+}
+
+// These functions are not guaranteed to evaluate to the same result for given input, because they
+// refer to the environemnt or global state.
+var nonhermeticFunctions = []string{
+	// Date functions
+	"date",
+	"date_in_zone",
+	"date_modify",
+	"now",
+	"htmlDate",
+	"htmlDateInZone",
+	"dateInZone",
+	"dateModify",
+
+	// Strings
+	"randAlphaNum",
+	"randAlpha",
+	"randAscii",
+	"randNumeric",
+
+	// OS
+	"env",
+	"expandenv",
 }
 
 var genericMap = map[string]interface{}{
