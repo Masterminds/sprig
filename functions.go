@@ -132,13 +132,6 @@ string is passed in, functions will attempt to convert with
 	- min: Return the smallest of a series of one or more integers
 	- biggest: DEPRECATED. Return the biggest of a series of one or more integers
 
-REMOVED (implemented in Go 1.2)
-
-	- gt: Greater than (integer)
-	- lt: Less than (integer)
-	- gte: Greater than or equal to (integer)
-	- lte: Less than or equal to (integer)
-
 */
 package sprig
 
