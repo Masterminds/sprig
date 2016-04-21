@@ -132,15 +132,30 @@ string is passed in, functions will attempt to convert with
 	- min: Return the smallest of a series of one or more integers
 	- biggest: DEPRECATED. Return the biggest of a series of one or more integers
 
+Crypto Functions:
+
+	- genPrivateKey: Generate a private key for the given cryptosystem. If no
+	  argument is supplied, by default it will generate a private key using
+	  the RSA algorithm. Accepted values are `rsa`, `dsa`, and `ecdsa`.
+
 */
 package sprig
 
 import (
+	"crypto/dsa"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/asn1"
 	"encoding/base32"
 	"encoding/base64"
+	"encoding/pem"
 	"fmt"
 	"html/template"
 	"math"
+	"math/big"
 	"os"
 	"reflect"
 	"strconv"
@@ -316,6 +331,9 @@ var genericMap = map[string]interface{}{
 	// Data Structures:
 	"tuple": tuple,
 	"dict":  dict,
+
+	// Crypto:
+	"genPrivateKey": generatePrivateKey,
 }
 
 func split(sep, orig string) map[string]string {
@@ -632,5 +650,57 @@ func toInt64(v interface{}) int64 {
 		return 0
 	default:
 		return 0
+	}
+}
+
+func generatePrivateKey(typ string) string {
+	var priv interface{}
+	var err error
+	switch typ {
+	case "", "rsa":
+		// good enough for government work
+		priv, err = rsa.GenerateKey(rand.Reader, 4096)
+	case "dsa":
+		key := new(dsa.PrivateKey)
+		// again, good enough for government work
+		if err = dsa.GenerateParameters(&key.Parameters, rand.Reader, dsa.L2048N256); err != nil {
+			return fmt.Sprintf("failed to generate dsa params: %s", err)
+		}
+		err = dsa.GenerateKey(key, rand.Reader)
+		priv = key
+	case "ecdsa":
+		// again, good enough for government work
+		priv, err = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	default:
+		return "Unknown type " + typ
+	}
+	if err != nil {
+		return fmt.Sprintf("failed to generate private key: %s", err)
+	}
+
+	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
+}
+
+type DSAKeyFormat struct {
+	Version       int
+	P, Q, G, Y, X *big.Int
+}
+
+func pemBlockForKey(priv interface{}) *pem.Block {
+	switch k := priv.(type) {
+	case *rsa.PrivateKey:
+		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}
+	case *dsa.PrivateKey:
+		val := DSAKeyFormat{
+			P: k.P, Q: k.Q, G: k.G,
+			Y: k.Y, X: k.X,
+		}
+		bytes, _ := asn1.Marshal(val)
+		return &pem.Block{Type: "DSA PRIVATE KEY", Bytes: bytes}
+	case *ecdsa.PrivateKey:
+		b, _ := x509.MarshalECPrivateKey(k)
+		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
+	default:
+		return nil
 	}
 }

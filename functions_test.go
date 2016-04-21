@@ -385,6 +385,60 @@ func TestDelete(t *testing.T) {
 	}
 }
 
+// NOTE(bacongobbler): this test is really _slow_ because of how long it takes to compute
+// and generate a new crypto key.
+func TestGenPrivateKey(t *testing.T) {
+	// test that calling by default generates an RSA private key
+	tpl := `{{genPrivateKey ""}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "RSA PRIVATE KEY") {
+		t.Error("Expected RSA PRIVATE KEY")
+	}
+	// test all acceptable arguments
+	tpl = `{{genPrivateKey "rsa"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "RSA PRIVATE KEY") {
+		t.Error("Expected RSA PRIVATE KEY")
+	}
+	tpl = `{{genPrivateKey "dsa"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "DSA PRIVATE KEY") {
+		t.Error("Expected DSA PRIVATE KEY")
+	}
+	tpl = `{{genPrivateKey "ecdsa"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "EC PRIVATE KEY") {
+		t.Error("Expected EC PRIVATE KEY")
+	}
+	// test bad
+	tpl = `{{genPrivateKey "bad"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if out != "Unknown type bad" {
+		t.Error("Expected type 'bad' to be an unknown crypto algorithm")
+	}
+	// ensure that we can base64 encode the string
+	tpl = `{{genPrivateKey "rsa" | b64enc}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, map[string]string{})
 }
