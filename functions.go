@@ -46,6 +46,7 @@ String Functions
 	- randAscii: Given a length, generate a random ASCII string (symbols included)
 	- randNumeric: Given a length, generate a string of digits.
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
+	- pluralize: Pluralize a noun. `pluralize 123 "singular noun" "plural noun"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
 	- quote: Wrap string(s) in double quotation marks.
@@ -262,6 +263,7 @@ var genericMap = map[string]interface{}{
 	"randNumeric":  randNumeric,
 	"swapcase":     util.SwapCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
+	"pluralize":    pluralize,
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
 	"contains": func(substr string, str string) bool { return strings.Contains(str, substr) },
@@ -582,6 +584,13 @@ func squote(str ...string) string {
 		str[i] = fmt.Sprintf("'%s'", s)
 	}
 	return strings.Join(str, " ")
+}
+
+func pluralize(i int, sing, plur string) string {
+	if i == 1 {
+		return sing
+	}
+	return plur
 }
 
 func tuple(v ...interface{}) []interface{} {
