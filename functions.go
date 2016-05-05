@@ -31,6 +31,7 @@ String Functions
 
 	- abbrev: Truncate a string with ellipses. `abbrev 5 "hello world"` yields "he..."
 	- abbrevboth: Abbreviate from both sides, yielding "...lo wo..."
+	- trunc: Truncate a string (no suffix). `trunc 5 "Hello World"` yields "hello".
 	- trim: strings.TrimSpace
 	- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
 	- upper: strings.ToUpper
@@ -244,6 +245,7 @@ var genericMap = map[string]interface{}{
 	// Strings
 	"abbrev":     abbrev,
 	"abbrevboth": abbrevboth,
+	"trunc":      trunc,
 	"trim":       strings.TrimSpace,
 	"upper":      strings.ToUpper,
 	"lower":      strings.ToLower,
@@ -570,18 +572,20 @@ func untitle(str string) string {
 	return util.Uncapitalize(str)
 }
 
-func quote(str ...string) string {
+func quote(str ...interface{}) string {
+	out := make([]string, len(str))
 	for i, s := range str {
-		str[i] = fmt.Sprintf("%q", s)
+		out[i] = fmt.Sprintf("\"%v\"", s)
 	}
-	return strings.Join(str, " ")
+	return strings.Join(out, " ")
 }
 
-func squote(str ...string) string {
+func squote(str ...interface{}) string {
+	out := make([]string, len(str))
 	for i, s := range str {
-		str[i] = fmt.Sprintf("'%s'", s)
+		out[i] = fmt.Sprintf("'%v'", s)
 	}
-	return strings.Join(str, " ")
+	return strings.Join(out, " ")
 }
 
 func tuple(v ...interface{}) []interface{} {
@@ -703,4 +707,11 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 	default:
 		return nil
 	}
+}
+
+func trunc(c int, s string) string {
+	if len(s) <= c {
+		return s
+	}
+	return s[0:c]
 }

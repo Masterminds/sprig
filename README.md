@@ -81,6 +81,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - nospace: Remove all spaces from a string. `h e l l o` becomes
   `hello`.
 - abbrev: Truncate a string with ellipses
+- trunc: Truncate a string (no suffix). `trunc 5 "Hello World"` yields "hello".
 - abbrevboth: Truncate both sides of a string with ellipses
 - untitle: Remove title case
 - intials: Given multiple words, return the first letter of each

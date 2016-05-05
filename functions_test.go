@@ -23,15 +23,30 @@ func TestSubstr(t *testing.T) {
 	}
 }
 
+func TestTrunc(t *testing.T) {
+	tpl := `{{ "foooooo" | trunc 3 }}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestQuote(t *testing.T) {
 	tpl := `{{quote "a" "b" "c"}}`
 	if err := runt(tpl, `"a" "b" "c"`); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{quote 1 2 3 }}`
+	if err := runt(tpl, `"1" "2" "3"`); err != nil {
 		t.Error(err)
 	}
 }
 func TestSquote(t *testing.T) {
 	tpl := `{{squote "a" "b" "c"}}`
 	if err := runt(tpl, `'a' 'b' 'c'`); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{squote 1 2 3 }}`
+	if err := runt(tpl, `'1' '2' '3'`); err != nil {
 		t.Error(err)
 	}
 }
