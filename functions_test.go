@@ -381,6 +381,17 @@ func TestReplace(t *testing.T) {
 	}
 }
 
+func TestPlural(t *testing.T) {
+	tpl := `{{$num := len "two"}}{{$num}} {{$num | plural "1 char" "chars"}}`
+	if err := runt(tpl, "3 chars"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{len "t" | plural "cheese" "%d chars"}}`
+	if err := runt(tpl, "cheese"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTuple(t *testing.T) {
 	tpl := `{{$t := tuple 1 "a" "foo"}}{{index $t 2}}{{index $t 0 }}{{index $t 1}}`
 	if err := runt(tpl, "foo1a"); err != nil {

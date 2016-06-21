@@ -54,6 +54,7 @@ String Functions
 	- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
 	- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
 	- replace: Replace an old with a new in a string: `$name | replace " " "-"`
+	- plural: Choose singular or plural based on length: `len $fish | plural "one anchovy" "many anchovies"`
 
 String Slice Functions:
 
@@ -275,6 +276,7 @@ var genericMap = map[string]interface{}{
 	"cat":      cat,
 	"indent":   indent,
 	"replace":  replace,
+	"plural":   plural,
 
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -734,4 +736,11 @@ func indent(spaces int, v string) string {
 
 func replace(old, new, src string) string {
 	return strings.Replace(src, old, new, -1)
+}
+
+func plural(one, many string, count int) string {
+	if count == 1 {
+		return one
+	}
+	return many
 }

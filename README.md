@@ -100,6 +100,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
 - indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
 - replace: Replace an old with a new in a string: `$name | replace " " "-"`
+- plural: Choose singular or plural based on length: `len $fish | plural
+  "one anchovy" "many anchovies"`
 
 ### String Slice Functions:
 
