@@ -51,6 +51,9 @@ String Functions
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
 	- quote: Wrap string(s) in double quotation marks.
 	- squote: Wrap string(s) in double quotation marks.
+	- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
+	- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
+	- replace: Replace an old with a new in a string: `$name | replace " " "-"`
 
 String Slice Functions:
 
@@ -269,6 +272,9 @@ var genericMap = map[string]interface{}{
 	"contains": func(substr string, str string) bool { return strings.Contains(str, substr) },
 	"quote":    quote,
 	"squote":   squote,
+	"cat":      cat,
+	"indent":   indent,
+	"replace":  replace,
 
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -714,4 +720,18 @@ func trunc(c int, s string) string {
 		return s
 	}
 	return s[0:c]
+}
+
+func cat(v ...interface{}) string {
+	r := strings.TrimSpace(strings.Repeat("%v ", len(v)))
+	return fmt.Sprintf(r, v...)
+}
+
+func indent(spaces int, v string) string {
+	pad := strings.Repeat(" ", spaces)
+	return pad + strings.Replace(v, "\n", "\n"+pad, -1)
+}
+
+func replace(old, new, src string) string {
+	return strings.Replace(src, old, new, -1)
 }

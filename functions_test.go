@@ -360,6 +360,27 @@ func TestContains(t *testing.T) {
 	}
 }
 
+func TestCat(t *testing.T) {
+	tpl := `{{$b := "b"}}{{"c" | cat "a" $b}}`
+	if err := runt(tpl, "a b c"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestIndent(t *testing.T) {
+	tpl := `{{indent 4 "a\nb\nc"}}`
+	if err := runt(tpl, "    a\n    b\n    c"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestReplace(t *testing.T) {
+	tpl := `{{"I Am Henry VIII" | replace " " "-"}}`
+	if err := runt(tpl, "I-Am-Henry-VIII"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTuple(t *testing.T) {
 	tpl := `{{$t := tuple 1 "a" "foo"}}{{index $t 2}}{{index $t 0 }}{{index $t 1}}`
 	if err := runt(tpl, "foo1a"); err != nil {

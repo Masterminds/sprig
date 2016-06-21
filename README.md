@@ -97,6 +97,9 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - quote: Wrap strings in double quotes. `quote "a" "b"` returns `"a"
   "b"`
 - squote: Wrap strings in single quotes.
+- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
+- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
+- replace: Replace an old with a new in a string: `$name | replace " " "-"`
 
 ### String Slice Functions:
 
