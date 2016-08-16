@@ -110,6 +110,14 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   as a map with the indexes set to _N, where N is an integer starting from 0.
   Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
 
+### Integer Slice Functions:
+
+- until: Given an integer, returns a slice of counting integers from 0 to one
+	  less than the given integer: `range $i, $e := until 5`
+- untilStep: Given start, stop, and step, return an integer slice starting at
+	  'start', stopping at `stop`, and incrementing by 'step'. This is the same
+	  as Python's long-form of 'range'.
+
 ### Conversions:
 
 - atoi: Convert a string to an integer. 0 if the integer could not be parsed.

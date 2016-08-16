@@ -63,6 +63,14 @@ String Slice Functions:
 	  as a map with the indexes set to _N, where N is an integer starting from 0.
 	  Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
 
+Integer Slice Functions:
+
+	- until: Given an integer, returns a slice of counting integers from 0 to one
+	  less than the given integer: `range $i, $e := until 5`
+	- untilStep: Given start, stop, and step, return an integer slice starting at
+	  'start', stopping at `stop`, and incrementing by 'step. This is the same
+	  as Python's long-form of 'range'.
+
 Conversions:
 
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
@@ -289,6 +297,9 @@ var genericMap = map[string]interface{}{
 
 	// split "/" foo/bar returns map[int]string{0: foo, 1: bar}
 	"split": split,
+
+	"until":     until,
+	"untilStep": untilStep,
 
 	// VERY basic arithmetic.
 	"add1": func(i interface{}) int64 { return toInt64(i) + 1 },
@@ -743,4 +754,34 @@ func plural(one, many string, count int) string {
 		return one
 	}
 	return many
+}
+
+func until(count int) []int {
+	step := 1
+	if count < 0 {
+		step = -1
+	}
+	return untilStep(0, count, step)
+}
+
+func untilStep(start, stop, step int) []int {
+	v := []int{}
+
+	if stop < start {
+		if step >= 0 {
+			return v
+		}
+		for i := start; i > stop; i += step {
+			v = append(v, i)
+		}
+		return v
+	}
+
+	if step <= 0 {
+		return v
+	}
+	for i := start; i < stop; i += step {
+		v = append(v, i)
+	}
+	return v
 }

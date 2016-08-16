@@ -424,6 +424,35 @@ func TestDict(t *testing.T) {
 	}
 }
 
+func TestUntil(t *testing.T) {
+	tests := map[string]string{
+		`{{range $i, $e := until 5}}{{$i}}{{$e}}{{end}}`:   "0011223344",
+		`{{range $i, $e := until -5}}{{$i}}{{$e}} {{end}}`: "00 1-1 2-2 3-3 4-4 ",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+func TestUntilStep(t *testing.T) {
+	tests := map[string]string{
+		`{{range $i, $e := untilStep 0 5 1}}{{$i}}{{$e}}{{end}}`:     "0011223344",
+		`{{range $i, $e := untilStep 3 6 1}}{{$i}}{{$e}}{{end}}`:     "031425",
+		`{{range $i, $e := untilStep 0 -10 -2}}{{$i}}{{$e}} {{end}}`: "00 1-2 2-4 3-6 4-8 ",
+		`{{range $i, $e := untilStep 3 0 1}}{{$i}}{{$e}}{{end}}`:     "",
+		`{{range $i, $e := untilStep 3 99 0}}{{$i}}{{$e}}{{end}}`:    "",
+		`{{range $i, $e := untilStep 3 99 -1}}{{$i}}{{$e}}{{end}}`:   "",
+		`{{range $i, $e := untilStep 3 0 0}}{{$i}}{{$e}}{{end}}`:     "",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+
+}
+
 func TestDelete(t *testing.T) {
 	fmap := TxtFuncMap()
 	delete(fmap, "split")
