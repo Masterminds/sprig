@@ -33,7 +33,9 @@ String Functions
 	- abbrevboth: Abbreviate from both sides, yielding "...lo wo..."
 	- trunc: Truncate a string (no suffix). `trunc 5 "Hello World"` yields "hello".
 	- trim: strings.TrimSpace
-	- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
+	- trimAll: strings.Trim, but with the argument order reversed `trimAll "$" "$5.00"` or `"$5.00 | trimAll "$"`
+	- trimSuffix: strings.TrimSuffix, but with the argument order reversed: `trimSuffix "-" "ends-with-"`
+	- trimPrefix: strings.TrimPrefix, but with the argument order reversed `trimPrefix "$" "$5"`
 	- upper: strings.ToUpper
 	- lower: strings.ToLower
 	- nospace: Remove all space characters from a string. `nospace "h e l l o"` becomes "hello"
@@ -49,6 +51,8 @@ String Functions
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
+	- hasPrefix: strings.hasPrefix, but with the arguments switched
+	- hasSuffix: strings.hasSuffix, but with the arguments switched
 	- quote: Wrap string(s) in double quotation marks.
 	- squote: Wrap string(s) in double quotation marks.
 	- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
@@ -266,8 +270,12 @@ var genericMap = map[string]interface{}{
 	"substr":     substring,
 	// Switch order so that "foo" | repeat 5
 	"repeat": func(count int, str string) string { return strings.Repeat(str, count) },
+	// Deprecated: Use trimAll.
+	"trimall": func(a, b string) string { return strings.Trim(b, a) },
 	// Switch order so that "$foo" | trimall "$"
-	"trimall":      func(a, b string) string { return strings.Trim(b, a) },
+	"trimAll":      func(a, b string) string { return strings.Trim(b, a) },
+	"trimSuffix":   func(a, b string) string { return strings.TrimSuffix(b, a) },
+	"trimPrefix":   func(a, b string) string { return strings.TrimPrefix(b, a) },
 	"nospace":      util.DeleteWhiteSpace,
 	"initials":     initials,
 	"randAlphaNum": randAlphaNumeric,
@@ -278,13 +286,15 @@ var genericMap = map[string]interface{}{
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
-	"contains": func(substr string, str string) bool { return strings.Contains(str, substr) },
-	"quote":    quote,
-	"squote":   squote,
-	"cat":      cat,
-	"indent":   indent,
-	"replace":  replace,
-	"plural":   plural,
+	"contains":  func(substr string, str string) bool { return strings.Contains(str, substr) },
+	"hasPrefix": func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
+	"hasSuffix": func(substr string, str string) bool { return strings.HasSuffix(str, substr) },
+	"quote":     quote,
+	"squote":    squote,
+	"cat":       cat,
+	"indent":    indent,
+	"replace":   replace,
+	"plural":    plural,
 
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },

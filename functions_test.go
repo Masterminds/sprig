@@ -51,6 +51,34 @@ func TestSquote(t *testing.T) {
 	}
 }
 
+func TestContains(t *testing.T) {
+	// Mainly, we're just verifying the paramater order swap.
+	tests := []string{
+		`{{if contains "cat" "fair catch"}}1{{end}}`,
+		`{{if hasPrefix "cat" "catch"}}1{{end}}`,
+		`{{if hasSuffix "cat" "ducat"}}1{{end}}`,
+	}
+	for _, tt := range tests {
+		if err := runt(tt, "1"); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
+func TestTrim(t *testing.T) {
+	tests := []string{
+		`{{trim "   5.00   "}}`,
+		`{{trimAll "$" "$5.00$"}}`,
+		`{{trimPrefix "$" "$5.00"}}`,
+		`{{trimSuffix "$" "5.00$"}}`,
+	}
+	for _, tt := range tests {
+		if err := runt(tt, "5.00"); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestAdd(t *testing.T) {
 	tpl := `{{ 3 | add 1 2}}`
 	if err := runt(tpl, `6`); err != nil {
@@ -92,13 +120,6 @@ func TestMin(t *testing.T) {
 
 	tpl = `{{ min 345}}`
 	if err := runt(tpl, `345`); err != nil {
-		t.Error(err)
-	}
-}
-
-func TestTrimall(t *testing.T) {
-	tpl := `{{"$foo$" | trimall "$"}}`
-	if err := runt(tpl, "foo"); err != nil {
 		t.Error(err)
 	}
 }
@@ -351,13 +372,6 @@ func TestRandom(t *testing.T) {
 		t.Errorf("Error on tpl %s: %s", err)
 	}
 
-}
-
-func TestContains(t *testing.T) {
-	tpl := `{{"foobar" | contains "foo"}}`
-	if err := runt(tpl, "true"); err != nil {
-		t.Error(err)
-	}
 }
 
 func TestCat(t *testing.T) {

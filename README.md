@@ -72,7 +72,9 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 ### String Functions
 
 - trim: strings.TrimSpace
-- trimall: strings.Trim, but with the argument order reversed `trimall "$" "$5.00"` or `"$5.00 | trimall "$"`
+- trimAll: strings.Trim, but with the argument order reversed `trimAll "$" "$5.00"` or `"$5.00 | trimAll "$"`
+- trimSuffix: strings.TrimSuffix, but with the argument order reversed `trimSuffix "-" "5-"`
+- trimPrefix: strings.TrimPrefix, but with the argument order reversed `trimPrefix "$" "$5"`
 - upper: strings.ToUpper
 - lower: strings.ToLower
 - title: strings.Title
@@ -93,7 +95,9 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - wrap: Wrap text at the given column count
 - wrapWith: Wrap text at the given column count, and with the given
   string for a line terminator: `wrap 50 "\n\t" $string`
-- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
+- contains: strings.Contains, but with the arguments switched: `contains "cat" "uncatch"`. (This simplifies common pipelines)
+- hasPrefix: strings.hasPrefix, but with the arguments switched: `hasPrefix "cat" "catch"`.
+- hasSuffix: strings.hasSuffix, but with the arguments switched: `hasSuffix "cat" "ducat"`.
 - quote: Wrap strings in double quotes. `quote "a" "b"` returns `"a"
   "b"`
 - squote: Wrap strings in single quotes.
