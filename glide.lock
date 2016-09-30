@@ -1,6 +1,8 @@
-hash: e3e0c601d62e05e5e182697a6c20bdd7ea534577ae8e08b7196f33ca5378acc4
-updated: 2015-12-23T07:41:07.419749413-07:00
+hash: a8ed42a70698b4d199b5de7fa33e7c48251651e6ccf97d007f546cb72a5d0f8f
+updated: 2016-09-30T12:23:39.512939213-06:00
 imports:
 - name: github.com/aokoli/goutils
   version: 9c37978a95bd5c709a15883b6242714ea6709e64
-devImports: []
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+testImports: []
