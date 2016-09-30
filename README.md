@@ -106,6 +106,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - replace: Replace an old with a new in a string: `$name | replace " " "-"`
 - plural: Choose singular or plural based on length: `len $fish | plural
   "one anchovy" "many anchovies"`
+- uuidv4: Generate a UUID v4 string
 
 ### String Slice Functions:
 

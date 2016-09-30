@@ -1,3 +1,5 @@
 package: github.com/Masterminds/sprig
 import:
 - package: github.com/aokoli/goutils
+- package: github.com/satori/go.uuid
+  version: ^1.1.0

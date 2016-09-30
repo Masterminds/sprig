@@ -181,6 +181,7 @@ import (
 	"time"
 
 	util "github.com/aokoli/goutils"
+	uuid "github.com/satori/go.uuid"
 )
 
 // Produce the function map.
@@ -239,6 +240,7 @@ var nonhermeticFunctions = []string{
 	"randAlpha",
 	"randAscii",
 	"randNumeric",
+	"uuidv4",
 
 	// OS
 	"env",
@@ -365,6 +367,9 @@ var genericMap = map[string]interface{}{
 
 	// Crypto:
 	"genPrivateKey": generatePrivateKey,
+
+	// UUIDs:
+	"uuidv4": uuidv4,
 }
 
 func split(sep, orig string) map[string]string {
@@ -794,4 +799,9 @@ func untilStep(start, stop, step int) []int {
 		v = append(v, i)
 	}
 	return v
+}
+
+// uuidv4 provides a safe and secure UUID v4 implementation
+func uuidv4() string {
+	return fmt.Sprintf("%s", uuid.NewV4())
 }
