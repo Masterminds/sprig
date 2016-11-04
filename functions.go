@@ -59,6 +59,7 @@ String Functions
 	- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
 	- replace: Replace an old with a new in a string: `$name | replace " " "-"`
 	- plural: Choose singular or plural based on length: `len $fish | plural "one anchovy" "many anchovies"`
+	- sha256sum: Generate a hex encoded sha256 hash of the input
 
 String Slice Functions:
 
@@ -164,10 +165,12 @@ import (
 	"crypto/elliptic"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/asn1"
 	"encoding/base32"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/pem"
 	"fmt"
 	"html/template"
@@ -297,6 +300,7 @@ var genericMap = map[string]interface{}{
 	"indent":    indent,
 	"replace":   replace,
 	"plural":    plural,
+	"sha256sum": sha256sum,
 
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -769,6 +773,11 @@ func plural(one, many string, count int) string {
 		return one
 	}
 	return many
+}
+
+func sha256sum(input string) string {
+	hash := sha256.Sum256([]byte(input))
+	return hex.EncodeToString(hash[:])
 }
 
 func until(count int) []int {
