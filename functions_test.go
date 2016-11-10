@@ -406,6 +406,13 @@ func TestPlural(t *testing.T) {
 	}
 }
 
+func TestSha256Sum(t *testing.T) {
+	tpl := `{{"abc" | sha256sum}}`
+	if err := runt(tpl, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTuple(t *testing.T) {
 	tpl := `{{$t := tuple 1 "a" "foo"}}{{index $t 2}}{{index $t 0 }}{{index $t 1}}`
 	if err := runt(tpl, "foo1a"); err != nil {

@@ -107,6 +107,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - plural: Choose singular or plural based on length: `len $fish | plural
   "one anchovy" "many anchovies"`
 - uuidv4: Generate a UUID v4 string
+- sha256sum: Generate a hex encoded sha256 hash of the input
 
 ### String Slice Functions:
 
