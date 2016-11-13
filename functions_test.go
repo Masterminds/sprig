@@ -185,6 +185,43 @@ func TestToInt64(t *testing.T) {
 	}
 }
 
+func TestToInt(t *testing.T) {
+	target := int(102)
+	if target != toInt(int8(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(int(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(int32(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(int16(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(int64(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt("102") {
+		t.Errorf("Expected 102")
+	}
+	if 0 != toInt("frankie") {
+		t.Errorf("Expected 0")
+	}
+	if target != toInt(uint16(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(uint64(102)) {
+		t.Errorf("Expected 102")
+	}
+	if target != toInt(float64(102.1234)) {
+		t.Errorf("Expected 102")
+	}
+	if 1 != toInt(true) {
+		t.Errorf("Expected 102")
+	}
+}
+
 func TestEmpty(t *testing.T) {
 	tpl := `{{if empty 1}}1{{else}}0{{end}}`
 	if err := runt(tpl, "0"); err != nil {
