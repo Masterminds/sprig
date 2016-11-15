@@ -79,7 +79,8 @@ Integer Slice Functions:
 Conversions:
 
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
-	- toInt64: Convert a string or another numeric type to an int64.
+	- in64: Convert a string or another numeric type to an int64.
+	- int: Convert a string or another numeric type to an int.
 
 Defaults:
 
@@ -305,6 +306,7 @@ var genericMap = map[string]interface{}{
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
 	"int64": toInt64,
+	"int": toInt,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
@@ -693,6 +695,11 @@ func toInt64(v interface{}) int64 {
 	default:
 		return 0
 	}
+}
+
+func toInt(v interface{}) int {
+	//It's not optimal. Bud I don't want duplicate toInt64 code.
+	return int(toInt64(v))
 }
 
 func generatePrivateKey(typ string) string {
