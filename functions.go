@@ -1,5 +1,5 @@
 /*
-Sprig: Template functions for Go.
+Package sprig provides template functions for Go.
 
 This package contains a number of utility functions for working with data
 inside of Go `html/template` and `text/template` files.
@@ -46,7 +46,7 @@ String Functions
 	- initials: Given a multi-word string, return the initials. `initials "Matt Butcher"` returns "MB"
 	- randAlphaNum: Given a length, generate a random alphanumeric sequence
 	- randAlpha: Given a length, generate an alphabetic string
-	- randAscii: Given a length, generate a random ASCII string (symbols included)
+	- randASCII: Given a length, generate a random ASCII string (symbols included)
 	- randNumeric: Given a length, generate a string of digits.
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
@@ -190,17 +190,17 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// Produce the function map.
+// FuncMap Produce the function map.
 //
 // Use this to pass the functions into the template engine:
 //
 // 	tpl := template.New("foo").Funcs(sprig.FuncMap))
 //
 func FuncMap() template.FuncMap {
-	return HtmlFuncMap()
+	return HTMLFuncMap()
 }
 
-// HermeticTextFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
+// HermeticTxtFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
 func HermeticTxtFuncMap() ttemplate.FuncMap {
 	r := TxtFuncMap()
 	for _, name := range nonhermeticFunctions {
@@ -209,27 +209,27 @@ func HermeticTxtFuncMap() ttemplate.FuncMap {
 	return r
 }
 
-// HermeticHtmlFuncMap returns an 'html/template'.Funcmap with only repeatable functions.
-func HermeticHtmlFuncMap() template.FuncMap {
-	r := HtmlFuncMap()
+// HermeticHTMLFuncMap returns an 'html/template'.Funcmap with only repeatable functions.
+func HermeticHTMLFuncMap() template.FuncMap {
+	r := HTMLFuncMap()
 	for _, name := range nonhermeticFunctions {
 		delete(r, name)
 	}
 	return r
 }
 
-// TextFuncMap returns a 'text/template'.FuncMap
+// TxtFuncMap returns a 'text/template'.FuncMap
 func TxtFuncMap() ttemplate.FuncMap {
 	return ttemplate.FuncMap(genericMap)
 }
 
-// HtmlFuncMap returns an 'html/template'.Funcmap
-func HtmlFuncMap() template.FuncMap {
+// HTMLFuncMap returns an 'html/template'.Funcmap
+func HTMLFuncMap() template.FuncMap {
 	return template.FuncMap(genericMap)
 }
 
 // These functions are not guaranteed to evaluate to the same result for given input, because they
-// refer to the environemnt or global state.
+// refer to the environment or global state.
 var nonhermeticFunctions = []string{
 	// Date functions
 	"date",
@@ -244,7 +244,7 @@ var nonhermeticFunctions = []string{
 	// Strings
 	"randAlphaNum",
 	"randAlpha",
-	"randAscii",
+	"randASCII",
 	"randNumeric",
 	"uuidv4",
 
@@ -288,7 +288,7 @@ var genericMap = map[string]interface{}{
 	"initials":     initials,
 	"randAlphaNum": randAlphaNumeric,
 	"randAlpha":    randAlpha,
-	"randAscii":    randAscii,
+	"randASCII":    randASCII,
 	"randNumeric":  randNumeric,
 	"swapcase":     util.SwapCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
@@ -506,8 +506,6 @@ func empty(given interface{}) bool {
 
 	// Basically adapted from text/template.isTrue
 	switch g.Kind() {
-	default:
-		return g.IsNil()
 	case reflect.Array, reflect.Slice, reflect.Map, reflect.String:
 		return g.Len() == 0
 	case reflect.Bool:
@@ -523,7 +521,7 @@ func empty(given interface{}) bool {
 	case reflect.Struct:
 		return false
 	}
-	return true
+	return g.IsNil()
 }
 
 // typeIs returns true if the src is the type named in target.
@@ -603,7 +601,7 @@ func randAlpha(count int) string {
 	return r
 }
 
-func randAscii(count int) string {
+func randASCII(count int) string {
 	r, _ := util.RandomAscii(count)
 	return r
 }
@@ -735,6 +733,7 @@ func generatePrivateKey(typ string) string {
 	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
 }
 
+// DSAKeyFormat contains the DSA Key data
 type DSAKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int
@@ -827,6 +826,7 @@ func uuidv4() string {
 	return fmt.Sprintf("%s", uuid.NewV4())
 }
 
+// xmlEncode escape XML data
 func xmlEncode(s string) string {
 	buf := new(bytes.Buffer)
 	xml.EscapeText(buf, []byte(s))

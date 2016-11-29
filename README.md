@@ -94,7 +94,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   word
 - randAlphaNum: Generate a random alpha-numeric string
 - randAlpha: Generate a random alphabetic string
-- randAscii: Generate a random ASCII string, including symbols
+- randASCII: Generate a random ASCII string, including symbols
 - randNumeric: Generate a random numeric string
 - wrap: Wrap text at the given column count
 - wrapWith: Wrap text at the given column count, and with the given

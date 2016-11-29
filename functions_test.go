@@ -278,7 +278,7 @@ func TestKindOf(t *testing.T) {
 		t.Error(err)
 	}
 
-	var f3 *fixtureTO = nil
+	var f3 *fixtureTO
 	if err := runtv(tpl, "ptr", f3); err != nil {
 		t.Error(err)
 	}
@@ -385,7 +385,7 @@ func TestGoutils(t *testing.T) {
 	for k, v := range tests {
 		t.Log(k)
 		if err := runt(k, v); err != nil {
-			t.Errorf("Error on tpl %s: %s", err)
+			t.Errorf("Error: %s", err)
 		}
 	}
 }
@@ -397,16 +397,16 @@ func TestRandom(t *testing.T) {
 	// Because we're using a random number generator, we need these to go in
 	// a predictable sequence:
 	if err := runt(`{{randAlphaNum 5}}`, "9bzRv"); err != nil {
-		t.Errorf("Error on tpl %s: %s", err)
+		t.Errorf("Error: %s", err)
 	}
 	if err := runt(`{{randAlpha 5}}`, "VjwGe"); err != nil {
-		t.Errorf("Error on tpl %s: %s", err)
+		t.Errorf("Error: %s", err)
 	}
-	if err := runt(`{{randAscii 5}}`, "1KA5p"); err != nil {
-		t.Errorf("Error on tpl %s: %s", err)
+	if err := runt(`{{randASCII 5}}`, "1KA5p"); err != nil {
+		t.Errorf("Error: %s", err)
 	}
 	if err := runt(`{{randNumeric 5}}`, "26018"); err != nil {
-		t.Errorf("Error on tpl %s: %s", err)
+		t.Errorf("Error: %s", err)
 	}
 
 }
@@ -567,7 +567,7 @@ func TestGenPrivateKey(t *testing.T) {
 	}
 	// ensure that we can base64 encode the string
 	tpl = `{{genPrivateKey "rsa" | b64enc}}`
-	out, err = runRaw(tpl, nil)
+	_, err = runRaw(tpl, nil)
 	if err != nil {
 		t.Error(err)
 	}
