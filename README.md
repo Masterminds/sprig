@@ -8,15 +8,15 @@ used template functions.
 It is inspired by the template functions found in
 [Twig](http://twig.sensiolabs.org/documentation).
 
-[![Documentation](https://godoc.org/github.com/miracl/spring?status.png)](http://godoc.org/github.com/miracl/spring) 
-[![Master Build Status](https://secure.travis-ci.org/miracl/spring.png?branch=master)](https://travis-ci.org/miracl/spring?branch=master)
-[![Master Coverage Status](https://coveralls.io/repos/miracl/spring/badge.svg?branch=master&service=github)](https://coveralls.io/github/miracl/spring?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/miracl/spring)](https://goreportcard.com/report/github.com/miracl/spring)
+[![Documentation](https://godoc.org/github.com/miracl/sprig?status.png)](http://godoc.org/github.com/miracl/sprig) 
+[![Master Build Status](https://secure.travis-ci.org/miracl/sprig.png?branch=master)](https://travis-ci.org/miracl/sprig?branch=master)
+[![Master Coverage Status](https://coveralls.io/repos/miracl/sprig/badge.svg?branch=master&service=github)](https://coveralls.io/github/miracl/sprig?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/miracl/sprig)](https://goreportcard.com/report/github.com/miracl/sprig)
 
 
 ## Usage
 
-API documentation is available [at GoDoc.org](http://godoc.org/github.com/Masterminds/spring), but
+API documentation is available [at GoDoc.org](http://godoc.org/github.com/Masterminds/sprig), but
 read on for standard usage.
 
 ### Load the Sprig library
@@ -26,14 +26,14 @@ To load the Sprig `FuncMap`:
 ```go
 
 import (
-  "github.com/Masterminds/spring"
+  "github.com/Masterminds/sprig"
   "html/template"
 )
 
 // This example illustrates that the FuncMap *must* be set before the
 // templates themselves are loaded.
 tpl := template.Must(
-  template.New("base").Funcs(spring.FuncMap()).ParseGlob("*.html")
+  template.New("base").Funcs(sprig.FuncMap()).ParseGlob("*.html")
 )
 
 
