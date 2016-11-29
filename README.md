@@ -8,7 +8,11 @@ used template functions.
 It is inspired by the template functions found in
 [Twig](http://twig.sensiolabs.org/documentation).
 
-[![Build Status](https://travis-ci.org/Masterminds/sprig.svg?branch=master)](https://travis-ci.org/Masterminds/sprig)
+[![Documentation](https://godoc.org/github.com/miracl/spring?status.png)](http://godoc.org/github.com/miracl/spring) 
+[![Master Build Status](https://secure.travis-ci.org/miracl/spring.png?branch=master)](https://travis-ci.org/miracl/spring?branch=master)
+[![Master Coverage Status](https://coveralls.io/repos/miracl/spring/badge.svg?branch=master&service=github)](https://coveralls.io/github/miracl/spring?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/miracl/spring)](https://goreportcard.com/report/github.com/miracl/spring)
+
 
 ## Usage
 
@@ -90,7 +94,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   word
 - randAlphaNum: Generate a random alpha-numeric string
 - randAlpha: Generate a random alphabetic string
-- randAscii: Generate a random ASCII string, including symbols
+- randASCII: Generate a random ASCII string, including symbols
 - randNumeric: Generate a random numeric string
 - wrap: Wrap text at the given column count
 - wrapWith: Wrap text at the given column count, and with the given
