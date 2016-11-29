@@ -161,6 +161,7 @@ Crypto Functions:
 package sprig
 
 import (
+	"bytes"
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
@@ -173,6 +174,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/pem"
+	"encoding/xml"
 	"fmt"
 	"html/template"
 	"math"
@@ -376,6 +378,9 @@ var genericMap = map[string]interface{}{
 
 	// UUIDs:
 	"uuidv4": uuidv4,
+
+	// xml
+	"xml": xmlEncode,
 }
 
 func split(sep, orig string) map[string]string {
@@ -820,4 +825,11 @@ func untilStep(start, stop, step int) []int {
 // uuidv4 provides a safe and secure UUID v4 implementation
 func uuidv4() string {
 	return fmt.Sprintf("%s", uuid.NewV4())
+}
+
+func xmlEncode(s string) string {
+	buf := new(bytes.Buffer)
+	xml.EscapeText(buf, []byte(s))
+	return buf.String()
+
 }
