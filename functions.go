@@ -306,7 +306,13 @@ var genericMap = map[string]interface{}{
 	"sha256sum": sha256sum,
 
 	// Wrap Atoi to stop errors.
-	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"atoi": func(a string) int {
+		i, err := strconv.Atoi(a)
+		if err != nil {
+			return 0
+		}
+		return i
+	},
 	"int64": toInt64,
 	"int":   toInt,
 
@@ -443,7 +449,7 @@ func dateInZone(fmt string, date interface{}, zone string) string {
 
 	loc, err := time.LoadLocation(zone)
 	if err != nil {
-		loc, _ = time.LoadLocation("UTC")
+		loc, _ = time.LoadLocation("UTC") // nosec we know that "UTC" is a valid string
 	}
 
 	return t.In(loc).Format(fmt)
@@ -574,7 +580,10 @@ func abbrev(width int, s string) string {
 	if width < 4 {
 		return s
 	}
-	r, _ := util.Abbreviate(s, width)
+	r, err := util.Abbreviate(s, width)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
@@ -582,7 +591,10 @@ func abbrevboth(left, right int, s string) string {
 	if right < 4 || left > 0 && right < 7 {
 		return s
 	}
-	r, _ := util.AbbreviateFull(s, left, right)
+	r, err := util.AbbreviateFull(s, left, right)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 func initials(s string) string {
@@ -591,23 +603,34 @@ func initials(s string) string {
 }
 
 func randAlphaNumeric(count int) string {
-	// It is not possible, it appears, to actually generate an error here.
-	r, _ := util.RandomAlphaNumeric(count)
+	r, err := util.RandomAlphaNumeric(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
 func randAlpha(count int) string {
-	r, _ := util.RandomAlphabetic(count)
+	r, err := util.RandomAlphabetic(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
 func randASCII(count int) string {
-	r, _ := util.RandomAscii(count)
+	r, err := util.RandomAscii(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
 func randNumeric(count int) string {
-	r, _ := util.RandomNumeric(count)
+	r, err := util.RandomNumeric(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
@@ -748,10 +771,16 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 			P: k.P, Q: k.Q, G: k.G,
 			Y: k.Y, X: k.X,
 		}
-		bytes, _ := asn1.Marshal(val)
+		bytes, err := asn1.Marshal(val)
+		if err != nil {
+			bytes = []byte("")
+		}
 		return &pem.Block{Type: "DSA PRIVATE KEY", Bytes: bytes}
 	case *ecdsa.PrivateKey:
-		b, _ := x509.MarshalECPrivateKey(k)
+		b, err := x509.MarshalECPrivateKey(k)
+		if err != nil {
+			b = []byte("")
+		}
 		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
 	default:
 		return nil
