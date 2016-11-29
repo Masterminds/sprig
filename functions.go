@@ -308,7 +308,7 @@ var genericMap = map[string]interface{}{
 	// Wrap Atoi to stop errors.
 	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
 	"int64": toInt64,
-	"int": toInt,
+	"int":   toInt,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
