@@ -16,7 +16,7 @@ It is inspired by the template functions found in
 
 ## Usage
 
-API documentation is available [at GoDoc.org](http://godoc.org/github.com/Masterminds/sprig), but
+API documentation is available [at GoDoc.org](http://godoc.org/github.com/miracl/sprig), but
 read on for standard usage.
 
 ### Load the Sprig library
@@ -26,7 +26,7 @@ To load the Sprig `FuncMap`:
 ```go
 
 import (
-  "github.com/Masterminds/sprig"
+  "github.com/miracl/sprig"
   "html/template"
 )
 
