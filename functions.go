@@ -101,7 +101,7 @@ OS:
 Encoding:
 	- b64enc: Base 64 encode a string.
 	- b64dec: Base 64 decode a string.
-	- xml: encode a string for safe insertion into an xml document
+	- xml: Encode a string for safe insertion into an xml document.
 
 Reflection:
 
@@ -375,6 +375,7 @@ var genericMap = map[string]interface{}{
 	"b64dec": base64decode,
 	"b32enc": base32encode,
 	"b32dec": base32decode,
+	"xmlenc": xmlEncode,
 
 	// Data Structures:
 	"tuple": tuple,
@@ -385,9 +386,6 @@ var genericMap = map[string]interface{}{
 
 	// UUIDs:
 	"uuidv4": uuidv4,
-
-	// xml
-	"xml": xmlEncode,
 }
 
 func split(sep, orig string) map[string]string {
@@ -856,10 +854,12 @@ func uuidv4() string {
 	return fmt.Sprintf("%s", uuid.NewV4())
 }
 
-// xmlEncode escape XML data
+// xmlEncode encode a string for safe insertion into an xml document
 func xmlEncode(s string) string {
 	buf := new(bytes.Buffer)
-	xml.EscapeText(buf, []byte(s))
+	err := xml.EscapeText(buf, []byte(s))
+	if err != nil {
+		return ""
+	}
 	return buf.String()
-
 }

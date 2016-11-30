@@ -595,7 +595,7 @@ func TestUUIDGeneration(t *testing.T) {
 }
 
 func TestXMLEncode(t *testing.T) {
-	tpl := `{{"test&" | xml }}`
+	tpl := `{{"test&" | xmlenc }}`
 	if err := runt(tpl, "test&amp;"); err != nil {
 		t.Error(err)
 	}
