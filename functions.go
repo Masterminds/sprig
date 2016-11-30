@@ -101,6 +101,7 @@ OS:
 Encoding:
 	- b64enc: Base 64 encode a string.
 	- b64dec: Base 64 decode a string.
+	- xml: encode a string for safe insertion into an xml document
 
 Reflection:
 
