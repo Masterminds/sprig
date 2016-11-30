@@ -13,6 +13,27 @@ It is inspired by the template functions found in
 [![Master Coverage Status](https://coveralls.io/repos/miracl/sprig/badge.svg?branch=master&service=github)](https://coveralls.io/github/miracl/sprig?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/miracl/sprig)](https://goreportcard.com/report/github.com/miracl/sprig)
 
+## Quick Start
+
+This project includes a Makefile that allows you to test the project in a Linux-compatible system with simple commands.  
+All the artifacts and reports produced using this Makefile are stored in the *target* folder.  
+
+All the packages listed in the *resources/DockerDev/Dockerfile* file are required in order to build and test all the library options in the current environment. Alternatively, everything can be built inside a [Docker](https://www.docker.com) container using the command "make dbuild".
+
+To see all available options:
+```
+make help
+```
+
+To execute all the default test builds and generate reports in the current environment:
+```
+make qa
+```
+
+To format the code (please use this command before submitting any pull request):
+```
+make format
+```
 
 ## Usage
 
