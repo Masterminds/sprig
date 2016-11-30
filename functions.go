@@ -1,5 +1,5 @@
 /*
-Sprig: Template functions for Go.
+Package sprig provides template functions for Go.
 
 This package contains a number of utility functions for working with data
 inside of Go `html/template` and `text/template` files.
@@ -46,7 +46,7 @@ String Functions
 	- initials: Given a multi-word string, return the initials. `initials "Matt Butcher"` returns "MB"
 	- randAlphaNum: Given a length, generate a random alphanumeric sequence
 	- randAlpha: Given a length, generate an alphabetic string
-	- randAscii: Given a length, generate a random ASCII string (symbols included)
+	- randASCII: Given a length, generate a random ASCII string (symbols included)
 	- randNumeric: Given a length, generate a string of digits.
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
@@ -101,6 +101,7 @@ OS:
 Encoding:
 	- b64enc: Base 64 encode a string.
 	- b64dec: Base 64 decode a string.
+	- xml: Encode a string for safe insertion into an xml document.
 
 Reflection:
 
@@ -161,6 +162,7 @@ Crypto Functions:
 package sprig
 
 import (
+	"bytes"
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
@@ -173,6 +175,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/pem"
+	"encoding/xml"
 	"fmt"
 	"html/template"
 	"math"
@@ -188,17 +191,17 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// Produce the function map.
+// FuncMap Produce the function map.
 //
 // Use this to pass the functions into the template engine:
 //
 // 	tpl := template.New("foo").Funcs(sprig.FuncMap))
 //
 func FuncMap() template.FuncMap {
-	return HtmlFuncMap()
+	return HTMLFuncMap()
 }
 
-// HermeticTextFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
+// HermeticTxtFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
 func HermeticTxtFuncMap() ttemplate.FuncMap {
 	r := TxtFuncMap()
 	for _, name := range nonhermeticFunctions {
@@ -207,27 +210,27 @@ func HermeticTxtFuncMap() ttemplate.FuncMap {
 	return r
 }
 
-// HermeticHtmlFuncMap returns an 'html/template'.Funcmap with only repeatable functions.
-func HermeticHtmlFuncMap() template.FuncMap {
-	r := HtmlFuncMap()
+// HermeticHTMLFuncMap returns an 'html/template'.Funcmap with only repeatable functions.
+func HermeticHTMLFuncMap() template.FuncMap {
+	r := HTMLFuncMap()
 	for _, name := range nonhermeticFunctions {
 		delete(r, name)
 	}
 	return r
 }
 
-// TextFuncMap returns a 'text/template'.FuncMap
+// TxtFuncMap returns a 'text/template'.FuncMap
 func TxtFuncMap() ttemplate.FuncMap {
 	return ttemplate.FuncMap(genericMap)
 }
 
-// HtmlFuncMap returns an 'html/template'.Funcmap
-func HtmlFuncMap() template.FuncMap {
+// HTMLFuncMap returns an 'html/template'.Funcmap
+func HTMLFuncMap() template.FuncMap {
 	return template.FuncMap(genericMap)
 }
 
 // These functions are not guaranteed to evaluate to the same result for given input, because they
-// refer to the environemnt or global state.
+// refer to the environment or global state.
 var nonhermeticFunctions = []string{
 	// Date functions
 	"date",
@@ -242,7 +245,7 @@ var nonhermeticFunctions = []string{
 	// Strings
 	"randAlphaNum",
 	"randAlpha",
-	"randAscii",
+	"randASCII",
 	"randNumeric",
 	"uuidv4",
 
@@ -286,7 +289,7 @@ var genericMap = map[string]interface{}{
 	"initials":     initials,
 	"randAlphaNum": randAlphaNumeric,
 	"randAlpha":    randAlpha,
-	"randAscii":    randAscii,
+	"randASCII":    randASCII,
 	"randNumeric":  randNumeric,
 	"swapcase":     util.SwapCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
@@ -304,9 +307,15 @@ var genericMap = map[string]interface{}{
 	"sha256sum": sha256sum,
 
 	// Wrap Atoi to stop errors.
-	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"atoi": func(a string) int {
+		i, err := strconv.Atoi(a)
+		if err != nil {
+			return 0
+		}
+		return i
+	},
 	"int64": toInt64,
-	"int": toInt,
+	"int":   toInt,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
@@ -366,6 +375,7 @@ var genericMap = map[string]interface{}{
 	"b64dec": base64decode,
 	"b32enc": base32encode,
 	"b32dec": base32decode,
+	"xmlenc": xmlEncode,
 
 	// Data Structures:
 	"tuple": tuple,
@@ -438,7 +448,7 @@ func dateInZone(fmt string, date interface{}, zone string) string {
 
 	loc, err := time.LoadLocation(zone)
 	if err != nil {
-		loc, _ = time.LoadLocation("UTC")
+		loc, _ = time.LoadLocation("UTC") // nosec we know that "UTC" is a valid string
 	}
 
 	return t.In(loc).Format(fmt)
@@ -501,8 +511,6 @@ func empty(given interface{}) bool {
 
 	// Basically adapted from text/template.isTrue
 	switch g.Kind() {
-	default:
-		return g.IsNil()
 	case reflect.Array, reflect.Slice, reflect.Map, reflect.String:
 		return g.Len() == 0
 	case reflect.Bool:
@@ -518,7 +526,7 @@ func empty(given interface{}) bool {
 	case reflect.Struct:
 		return false
 	}
-	return true
+	return g.IsNil()
 }
 
 // typeIs returns true if the src is the type named in target.
@@ -571,7 +579,10 @@ func abbrev(width int, s string) string {
 	if width < 4 {
 		return s
 	}
-	r, _ := util.Abbreviate(s, width)
+	r, err := util.Abbreviate(s, width)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
@@ -579,7 +590,10 @@ func abbrevboth(left, right int, s string) string {
 	if right < 4 || left > 0 && right < 7 {
 		return s
 	}
-	r, _ := util.AbbreviateFull(s, left, right)
+	r, err := util.AbbreviateFull(s, left, right)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 func initials(s string) string {
@@ -588,23 +602,34 @@ func initials(s string) string {
 }
 
 func randAlphaNumeric(count int) string {
-	// It is not possible, it appears, to actually generate an error here.
-	r, _ := util.RandomAlphaNumeric(count)
+	r, err := util.RandomAlphaNumeric(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
 func randAlpha(count int) string {
-	r, _ := util.RandomAlphabetic(count)
+	r, err := util.RandomAlphabetic(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
-func randAscii(count int) string {
-	r, _ := util.RandomAscii(count)
+func randASCII(count int) string {
+	r, err := util.RandomAscii(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
 func randNumeric(count int) string {
-	r, _ := util.RandomNumeric(count)
+	r, err := util.RandomNumeric(count)
+	if err != nil {
+		return ""
+	}
 	return r
 }
 
@@ -730,6 +755,7 @@ func generatePrivateKey(typ string) string {
 	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
 }
 
+// DSAKeyFormat contains the DSA Key data
 type DSAKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int
@@ -744,10 +770,16 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 			P: k.P, Q: k.Q, G: k.G,
 			Y: k.Y, X: k.X,
 		}
-		bytes, _ := asn1.Marshal(val)
+		bytes, err := asn1.Marshal(val)
+		if err != nil {
+			bytes = []byte("")
+		}
 		return &pem.Block{Type: "DSA PRIVATE KEY", Bytes: bytes}
 	case *ecdsa.PrivateKey:
-		b, _ := x509.MarshalECPrivateKey(k)
+		b, err := x509.MarshalECPrivateKey(k)
+		if err != nil {
+			b = []byte("")
+		}
 		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
 	default:
 		return nil
@@ -820,4 +852,14 @@ func untilStep(start, stop, step int) []int {
 // uuidv4 provides a safe and secure UUID v4 implementation
 func uuidv4() string {
 	return fmt.Sprintf("%s", uuid.NewV4())
+}
+
+// xmlEncode encode a string for safe insertion into an xml document
+func xmlEncode(s string) string {
+	buf := new(bytes.Buffer)
+	err := xml.EscapeText(buf, []byte(s))
+	if err != nil {
+		return ""
+	}
+	return buf.String()
 }
