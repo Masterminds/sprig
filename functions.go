@@ -81,6 +81,7 @@ Conversions:
 	- atoi: Convert a string to an integer. 0 if the integer could not be parsed.
 	- in64: Convert a string or another numeric type to an int64.
 	- int: Convert a string or another numeric type to an int.
+	- float64: Convert a string or another numeric type to a float64.
 
 Defaults:
 
@@ -304,9 +305,10 @@ var genericMap = map[string]interface{}{
 	"sha256sum": sha256sum,
 
 	// Wrap Atoi to stop errors.
-	"atoi":  func(a string) int { i, _ := strconv.Atoi(a); return i },
-	"int64": toInt64,
-	"int": toInt,
+	"atoi":    func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"int64":   toInt64,
+	"int":     toInt,
+	"float64": toFloat64,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
@@ -661,9 +663,43 @@ func strval(v interface{}) string {
 	}
 }
 
+// toFloat64 converts 64-bit floats
+func toFloat64(v interface{}) float64 {
+	if str, ok := v.(string); ok {
+		iv, err := strconv.ParseFloat(str, 64)
+		if err != nil {
+			return 0
+		}
+		return iv
+	}
+
+	val := reflect.Indirect(reflect.ValueOf(v))
+	switch val.Kind() {
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
+		return float64(val.Int())
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32:
+		return float64(val.Uint())
+	case reflect.Uint, reflect.Uint64:
+		return float64(val.Uint())
+	case reflect.Float32, reflect.Float64:
+		return val.Float()
+	case reflect.Bool:
+		if val.Bool() == true {
+			return 1
+		}
+		return 0
+	default:
+		return 0
+	}
+}
+
+func toInt(v interface{}) int {
+	//It's not optimal. Bud I don't want duplicate toInt64 code.
+	return int(toInt64(v))
+}
+
 // toInt64 converts integer types to 64-bit integers
 func toInt64(v interface{}) int64 {
-
 	if str, ok := v.(string); ok {
 		iv, err := strconv.ParseInt(str, 10, 64)
 		if err != nil {
@@ -695,11 +731,6 @@ func toInt64(v interface{}) int64 {
 	default:
 		return 0
 	}
-}
-
-func toInt(v interface{}) int {
-	//It's not optimal. Bud I don't want duplicate toInt64 code.
-	return int(toInt64(v))
 }
 
 func generatePrivateKey(typ string) string {

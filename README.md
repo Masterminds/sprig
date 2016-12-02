@@ -127,6 +127,9 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 ### Conversions:
 
 - atoi: Convert a string to an integer. 0 if the integer could not be parsed.
+- int: Convert a string or numeric to an int
+- int64: Convert a string or numeric to an int64
+- float64: Convert a string or numeric to a float64
 
 ### Defaults:
 
