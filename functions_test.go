@@ -35,6 +35,10 @@ func TestQuote(t *testing.T) {
 	if err := runt(tpl, `"a" "b" "c"`); err != nil {
 		t.Error(err)
 	}
+	tpl = `{{quote "\"a\"" "b" "c"}}`
+	if err := runt(tpl, `"\"a\"" "b" "c"`); err != nil {
+		t.Error(err)
+	}
 	tpl = `{{quote 1 2 3 }}`
 	if err := runt(tpl, `"1" "2" "3"`); err != nil {
 		t.Error(err)

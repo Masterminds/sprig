@@ -53,8 +53,8 @@ String Functions
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
 	- hasPrefix: strings.hasPrefix, but with the arguments switched
 	- hasSuffix: strings.hasSuffix, but with the arguments switched
-	- quote: Wrap string(s) in double quotation marks.
-	- squote: Wrap string(s) in double quotation marks.
+	- quote: Wrap string(s) in double quotation marks, escape the contents by adding '\' before '"'.
+	- squote: Wrap string(s) in double quotation marks, does not escape content.
 	- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
 	- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
 	- replace: Replace an old with a new in a string: `$name | replace " " "-"`
@@ -617,7 +617,7 @@ func untitle(str string) string {
 func quote(str ...interface{}) string {
 	out := make([]string, len(str))
 	for i, s := range str {
-		out[i] = fmt.Sprintf("\"%v\"", s)
+		out[i] = fmt.Sprintf("%q", strval(s))
 	}
 	return strings.Join(out, " ")
 }
