@@ -187,6 +187,7 @@ import (
 	"math"
 	"math/big"
 	"os"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -372,10 +373,10 @@ var genericMap = map[string]interface{}{
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
 
 	// File Paths:
-	"base" path.Base,
-	"dir": path.Dir,
+	"base":  path.Base,
+	"dir":   path.Dir,
 	"clean": path.Clean,
-	"ext": path.Ext,
+	"ext":   path.Ext,
 	"isAbs": path.IsAbs,
 
 	// Encoding:

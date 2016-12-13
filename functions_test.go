@@ -12,6 +12,7 @@ import (
 	"text/template"
 
 	"github.com/aokoli/goutils"
+	"github.com/stretchr/testify/assert"
 )
 
 // This is woefully incomplete. Please help.
@@ -549,6 +550,27 @@ func TestUntilStep(t *testing.T) {
 		}
 	}
 
+}
+
+func TestBase(t *testing.T) {
+	assert.NoError(t, runt(`{{ base "foo/bar" }}`, "bar"))
+}
+
+func TestDir(t *testing.T) {
+	assert.NoError(t, runt(`{{ dir "foo/bar/baz" }}`, "foo/bar"))
+}
+
+func TestIsAbs(t *testing.T) {
+	assert.NoError(t, runt(`{{ isAbs "/foo" }}`, "true"))
+	assert.NoError(t, runt(`{{ isAbs "foo" }}`, "false"))
+}
+
+func TestClean(t *testing.T) {
+	assert.NoError(t, runt(`{{ clean "/foo/../foo/../bar" }}`, "/bar"))
+}
+
+func TestExt(t *testing.T) {
+	assert.NoError(t, runt(`{{ ext "/foo/bar/baz.txt" }}`, ".txt"))
 }
 
 func TestDelete(t *testing.T) {
