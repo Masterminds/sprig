@@ -166,6 +166,13 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   follows: []byte are converted, fmt.Stringers will have String() called.
   errors will have Error() called. All others will be passed through
   fmt.Sprtinf("%v").
+- set: Takes a dict, a key, and a value, and sets that key/value pair in
+  the dict. `set $dict $key $value`. For convenience, it returns the dict,
+  even though the dict was modified in place.
+- unset: Takes a dict and a key, and deletes that key/value pair from the
+  dict. `unset $dict $key`. This returns the dict for convenience.
+- hasKey: Takes a dict and a key, and returns boolean true if the key is in
+  the dict.
 
 ```
 {{$t := tuple 1 "a" "foo"}}

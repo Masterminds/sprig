@@ -285,6 +285,16 @@ func TestEmpty(t *testing.T) {
 	if err := runt(tpl, "1"); err != nil {
 		t.Error(err)
 	}
+
+	dict := map[string]interface{}{"top": map[string]interface{}{}}
+	tpl = `{{if empty .top.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "1", dict); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if empty .bottom.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "1", dict); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestSplit(t *testing.T) {
@@ -519,6 +529,43 @@ func TestDict(t *testing.T) {
 	}
 	tpl = `{{$t := dict "I" "shot" "the" "albatross"}}{{$t.the}} {{$t.I}}`
 	if err := runt(tpl, "albatross shot"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestUnset(t *testing.T) {
+	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
+	{{- $_ := unset $d "two" -}}
+	{{- range $k, $v := $d}}{{$k}}{{$v}}{{- end -}}
+	`
+
+	expect := "one1"
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+func TestHasKey(t *testing.T) {
+	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
+	{{- if hasKey $d "one" -}}1{{- end -}}
+	`
+
+	expect := "1"
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSet(t *testing.T) {
+	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
+	{{- $_ := set $d "two" 2 -}}
+	{{- $_ := set $d "three" 3 -}}
+	{{- if hasKey $d "one" -}}{{$d.one}}{{- end -}}
+	{{- if hasKey $d "two" -}}{{$d.two}}{{- end -}}
+	{{- if hasKey $d "three" -}}{{$d.three}}{{- end -}}
+	`
+
+	expect := "123"
+	if err := runt(tpl, expect); err != nil {
 		t.Error(err)
 	}
 }

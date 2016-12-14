@@ -143,6 +143,13 @@ Data Structures:
 	  follows: []byte are converted, fmt.Stringers will have String() called.
 	  errors will have Error() called. All others will be passed through
 	  fmt.Sprtinf("%v").
+	- set: Takes a dict, a key, and a value, and sets that key/value pair in
+	  the dict. `set $dict $key $value`. For convenience, it returns the dict,
+	  even though the dict was modified in place.
+	- unset: Takes a dict and a key, and deletes that key/value pair from the
+	  dict. `unset $dict $key`. This returns the dict for convenience.
+	- hasKey: Takes a dict and a key, and returns boolean true if the key is in
+	  the dict.
 
 Math Functions:
 
@@ -386,8 +393,11 @@ var genericMap = map[string]interface{}{
 	"b32dec": base32decode,
 
 	// Data Structures:
-	"tuple": tuple,
-	"dict":  dict,
+	"tuple":  tuple,
+	"dict":   dict,
+	"set":    set,
+	"unset":  unset,
+	"hasKey": hasKey,
 
 	// Crypto:
 	"genPrivateKey": generatePrivateKey,
@@ -648,6 +658,21 @@ func squote(str ...interface{}) string {
 
 func tuple(v ...interface{}) []interface{} {
 	return v
+}
+
+func set(d map[string]interface{}, key string, value interface{}) map[string]interface{} {
+	d[key] = value
+	return d
+}
+
+func unset(d map[string]interface{}, key string) map[string]interface{} {
+	delete(d, key)
+	return d
+}
+
+func hasKey(d map[string]interface{}, key string) bool {
+	_, ok := d[key]
+	return ok
 }
 
 func dict(v ...interface{}) map[string]interface{} {
