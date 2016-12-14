@@ -99,6 +99,14 @@ OS:
 	- env: Resolve an environment variable
 	- expandenv: Expand a string through the environment
 
+File Paths:
+	- base: Return the last element of a path. https://golang.org/pkg/path#Base
+	- dir: Remove the last element of a path. https://golang.org/pkg/path#Dir
+	- clean: Clean a path to the shortest equivalent name.  (e.g. remove "foo/.."
+	from "foo/../bar.html") https://golang.org/pkg/path#Clean
+	- ext: https://golang.org/pkg/path#Ext
+	- isAbs: https://golang.org/pkg/path#IsAbs
+
 Encoding:
 	- b64enc: Base 64 encode a string.
 	- b64dec: Base 64 decode a string.
@@ -179,6 +187,7 @@ import (
 	"math"
 	"math/big"
 	"os"
+	"path"
 	"reflect"
 	"strconv"
 	"strings"
@@ -362,6 +371,13 @@ var genericMap = map[string]interface{}{
 	// OS:
 	"env":       func(s string) string { return os.Getenv(s) },
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
+
+	// File Paths:
+	"base":  path.Base,
+	"dir":   path.Dir,
+	"clean": path.Clean,
+	"ext":   path.Ext,
+	"isAbs": path.IsAbs,
 
 	// Encoding:
 	"b64enc": base64encode,
