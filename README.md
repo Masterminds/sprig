@@ -147,6 +147,14 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - env: Read an environment variable.
 - expandenv: Expand all environment variables in a string.
 
+### File Paths:
+- base: Return the last element of a path. https://golang.org/pkg/path#Base
+- dir: Remove the last element of a path. https://golang.org/pkg/path#Dir
+- clean: Clean a path to the shortest equivalent name.  (e.g. remove "foo/.."
+  from "foo/../bar.html") https://golang.org/pkg/path#Clean
+- ext: Get the extension for a file path: https://golang.org/pkg/path#Ext
+- isAbs: Returns true if a path is absolute: https://golang.org/pkg/path#IsAbs
+
 ### Encoding:
 
 - b32enc: Encode a string into a Base32 string
