@@ -115,6 +115,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - split: strings.Split, but as `split SEP STRING`. The results are returned
   as a map with the indexes set to _N, where N is an integer starting from 0.
   Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
+- splitList: strings.Split, but as `split SEP STRING`. The results are returned
+  as an array.
 
 ### Integer Slice Functions:
 

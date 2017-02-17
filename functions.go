@@ -67,6 +67,8 @@ String Slice Functions:
 	- split: strings.Split, but as `split SEP STRING`. The results are returned
 	  as a map with the indexes set to _N, where N is an integer starting from 0.
 	  Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
+    - splitList: strings.Split, but as `split SEP STRING`. The results are returned
+	  as an array.
 
 Integer Slice Functions:
 
@@ -332,7 +334,8 @@ var genericMap = map[string]interface{}{
 	//"lte": func(a, b int) bool {return a <= b},
 
 	// split "/" foo/bar returns map[int]string{0: foo, 1: bar}
-	"split": split,
+	"split":     split,
+	"splitList": func(sep, orig string) []string { return strings.Split(orig, sep) },
 
 	"until":     until,
 	"untilStep": untilStep,
