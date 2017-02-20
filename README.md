@@ -93,6 +93,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
 - randAscii: Generate a random ASCII string, including symbols
 - randNumeric: Generate a random numeric string
 - wrap: Wrap text at the given column count
+- pluralize: Pluralize a noun according to an associated integer
 - wrapWith: Wrap text at the given column count, and with the given
   string for a line terminator: `wrap 50 "\n\t" $string`
 - contains: strings.Contains, but with the arguments switched: `contains "cat" "uncatch"`. (This simplifies common pipelines)

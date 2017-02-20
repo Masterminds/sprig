@@ -508,6 +508,17 @@ func TestTuple(t *testing.T) {
 	}
 }
 
+func TestPluralize(t *testing.T) {
+	tpl := `{{ pluralize 1 "abc" "def"}}`
+	if err := runt(tpl, "abc"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ pluralize 2 "abc" "def" }}`
+	if err := runt(tpl, "def"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestDict(t *testing.T) {
 	tpl := `{{$d := dict 1 2 "three" "four" 5}}{{range $k, $v := $d}}{{$k}}{{$v}}{{end}}`
 	out, err := runRaw(tpl, nil)
