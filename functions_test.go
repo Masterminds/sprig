@@ -628,6 +628,28 @@ func TestDelete(t *testing.T) {
 	}
 }
 
+func TestDerivePassword(t *testing.T) {
+	expectations := map[string]string{
+		`{{derivePassword 1 "long" "password" "user" "example.com"}}`: "ZedaFaxcZaso9*",
+		`{{derivePassword 2 "long" "password" "user" "example.com"}}`: "Fovi2@JifpTupx",
+		`{{derivePassword 1 "maximum" "password" "user" "example.com"}}`: "pf4zS1LjCg&LjhsZ7T2~",
+		`{{derivePassword 1 "medium" "password" "user" "example.com"}}`: "ZedJuz8$",
+		`{{derivePassword 1 "basic" "password" "user" "example.com"}}`: "pIS54PLs",
+		`{{derivePassword 1 "short" "password" "user" "example.com"}}`: "Zed5",
+		`{{derivePassword 1 "pin" "password" "user" "example.com"}}`: "6685",
+	}
+
+	for tpl, result := range expectations {
+		out, err := runRaw(tpl, nil)
+		if err != nil {
+			t.Error(err)
+		}
+		if 0 != strings.Compare(out, result) {
+			t.Error("Generated password does not match for", tpl)
+		}
+	}
+}
+
 // NOTE(bacongobbler): this test is really _slow_ because of how long it takes to compute
 // and generate a new crypto key.
 func TestGenPrivateKey(t *testing.T) {

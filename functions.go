@@ -174,14 +174,19 @@ Crypto Functions:
 	- genPrivateKey: Generate a private key for the given cryptosystem. If no
 	  argument is supplied, by default it will generate a private key using
 	  the RSA algorithm. Accepted values are `rsa`, `dsa`, and `ecdsa`.
-
+	- derivePassword: Derive a password from the given parameters according to the ["Master Password" algorithm](http://masterpasswordapp.com/algorithm.html)
+	  Given parameters (in order) are:
+          `counter` (starting with 1), `password_type` (maximum, long, medium, short, basic, or pin), `password`,
+           `user`, and `site`
 */
 package sprig
 
 import (
+	"bytes"
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	"crypto/hmac"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha256"
@@ -189,6 +194,7 @@ import (
 	"encoding/asn1"
 	"encoding/base32"
 	"encoding/base64"
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/pem"
 	"fmt"
@@ -205,6 +211,8 @@ import (
 
 	util "github.com/aokoli/goutils"
 	uuid "github.com/satori/go.uuid"
+
+	"golang.org/x/crypto/scrypt"
 )
 
 // Produce the function map.
@@ -403,7 +411,8 @@ var genericMap = map[string]interface{}{
 	"hasKey": hasKey,
 
 	// Crypto:
-	"genPrivateKey": generatePrivateKey,
+	"genPrivateKey":   generatePrivateKey,
+	"derivePassword": derivePassword,
 
 	// UUIDs:
 	"uuidv4": uuidv4,
@@ -775,6 +784,70 @@ func toInt64(v interface{}) int64 {
 	default:
 		return 0
 	}
+}
+
+var master_password_seed = "com.lyndir.masterpassword"
+
+var password_type_templates = map[string][][]byte{
+	"maximum": {[]byte("anoxxxxxxxxxxxxxxxxx"), []byte("axxxxxxxxxxxxxxxxxno")},
+	"long": {[]byte("CvcvnoCvcvCvcv"), []byte("CvcvCvcvnoCvcv"), []byte("CvcvCvcvCvcvno"), []byte("CvccnoCvcvCvcv"), []byte("CvccCvcvnoCvcv"),
+		[]byte("CvccCvcvCvcvno"), []byte("CvcvnoCvccCvcv"), []byte("CvcvCvccnoCvcv"), []byte("CvcvCvccCvcvno"), []byte("CvcvnoCvcvCvcc"),
+		[]byte("CvcvCvcvnoCvcc"), []byte("CvcvCvcvCvccno"), []byte("CvccnoCvccCvcv"), []byte("CvccCvccnoCvcv"), []byte("CvccCvccCvcvno"),
+		[]byte("CvcvnoCvccCvcc"), []byte("CvcvCvccnoCvcc"), []byte("CvcvCvccCvccno"), []byte("CvccnoCvcvCvcc"), []byte("CvccCvcvnoCvcc"),
+		[]byte("CvccCvcvCvccno")},
+	"medium": {[]byte("CvcnoCvc"), []byte("CvcCvcno")},
+	"short":  {[]byte("Cvcn")},
+	"basic":  {[]byte("aaanaaan"), []byte("aannaaan"), []byte("aaannaaa")},
+	"pin":    {[]byte("nnnn")},
+}
+
+var template_characters = map[byte]string{
+	'V': "AEIOU",
+	'C': "BCDFGHJKLMNPQRSTVWXYZ",
+	'v': "aeiou",
+	'c': "bcdfghjklmnpqrstvwxyz",
+	'A': "AEIOUBCDFGHJKLMNPQRSTVWXYZ",
+	'a': "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz",
+	'n': "0123456789",
+	'o': "@&%?,=[]_:-+*$#!'^~;()/.",
+	'x': "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
+}
+
+func derivePassword(counter uint32, password_type, password, user, site string) string {
+	var templates = password_type_templates[password_type]
+	if templates == nil {
+		return fmt.Sprintf("cannot find password template %s", password_type)
+	}
+
+	var buffer bytes.Buffer
+	buffer.WriteString(master_password_seed)
+	binary.Write(&buffer, binary.BigEndian, uint32(len(user)))
+	buffer.WriteString(user)
+
+	salt := buffer.Bytes()
+	key, err := scrypt.Key([]byte(password), salt, 32768, 8, 2, 64)
+	if err != nil {
+		return fmt.Sprintf("failed to derive password: %s", err)
+	}
+
+	buffer.Truncate(len(master_password_seed))
+	binary.Write(&buffer, binary.BigEndian, uint32(len(site)))
+	buffer.WriteString(site)
+	binary.Write(&buffer, binary.BigEndian, counter)
+
+	var hmacv = hmac.New(sha256.New, key)
+	hmacv.Write(buffer.Bytes())
+	var seed = hmacv.Sum(nil)
+	var temp = templates[int(seed[0])%len(templates)]
+
+	buffer.Truncate(0)
+	for i, element := range temp {
+		pass_chars := template_characters[element]
+		pass_char := pass_chars[int(seed[i+1]) % len(pass_chars)]
+		buffer.WriteByte(pass_char)
+	}
+
+	return buffer.String()
 }
 
 func generatePrivateKey(typ string) string {

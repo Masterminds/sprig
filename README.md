@@ -225,6 +225,16 @@ string is passed in, functions will attempt to conver with
 - min: Return the smallest of a series of integers. `min 1 2 3` returns
   `1`.
 
+### Cryptographic Functions:
+
+- derivePassword: Derive a password from the given parameters according to the "Master Password" algorithm (http://masterpasswordapp.com/algorithm.html)
+  Given parameters (in order) are:
+      `counter` (starting with 1), `password_type` (maximum, long, medium, short, basic, or pin), `password`,
+       `user`, and `site`. The following line generates a long password for the user "user" and with a master-password "password"  on the site "example.com":
+       ```
+       {{ derivePassword 1 "long" "password" "user" "example.com" }}
+       ```
+
 
 ## Principles:
 
