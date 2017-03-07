@@ -373,7 +373,7 @@ var genericMap = map[string]interface{}{
 
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
-	"join": func(sep string, ss []string) string { return strings.Join(ss, sep) },
+	"join": join,
 
 	// Defaults
 	"default": dfault,
@@ -411,7 +411,7 @@ var genericMap = map[string]interface{}{
 	"hasKey": hasKey,
 
 	// Crypto:
-	"genPrivateKey":   generatePrivateKey,
+	"genPrivateKey":  generatePrivateKey,
 	"derivePassword": derivePassword,
 
 	// UUIDs:
@@ -701,6 +701,34 @@ func dict(v ...interface{}) map[string]interface{} {
 	return dict
 }
 
+func join(sep string, v interface{}) string {
+	// The first two cases bypass the overhead of the reflection system.
+	switch v := v.(type) {
+	case []string:
+		return strings.Join(v, sep)
+	case []interface{}:
+		l := len(v)
+		b := make([]string, l)
+		for i := 0; i < l; i++ {
+			b[i] = strval(v[i])
+		}
+		return strings.Join(b, sep)
+	default:
+		val := reflect.ValueOf(v)
+		switch val.Kind() {
+		case reflect.Array, reflect.Slice:
+			l := val.Len()
+			b := make([]string, l)
+			for i := 0; i < l; i++ {
+				b[i] = strval(val.Index(i).Interface())
+			}
+			return strings.Join(b, sep)
+		default:
+			return strval(v)
+		}
+	}
+}
+
 func strval(v interface{}) string {
 	switch v := v.(type) {
 	case string:
@@ -843,7 +871,7 @@ func derivePassword(counter uint32, password_type, password, user, site string) 
 	buffer.Truncate(0)
 	for i, element := range temp {
 		pass_chars := template_characters[element]
-		pass_char := pass_chars[int(seed[i+1]) % len(pass_chars)]
+		pass_char := pass_chars[int(seed[i+1])%len(pass_chars)]
 		buffer.WriteByte(pass_char)
 	}
 

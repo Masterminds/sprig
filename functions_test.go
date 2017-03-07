@@ -620,6 +620,14 @@ func TestExt(t *testing.T) {
 	assert.NoError(t, runt(`{{ ext "/foo/bar/baz.txt" }}`, ".txt"))
 }
 
+func TestJoin(t *testing.T) {
+	assert.NoError(t, runt(`{{ tuple "a" "b" "c" | join "-" }}`, "a-b-c"))
+	assert.NoError(t, runt(`{{ tuple 1 2 3 | join "-" }}`, "1-2-3"))
+	assert.NoError(t, runtv(`{{ join "-" .V }}`, "a-b-c", map[string]interface{}{"V": []string{"a", "b", "c"}}))
+	assert.NoError(t, runtv(`{{ join "-" .V }}`, "abc", map[string]interface{}{"V": "abc"}))
+	assert.NoError(t, runtv(`{{ join "-" .V }}`, "1-2-3", map[string]interface{}{"V": []int{1, 2, 3}}))
+}
+
 func TestDelete(t *testing.T) {
 	fmap := TxtFuncMap()
 	delete(fmap, "split")
@@ -630,13 +638,13 @@ func TestDelete(t *testing.T) {
 
 func TestDerivePassword(t *testing.T) {
 	expectations := map[string]string{
-		`{{derivePassword 1 "long" "password" "user" "example.com"}}`: "ZedaFaxcZaso9*",
-		`{{derivePassword 2 "long" "password" "user" "example.com"}}`: "Fovi2@JifpTupx",
+		`{{derivePassword 1 "long" "password" "user" "example.com"}}`:    "ZedaFaxcZaso9*",
+		`{{derivePassword 2 "long" "password" "user" "example.com"}}`:    "Fovi2@JifpTupx",
 		`{{derivePassword 1 "maximum" "password" "user" "example.com"}}`: "pf4zS1LjCg&LjhsZ7T2~",
-		`{{derivePassword 1 "medium" "password" "user" "example.com"}}`: "ZedJuz8$",
-		`{{derivePassword 1 "basic" "password" "user" "example.com"}}`: "pIS54PLs",
-		`{{derivePassword 1 "short" "password" "user" "example.com"}}`: "Zed5",
-		`{{derivePassword 1 "pin" "password" "user" "example.com"}}`: "6685",
+		`{{derivePassword 1 "medium" "password" "user" "example.com"}}`:  "ZedJuz8$",
+		`{{derivePassword 1 "basic" "password" "user" "example.com"}}`:   "pIS54PLs",
+		`{{derivePassword 1 "short" "password" "user" "example.com"}}`:   "Zed5",
+		`{{derivePassword 1 "pin" "password" "user" "example.com"}}`:     "6685",
 	}
 
 	for tpl, result := range expectations {
