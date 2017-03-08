@@ -137,6 +137,13 @@ Data Structures:
 	- tuple: Takes an arbitrary list of items and returns a slice of items. Its
 	  tuple-ish properties are mainly gained through the template idiom, and not
 	  through an API provided here.
+	- list: An arbitrary ordered list of items.
+	- first: Get the first item in a 'list'. 'list 1 2 3 | first' prints '1'
+	- last: Get the last item in a 'list': 'list 1 2 3 | last ' prints '3'
+	- rest: Get all but the first item in a list: 'list 1 2 3 | rest' returns '[2 3]'
+	- initial: Get all but the last item in a list: 'list 1 2 3 | initial' returns '[1 2]'
+	- append: Add an item to the end of a list: 'append $list 4' adds '4' to the end of '$list'
+	- prepend: Add an item to the beginning of a list: 'prepend $list 4' puts 4 at the beginning of the list.
 	- dict: Takes a list of name/values and returns a map[string]interface{}.
 	  The first parameter is converted to a string and stored as a key, the
 	  second parameter is treated as the value. And so on, with odds as keys and
@@ -404,11 +411,18 @@ var genericMap = map[string]interface{}{
 	"b32dec": base32decode,
 
 	// Data Structures:
-	"tuple":  tuple,
+	"tuple":  list, // FIXME: with the addition of append/prepend these are no longer immutable.
+	"list":   list,
 	"dict":   dict,
 	"set":    set,
 	"unset":  unset,
 	"hasKey": hasKey,
+	"append": push, "push": push,
+	"prepend": prepend,
+	"first":   first,
+	"rest":    rest,
+	"last":    last,
+	"initial": initial,
 
 	// Crypto:
 	"genPrivateKey":  generatePrivateKey,
@@ -668,8 +682,46 @@ func squote(str ...interface{}) string {
 	return strings.Join(out, " ")
 }
 
-func tuple(v ...interface{}) []interface{} {
+func list(v ...interface{}) []interface{} {
 	return v
+}
+
+func push(list []interface{}, v interface{}) []interface{} {
+	return append(list, v)
+}
+
+func prepend(list []interface{}, v interface{}) []interface{} {
+	return append([]interface{}{v}, list...)
+}
+
+func last(list []interface{}) interface{} {
+	l := len(list)
+	if l == 0 {
+		return nil
+	}
+	return list[l-1]
+}
+
+func first(list []interface{}) interface{} {
+	if len(list) == 0 {
+		return nil
+	}
+	return list[0]
+}
+
+func rest(list []interface{}) []interface{} {
+	if len(list) == 0 {
+		return list
+	}
+	return list[1:]
+}
+
+func initial(list []interface{}) []interface{} {
+	l := len(list)
+	if l == 0 {
+		return list
+	}
+	return list[:l-1]
 }
 
 func set(d map[string]interface{}, key string, value interface{}) map[string]interface{} {
