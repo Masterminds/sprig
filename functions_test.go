@@ -304,6 +304,16 @@ func TestSplit(t *testing.T) {
 	}
 }
 
+func TestToString(t *testing.T) {
+	tpl := `{{ toString 1 | kindOf }}`
+	assert.NoError(t, runt(tpl, "string"))
+}
+
+func TestToStrings(t *testing.T) {
+	tpl := `{{ $s := list 1 2 3 | toStrings }}{{ index $s 1 | kindOf }}`
+	assert.NoError(t, runt(tpl, "string"))
+}
+
 type fixtureTO struct {
 	Name, Value string
 }
@@ -696,6 +706,17 @@ func TestJoin(t *testing.T) {
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "a-b-c", map[string]interface{}{"V": []string{"a", "b", "c"}}))
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "abc", map[string]interface{}{"V": "abc"}))
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "1-2-3", map[string]interface{}{"V": []int{1, 2, 3}}))
+}
+
+func TestSortAlpha(t *testing.T) {
+	// Named `append` in the function map
+	tests := map[string]string{
+		`{{ list "c" "a" "b" | sortAlpha | join "" }}`: "abc",
+		`{{ list 2 1 4 3 | sortAlpha | join "" }}`:     "1234",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
 }
 
 func TestDelete(t *testing.T) {

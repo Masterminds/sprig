@@ -108,6 +108,7 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   "one anchovy" "many anchovies"`
 - uuidv4: Generate a UUID v4 string
 - sha256sum: Generate a hex encoded sha256 hash of the input
+- toString: Convert something to a string
 
 ### String Slice Functions:
 
@@ -117,6 +118,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   Use it like this: `{{$v := "foo/bar/baz" | split "/"}}{{$v._0}}` (Prints `foo`)
 - splitList: strings.Split, but as `split SEP STRING`. The results are returned
   as an array.
+- toStrings: convert a list to a list of strings. 'list 1 2 3 | toStrings' produces '["1" "2" "3"]'
+- sortAlpha: sort a list lexicographically.
 
 ### Integer Slice Functions:
 
