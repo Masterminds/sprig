@@ -99,6 +99,10 @@ Defaults:
 	- empty: Return true if the given value is the zero value for its type.
 	  Caveats: structs are always non-empty. This should match the behavior of
 	  {{if pipeline}}, but can be used inside of a pipeline.
+	- coalesce: Given a list of items, return the first non-empty one.
+	  This follows the same rules as 'empty'. '{{ coalesce .someVal 0 "hello" }}`
+	  will return `.someVal` if set, or else return "hello". The 0 is skipped
+	  because it is an empty value.
 
 OS:
 	- env: Resolve an environment variable
@@ -139,14 +143,9 @@ Data Structures:
 
 	- tuple: Takes an arbitrary list of items and returns a slice of items. Its
 	  tuple-ish properties are mainly gained through the template idiom, and not
-	  through an API provided here.
-	- list: An arbitrary ordered list of items.
-	- first: Get the first item in a 'list'. 'list 1 2 3 | first' prints '1'
-	- last: Get the last item in a 'list': 'list 1 2 3 | last ' prints '3'
-	- rest: Get all but the first item in a list: 'list 1 2 3 | rest' returns '[2 3]'
-	- initial: Get all but the last item in a list: 'list 1 2 3 | initial' returns '[1 2]'
-	- append: Add an item to the end of a list: 'append $list 4' adds '4' to the end of '$list'
-	- prepend: Add an item to the beginning of a list: 'prepend $list 4' puts 4 at the beginning of the list.
+	  through an API provided here. WARNING: The implementation of tuple will
+	  change in the future.
+	- list: An arbitrary ordered list of items. (This is prefered over tuple.)
 	- dict: Takes a list of name/values and returns a map[string]interface{}.
 	  The first parameter is converted to a string and stored as a key, the
 	  second parameter is treated as the value. And so on, with odds as keys and
@@ -155,6 +154,22 @@ Data Structures:
 	  follows: []byte are converted, fmt.Stringers will have String() called.
 	  errors will have Error() called. All others will be passed through
 	  fmt.Sprtinf("%v").
+
+Lists Functions:
+
+These are used to manipulate lists: '{{ list 1 2 3 | reverse | first }}'
+
+	- first: Get the first item in a 'list'. 'list 1 2 3 | first' prints '1'
+	- last: Get the last item in a 'list': 'list 1 2 3 | last ' prints '3'
+	- rest: Get all but the first item in a list: 'list 1 2 3 | rest' returns '[2 3]'
+	- initial: Get all but the last item in a list: 'list 1 2 3 | initial' returns '[1 2]'
+	- append: Add an item to the end of a list: 'append $list 4' adds '4' to the end of '$list'
+	- prepend: Add an item to the beginning of a list: 'prepend $list 4' puts 4 at the beginning of the list.
+
+Dict Functions:
+
+These are used to manipulate dicts.
+
 	- set: Takes a dict, a key, and a value, and sets that key/value pair in
 	  the dict. `set $dict $key $value`. For convenience, it returns the dict,
 	  even though the dict was modified in place.
@@ -390,8 +405,9 @@ var genericMap = map[string]interface{}{
 	"sortAlpha": sortAlpha,
 
 	// Defaults
-	"default": dfault,
-	"empty":   empty,
+	"default":  dfault,
+	"empty":    empty,
+	"coalesce": coalesce,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -430,6 +446,7 @@ var genericMap = map[string]interface{}{
 	"rest":    rest,
 	"last":    last,
 	"initial": initial,
+	"reverse": reverse,
 
 	// Crypto:
 	"genPrivateKey":  generatePrivateKey,
@@ -580,6 +597,16 @@ func empty(given interface{}) bool {
 		return false
 	}
 	return true
+}
+
+// coalesce returns the first non-empty value.
+func coalesce(v ...interface{}) interface{} {
+	for _, val := range v {
+		if !empty(val) {
+			return val
+		}
+	}
+	return nil
 }
 
 // typeIs returns true if the src is the type named in target.
@@ -1004,6 +1031,16 @@ func trunc(c int, s string) string {
 		return s
 	}
 	return s[0:c]
+}
+
+func reverse(v []interface{}) []interface{} {
+	// We do not sort in place because the incomming array should not be altered.
+	l := len(v)
+	c := make([]interface{}, l)
+	for i := 0; i < l; i++ {
+		c[l-i-1] = v[i]
+	}
+	return c
 }
 
 func cat(v ...interface{}) string {

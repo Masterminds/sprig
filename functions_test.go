@@ -297,6 +297,26 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
+func TestCoalesce(t *testing.T) {
+	tests := map[string]string{
+		`{{ coalesce 1 }}`:                            "1",
+		`{{ coalesce "" 0 nil 2 }}`:                   "2",
+		`{{ $two := 2 }}{{ coalesce "" 0 nil $two }}`: "2",
+		`{{ $two := 2 }}{{ coalesce "" $two 0 0 0 }}`: "2",
+		`{{ $two := 2 }}{{ coalesce "" $two 3 4 5 }}`: "2",
+		`{{ coalesce }}`:                              "<no value>",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+
+	dict := map[string]interface{}{"top": map[string]interface{}{}}
+	tpl := `{{ coalesce .top.NoSuchThing .bottom .bottom.dollar "airplane"}}`
+	if err := runtv(tpl, "airplane", dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestSplit(t *testing.T) {
 	tpl := `{{$v := "foo$bar$baz" | split "$"}}{{$v._0}}`
 	if err := runt(tpl, "foo"); err != nil {
@@ -582,6 +602,20 @@ func TestRest(t *testing.T) {
 		`{{ list 1 2 3 | rest | last }}`:  "3",
 		`{{ list 1 2 3 | rest | first }}`: "2",
 		`{{ list | rest }}`:               "[]",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
+func TestReverse(t *testing.T) {
+	tests := map[string]string{
+		`{{ list 1 2 3 | reverse | first }}`:        "3",
+		`{{ list 1 2 3 | reverse | rest | first }}`: "2",
+		`{{ list 1 2 3 | reverse | last }}`:         "1",
+		`{{ list 1 2 3 4 | reverse }}`:              "[4 3 2 1]",
+		`{{ list 1 | reverse }}`:                    "[1]",
+		`{{ list | reverse }}`:                      "[]",
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))
