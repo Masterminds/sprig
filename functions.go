@@ -177,6 +177,7 @@ These are used to manipulate dicts.
 	  dict. `unset $dict $key`. This returns the dict for convenience.
 	- hasKey: Takes a dict and a key, and returns boolean true if the key is in
 	  the dict.
+	- pluck: Given a key and one or more maps, get all of the values for that key.
 
 Math Functions:
 
@@ -440,6 +441,8 @@ var genericMap = map[string]interface{}{
 	"set":    set,
 	"unset":  unset,
 	"hasKey": hasKey,
+	"pluck":  pluck,
+
 	"append": push, "push": push,
 	"prepend": prepend,
 	"first":   first,
@@ -771,6 +774,17 @@ func unset(d map[string]interface{}, key string) map[string]interface{} {
 func hasKey(d map[string]interface{}, key string) bool {
 	_, ok := d[key]
 	return ok
+}
+
+func pluck(key string, d ...map[string]interface{}) []interface{} {
+	res := []interface{}{}
+	for _, dict := range d {
+		if val, ok := dict[key]; ok {
+			res = append(res, val)
+		}
+	}
+	return res
+
 }
 
 func dict(v ...interface{}) map[string]interface{} {

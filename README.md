@@ -209,6 +209,7 @@ These are used to manipulate dicts.
   dict. `unset $dict $key`. This returns the dict for convenience.
 - hasKey: Takes a dict and a key, and returns boolean true if the key is in
   the dict.
+- pluck: Given a key and one or more maps, get all of the values for that key.
 
 ```
 {{$t := tuple 1 "a" "foo"}}
