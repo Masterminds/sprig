@@ -317,6 +317,17 @@ func TestCoalesce(t *testing.T) {
 	}
 }
 
+func TestCompact(t *testing.T) {
+	tests := map[string]string{
+		`{{ list 1 0 "" "hello" | compact }}`: `[1 hello]`,
+		`{{ list "" "" | compact }}`:          `[]`,
+		`{{ list | compact }}`:                `[]`,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
 func TestSplit(t *testing.T) {
 	tpl := `{{$v := "foo$bar$baz" | split "$"}}{{$v._0}}`
 	if err := runt(tpl, "foo"); err != nil {

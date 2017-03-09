@@ -103,6 +103,8 @@ Defaults:
 	  This follows the same rules as 'empty'. '{{ coalesce .someVal 0 "hello" }}`
 	  will return `.someVal` if set, or else return "hello". The 0 is skipped
 	  because it is an empty value.
+	- compact: Return a copy of a list with all of the empty values removed.
+	  'list 0 1 2 "" | compact' will return '[1 2]'
 
 OS:
 	- env: Resolve an environment variable
@@ -409,6 +411,7 @@ var genericMap = map[string]interface{}{
 	"default":  dfault,
 	"empty":    empty,
 	"coalesce": coalesce,
+	"compact":  compact,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -610,6 +613,16 @@ func coalesce(v ...interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+func compact(list []interface{}) []interface{} {
+	res := []interface{}{}
+	for _, item := range list {
+		if !empty(item) {
+			res = append(res, item)
+		}
+	}
+	return res
 }
 
 // typeIs returns true if the src is the type named in target.

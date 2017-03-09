@@ -150,6 +150,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   This follows the same rules as 'empty'. `{{ coalesce .someVal 0 "hello" }}`
   will return `.someVal` if set, or else return "hello". The 0 is skipped
   because it is an empty value.
+- compact: Return a copy of a list with all of the empty values removed.
+  `list 0 1 2 "" | compact` will return `[1 2]`
 
 ### OS:
 
