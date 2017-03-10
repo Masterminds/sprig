@@ -695,6 +695,18 @@ func TestPluck(t *testing.T) {
 	}
 }
 
+func TestKeys(t *testing.T) {
+	tests := map[string]string{
+		`{{ dict "foo" 1 "bar" 2 | keys | sortAlpha }}`: "[bar foo]",
+		`{{ dict | keys }}`:                             "[]",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestSet(t *testing.T) {
 	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
 	{{- $_ := set $d "two" 2 -}}

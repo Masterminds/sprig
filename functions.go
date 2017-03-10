@@ -180,6 +180,7 @@ These are used to manipulate dicts.
 	- hasKey: Takes a dict and a key, and returns boolean true if the key is in
 	  the dict.
 	- pluck: Given a key and one or more maps, get all of the values for that key.
+	- keys: Get an array of all of the keys in a dict.
 
 Math Functions:
 
@@ -445,6 +446,7 @@ var genericMap = map[string]interface{}{
 	"unset":  unset,
 	"hasKey": hasKey,
 	"pluck":  pluck,
+	"keys":   keys,
 
 	"append": push, "push": push,
 	"prepend": prepend,
@@ -797,7 +799,14 @@ func pluck(key string, d ...map[string]interface{}) []interface{} {
 		}
 	}
 	return res
+}
 
+func keys(dict map[string]interface{}) []string {
+	k := []string{}
+	for key := range dict {
+		k = append(k, key)
+	}
+	return k
 }
 
 func dict(v ...interface{}) map[string]interface{} {
@@ -818,11 +827,16 @@ func join(sep string, v interface{}) string {
 	return strings.Join(strslice(v), sep)
 }
 
-func sortAlpha(array []interface{}) []string {
-	a := strslice(array)
-	s := sort.StringSlice(a)
-	s.Sort()
-	return s
+func sortAlpha(list interface{}) []string {
+	k := reflect.Indirect(reflect.ValueOf(list)).Kind()
+	switch k {
+	case reflect.Slice, reflect.Array:
+		a := strslice(list)
+		s := sort.StringSlice(a)
+		s.Sort()
+		return s
+	}
+	return []string{strval(list)}
 }
 
 func strslice(v interface{}) []string {

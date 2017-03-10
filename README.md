@@ -212,6 +212,7 @@ These are used to manipulate dicts.
 - hasKey: Takes a dict and a key, and returns boolean true if the key is in
   the dict.
 - pluck: Given a key and one or more maps, get all of the values for that key.
+- keys: Get an array of all of the keys in a dict. Order is not guaranteed.
 
 ```
 {{$t := tuple 1 "a" "foo"}}
