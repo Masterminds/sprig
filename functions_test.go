@@ -896,6 +896,13 @@ func TestUUIDGeneration(t *testing.T) {
 	}
 }
 
+func TestXMLEncode(t *testing.T) {
+	tpl := `{{"test&" | xml }}`
+	if err := runt(tpl, "test&amp;"); err != nil {
+		t.Error(err)
+	}
+}
+
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, map[string]string{})
 }
