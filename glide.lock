@@ -1,18 +1,18 @@
 hash: 6e5af84de9810bc5784f56d5a321887db57b3454d45888153202b4b1e191018b
-updated: 2017-02-01T14:01:56.546297154+01:00
+updated: 2017-03-13T15:10:35.206679863-06:00
 imports:
 - name: github.com/aokoli/goutils
   version: 9c37978a95bd5c709a15883b6242714ea6709e64
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: golang.org/x/crypto
-  version: dc137beb6cce2043eb6b5f223ab8bf51c32459f4
+  version: 1f22c0103821b9390939b6776727195525381532
   subpackages:
   - pbkdf2
   - scrypt
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 04cdfd42973bb9c8589fd6a731800cf222fde1a9
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib
@@ -20,6 +20,6 @@ testImports:
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 4d4bfba8f1d1027c4fdbe371823030df51419987
+  version: e3a8ff8ce36581f87a15341206f205b1da467059
   subpackages:
   - assert
