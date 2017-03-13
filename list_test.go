@@ -96,3 +96,16 @@ func TestReverse(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestUniq(t *testing.T) {
+	tests := map[string]string{
+		`{{ list 1 2 3 4 | uniq }}`:                   `[1 2 3 4]`,
+		`{{ list "a" "b" "c" "d" | uniq }}`:           `[a b c d]`,
+		`{{ list 1 1 1 1 2 2 2 2 | uniq }}`:           `[1 2]`,
+		`{{ list "foo" 1 1 1 1 "foo" "foo" | uniq }}`: `[foo 1]`,
+		`{{ list | uniq }}`:                           `[]`,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}

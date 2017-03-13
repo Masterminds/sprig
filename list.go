@@ -78,3 +78,23 @@ func compact(list []interface{}) []interface{} {
 	}
 	return res
 }
+
+func uniq(list []interface{}) []interface{} {
+	dest := []interface{}{}
+
+	skip := func(haystack []interface{}, needle interface{}) bool {
+		for _, h := range haystack {
+			if reflect.DeepEqual(needle, h) {
+				return true
+			}
+		}
+		return false
+	}
+
+	for _, item := range list {
+		if !skip(dest, item) {
+			dest = append(dest, item)
+		}
+	}
+	return dest
+}

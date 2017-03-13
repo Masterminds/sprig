@@ -233,6 +233,7 @@ var genericMap = map[string]interface{}{
 	"last":    last,
 	"initial": initial,
 	"reverse": reverse,
+	"uniq":    uniq,
 
 	// Crypto:
 	"genPrivateKey":  generatePrivateKey,
