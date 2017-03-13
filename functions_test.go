@@ -707,6 +707,35 @@ func TestKeys(t *testing.T) {
 	}
 }
 
+func TestPick(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "two" | len -}}`:               "1",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "two" -}}`:                     "map[two:222222]",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "one" "two" | len -}}`:         "2",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "one" "two" "three" | len -}}`: "2",
+		`{{- $d := dict }}{{ pick $d "two" | len -}}`:                                    "0",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+func TestOmit(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ omit $d "one" | len -}}`:         "1",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ omit $d "one" -}}`:               "map[two:222222]",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ omit $d "one" "two" | len -}}`:   "0",
+		`{{- $d := dict "one" 1 "two" 222222 }}{{ omit $d "two" "three" | len -}}`: "1",
+		`{{- $d := dict }}{{ omit $d "two" | len -}}`:                              "0",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestSet(t *testing.T) {
 	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
 	{{- $_ := set $d "two" 2 -}}

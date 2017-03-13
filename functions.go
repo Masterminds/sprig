@@ -181,6 +181,8 @@ These are used to manipulate dicts.
 	  the dict.
 	- pluck: Given a key and one or more maps, get all of the values for that key.
 	- keys: Get an array of all of the keys in a dict.
+	- pick: Select just the given keys out of the dict, and return a new dict.
+	- omit: Return a dict without the given keys.
 
 Math Functions:
 
@@ -447,6 +449,8 @@ var genericMap = map[string]interface{}{
 	"hasKey": hasKey,
 	"pluck":  pluck,
 	"keys":   keys,
+	"pick":   pick,
+	"omit":   omit,
 
 	"append": push, "push": push,
 	"prepend": prepend,
@@ -807,6 +811,32 @@ func keys(dict map[string]interface{}) []string {
 		k = append(k, key)
 	}
 	return k
+}
+
+func pick(dict map[string]interface{}, keys ...string) map[string]interface{} {
+	res := map[string]interface{}{}
+	for _, k := range keys {
+		if v, ok := dict[k]; ok {
+			res[k] = v
+		}
+	}
+	return res
+}
+
+func omit(dict map[string]interface{}, keys ...string) map[string]interface{} {
+	res := map[string]interface{}{}
+
+	omit := make(map[string]bool, len(keys))
+	for _, k := range keys {
+		omit[k] = true
+	}
+
+	for k, v := range dict {
+		if _, ok := omit[k]; !ok {
+			res[k] = v
+		}
+	}
+	return res
 }
 
 func dict(v ...interface{}) map[string]interface{} {

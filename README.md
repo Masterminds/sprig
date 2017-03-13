@@ -189,6 +189,22 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   errors will have Error() called. All others will be passed through
   fmt.Sprtinf("%v"). _dicts are unordered_.
 
+List:
+
+```
+{{$t := list 1 "a" "foo"}}
+{{index $t 2}}{{index $t 0 }}{{index $t 1}}
+{{/* Prints foo1a *}}
+```
+
+Dict:
+```
+{{ $t := map "key1" "value1" "key2" "value2" }}
+{{ $t.key2 }}
+{{ /* Prints value2 *}}
+```
+
+
 ### Lists Functions:
 
 These are used to manipulate lists: `{{ list 1 2 3 | reverse | first }}`
@@ -213,12 +229,8 @@ These are used to manipulate dicts.
   the dict.
 - pluck: Given a key and one or more maps, get all of the values for that key.
 - keys: Get an array of all of the keys in a dict. Order is not guaranteed.
-
-```
-{{$t := tuple 1 "a" "foo"}}
-{{index $t 2}}{{index $t 0 }}{{index $t 1}}
-{{/* Prints foo1a *}}
-```
+- pick: Select just the given keys out of the dict, and return a new dict.
+- omit: Return a dict without the given keys.
 
 ### Reflection:
 
