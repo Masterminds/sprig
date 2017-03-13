@@ -16,7 +16,7 @@ import (
 //
 // Use this to pass the functions into the template engine:
 //
-// 	tpl := template.New("foo").Funcs(sprig.FuncMap))
+// 	tpl := template.New("foo").Funcs(sprig.FuncMap()))
 //
 func FuncMap() template.FuncMap {
 	return HtmlFuncMap()
@@ -42,12 +42,21 @@ func HermeticHtmlFuncMap() template.FuncMap {
 
 // TextFuncMap returns a 'text/template'.FuncMap
 func TxtFuncMap() ttemplate.FuncMap {
-	return ttemplate.FuncMap(genericMap)
+	return ttemplate.FuncMap(GenericFuncMap())
 }
 
 // HtmlFuncMap returns an 'html/template'.Funcmap
 func HtmlFuncMap() template.FuncMap {
-	return template.FuncMap(genericMap)
+	return template.FuncMap(GenericFuncMap())
+}
+
+// GenericFuncMap returns a copy of the basic function map as a map[string]interface{}.
+func GenericFuncMap() map[string]interface{} {
+	gfm := make(map[string]interface{}, len(genericMap))
+	for k, v := range genericMap {
+		gfm[k] = v
+	}
+	return gfm
 }
 
 // These functions are not guaranteed to evaluate to the same result for given input, because they
