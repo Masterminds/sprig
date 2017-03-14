@@ -215,6 +215,10 @@ These are used to manipulate lists: `{{ list 1 2 3 | reverse | first }}`
 - initial: Get all but the last item in a list: 'list 1 2 3 | initial' returns '[1 2]'
 - append: Add an item to the end of a list: 'append $list 4' adds '4' to the end of '$list'
 - prepend: Add an item to the beginning of a list: 'prepend $list 4' puts 4 at the beginning of the list.
+- reverse: Reverse the items in a list.
+- uniq: Remove duplicates from a list.
+- without: Return a list with the given values removed: 'without (list 1 2 3) 1' would return '[2 3]'
+- has: Return 'tru' if the item is found in the list: 'has "foo" $list' will return 'true' if the list contains "foo"
 
 ### Dict Functions:
 

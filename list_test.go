@@ -109,3 +109,27 @@ func TestUniq(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestWithout(t *testing.T) {
+	tests := map[string]string{
+		`{{ without (list 1 2 3 4) 1 }}`:           `[2 3 4]`,
+		`{{ without (list "a" "b" "c" "d") "a" }}`: `[b c d]`,
+		`{{ without (list 1 1 1 1 2) 1 }}`:         `[2]`,
+		`{{ without (list) 1 }}`:                   `[]`,
+		`{{ without (list 1 2 3) }}`:               `[1 2 3]`,
+		`{{ without list }}`:                       `[]`,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
+func TestHas(t *testing.T) {
+	tests := map[string]string{
+		`{{ list 1 2 3 | has 1 }}`: `true`,
+		`{{ list 1 2 3 | has 4 }}`: `false`,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}

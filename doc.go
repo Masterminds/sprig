@@ -169,6 +169,8 @@ These are used to manipulate lists: '{{ list 1 2 3 | reverse | first }}'
 	- prepend: Add an item to the beginning of a list: 'prepend $list 4' puts 4 at the beginning of the list.
 	- reverse: Reverse the items in a list.
 	- uniq: Remove duplicates from a list.
+	- without: Return a list with the given values removed: 'without (list 1 2 3) 1' would return '[2 3]'
+	- has: Return 'true' if the item is found in the list: 'has "foo" $list' will return 'true' if the list contains "foo"
 
 Dict Functions:
 

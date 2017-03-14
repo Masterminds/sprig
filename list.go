@@ -81,20 +81,29 @@ func compact(list []interface{}) []interface{} {
 
 func uniq(list []interface{}) []interface{} {
 	dest := []interface{}{}
-
-	skip := func(haystack []interface{}, needle interface{}) bool {
-		for _, h := range haystack {
-			if reflect.DeepEqual(needle, h) {
-				return true
-			}
-		}
-		return false
-	}
-
 	for _, item := range list {
-		if !skip(dest, item) {
+		if !inList(dest, item) {
 			dest = append(dest, item)
 		}
 	}
 	return dest
+}
+
+func inList(haystack []interface{}, needle interface{}) bool {
+	for _, h := range haystack {
+		if reflect.DeepEqual(needle, h) {
+			return true
+		}
+	}
+	return false
+}
+
+func without(list []interface{}, omit ...interface{}) []interface{} {
+	res := []interface{}{}
+	for _, i := range list {
+		if !inList(omit, i) {
+			res = append(res, i)
+		}
+	}
+	return res
 }
