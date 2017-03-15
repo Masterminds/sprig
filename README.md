@@ -281,6 +281,13 @@ string is passed in, functions will attempt to conver with
        {{ derivePassword 1 "long" "password" "user" "example.com" }}
        ```
 
+## SemVer Functions:
+
+These functions provide version parsing and comparisons for SemVer 2 version
+strings.
+
+- semver: Parse a semantic version and return a Version object.
+- semverCompare: Compare a SemVer range to a particular version.
 
 ## Principles:
 

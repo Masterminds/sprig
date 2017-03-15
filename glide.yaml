@@ -6,3 +6,5 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - scrypt
+- package: github.com/Masterminds/semver
+  version: v1.2.2

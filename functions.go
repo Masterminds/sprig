@@ -243,4 +243,8 @@ var genericMap = map[string]interface{}{
 
 	// UUIDs:
 	"uuidv4": uuidv4,
+
+	// SemVer:
+	"semver":        semver,
+	"semverCompare": semverCompare,
 }

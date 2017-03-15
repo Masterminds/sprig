@@ -213,5 +213,13 @@ Crypto Functions:
 	  Given parameters (in order) are:
           `counter` (starting with 1), `password_type` (maximum, long, medium, short, basic, or pin), `password`,
            `user`, and `site`
+
+SemVer Functions:
+
+These functions provide version parsing and comparisons for SemVer 2 version
+strings.
+
+	- semver: Parse a semantic version and return a Version object.
+	- semverCompare: Compare a SemVer range to a particular version.
 */
 package sprig

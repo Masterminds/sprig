@@ -1,8 +1,10 @@
-hash: 6e5af84de9810bc5784f56d5a321887db57b3454d45888153202b4b1e191018b
-updated: 2017-03-13T15:10:35.206679863-06:00
+hash: c2d7cb87ff32a0aba767b90bff630c3e4c1ca9904fc72568414d20d79a41e70f
+updated: 2017-03-13T18:38:30.597881175-06:00
 imports:
 - name: github.com/aokoli/goutils
   version: 9c37978a95bd5c709a15883b6242714ea6709e64
+- name: github.com/Masterminds/semver
+  version: 59c29afe1a994eacb71c833025ca7acf874bb1da
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: golang.org/x/crypto
