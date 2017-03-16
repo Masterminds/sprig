@@ -12,5 +12,5 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Encoding Functions](encoding.html): `b64enc`, `b64dec`, etc.
 - [Lists and List Functions](lists.html): `list`, `first`, `uniq`, etc.
 - [Dictionaries and Dict Functions](dicts.html): `dict`, `hasKey`, `pluck`, etc.
-
+- [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
 
