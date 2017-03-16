@@ -103,3 +103,9 @@ has $myList 4
 ```
 
 The above would return `true`, while `has $myList "hello"` would return false.
+
+## A Note on List Internals
+
+A list is implemented in Go as a `[]interface{}`. For Go developers embedding
+Sprig, you may pass `[]interface{}` items into your template context and be
+able to use all of the `list` functions on those items.
