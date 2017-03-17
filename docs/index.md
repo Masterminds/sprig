@@ -2,7 +2,7 @@
 
 The Sprig library provides over 70 template functions for Go's template language.
 
-- [String Functions](string.html): `trim`, `wrap`, `randAlpha`, `plural`, etc.
+- [String Functions](strings.html): `trim`, `wrap`, `randAlpha`, `plural`, etc.
   - [String List Functions](string_slice.html): `splitList`, `sortAlpha`, etc.
 - [Math Functions](math.html): `add`, `max`, `mul`, etc.
   - [Integer Slice Functions](integer_slice.html): `until`, `untilStep`
