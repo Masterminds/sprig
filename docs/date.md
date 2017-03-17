@@ -1,10 +1,10 @@
 # Date Functions
 
-## `now`
+## now
 
 The current date/time. Use this in conjunction with other date functions.
 
-## `date`
+## date
 
 The `date` function formats a date.
 
@@ -25,7 +25,7 @@ Mon Jan 2 15:04:05 MST 2006
 Write it in the format you want. Above, `2006-01-02` is the same date, but
 in the format we want.
 
-## `dateInZone`
+## dateInZone
 
 Same as `date`, but with a timezone.
 
@@ -33,7 +33,7 @@ Same as `date`, but with a timezone.
 date "2006-01-02" (now) "UTC"
 ```
 
-## `dateModify`
+## dateModify
 
 The `dateModify` takes a modification and a date and returns the timestamp.
 
@@ -43,7 +43,7 @@ Subtract an hour and thirty minutes from the current time:
 now | date_modify "-1.5h"
 ```
 
-## `htmlDate`
+## htmlDate
 
 The `htmlDate` function formates a date for inserting into an HTML date picker
 input field.
@@ -52,7 +52,7 @@ input field.
 now | htmlDate
 ```
 
-## `htmlDateInZone`
+## htmlDateInZone
 
 Same as htmlDate, but with a timezone.
 

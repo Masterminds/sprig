@@ -1,6 +1,6 @@
 # Integer Slice Functions
 
-## `until`
+## until
 
 The `until` function builds a range of integers.
 
@@ -12,7 +12,7 @@ The above generates the list `[0, 1, 2, 3, 4]`.
 
 This is useful for looping with `range $i, $e := until 5`.
 
-## `untilStep`
+## untilStep
 
 Like `until`, `untilStep` generates a list of counting integers. But it allows
 you to define a start, stop, and step:

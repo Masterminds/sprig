@@ -12,31 +12,31 @@ $myList := list 1 2 3 4 5
 
 The above creates a list of `[1 2 3 4 5]`.
 
-## `first`
+## first
 
 To get the head item on a list, use `first`.
 
 `first $myList` returns `1`
 
-## `rest`
+## rest
 
 To get the tail of the list (everything but the first item), use `rest`.
 
 `rest $myList` returns `[2 3 4 5]`
 
-## `last`
+## last
 
 To get the last item on a list, use `last`:
 
 `last $myList` returns `5`. This is roughly analogous to reversing a list and
 then calling `first`.
 
-## `initial`
+## initial
 
 This compliments `last` by returning all _but_ the last element.
 `initial $myList` returns `[1 2 3 4]`.
 
-## `append`
+## append
 
 Append a new item to an existing list, creating a new list.
 
@@ -46,7 +46,7 @@ $new = append $myList 6
 
 The above would set `$new` to `[1 2 3 4 5 6]`. `$myList` would remain unaltered.
 
-## `prepend`
+## prepend
 
 Push an alement onto the front of a list, creating a new list.
 
@@ -56,7 +56,7 @@ prepend $myList 0
 
 The above would produce `[0 1 2 3 4 5]`. `$myList` would remain unaltered.
 
-## `reverse`
+## reverse
 
 Produce a new list with the reversed elements of the given list.
 
@@ -66,7 +66,7 @@ reverse $myList
 
 The above would generate the list `[5 4 3 2 1]`.
 
-## `uniq`
+## uniq
 
 Generate a list with all of the duplicates removed.
 
@@ -76,7 +76,7 @@ list 1 1 1 2 | uniq
 
 The above would produce `[1 2]`
 
-## `without`
+## without
 
 The `without` function filters items out of a list.
 
@@ -94,7 +94,7 @@ without $myList 1 3 5
 
 That would produce `[2 4]`
 
-##  `has`
+##  has
 
 Test to see if a list has a particular element.
 

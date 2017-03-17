@@ -7,7 +7,7 @@ _WARNING:_ Some notable implementations of Sprig (such as
 [Kubernetes Helm](http://helm.sh) _do not provide these functions for security
 reasons_.
 
-## `env`
+## env
 
 The `env` function reads an environment variable:
 
@@ -15,7 +15,7 @@ The `env` function reads an environment variable:
 env "HOME"
 ```
 
-## `expandenv`
+## expandenv
 
 To substitute environment variables in a string, use `expandenv`:
 

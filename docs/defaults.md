@@ -2,7 +2,7 @@
 
 Sprig provides tools for setting default values for templates.
 
-## `default`
+## default
 
 To set a simple default value, use `default`:
 
@@ -25,7 +25,7 @@ The definition of "empty" depends on type:
 For structs, there is no definition of empty, so a struct will never return the
 default.
 
-## `empty`
+## empty
 
 The `empty` function returns `true` if the given value is considered empty, and
 `false` otherwise. The empty values are listed in the `default` section.
@@ -37,7 +37,7 @@ empty .Foo
 Note that in Go template conditionals, emptiness is calculated for you. Thus,
 you rarely need `if empty .Foo`. Instead, just use `if .Foo`.
 
-## `coalesce`
+## coalesce
 
 The `coalesce` function takes a list of values and returns the first non-empty
 one.

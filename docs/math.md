@@ -4,31 +4,31 @@ All math functions operate on `int64` values unless specified otherwise.
 
 (In the future, these will be extended to handle floats as well)
 
-## `add`
+## add
 
 Sum numbers with `add`
 
-## `add1`
+## add1
 
 To increment by 1, use `add1`
 
-## `sub`
+## sub
 
 To subtract, use `sub`
 
-## `div`
+## div
 
 Perform integer division with `div`
 
-## `mod`
+## mod
 
 Modulo with `mod`
 
-## `mul`
+## mul
 
 Multiply with `mul`
 
-## `max`
+## max
 
 Return the largest of a series of integers:
 
@@ -38,7 +38,7 @@ This will return `3`:
 max 1 2 3
 ```
 
-## `min`
+## min
 
 Return the smallest of a series of integers.
 
