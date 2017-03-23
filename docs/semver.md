@@ -1,7 +1,7 @@
 # Semantic Version Functions
 
 Some version schemes are easily parseable and comparable. Sprig provides functions
-for working with [http://semver.org](SemVer 2) versions.
+for working with [SemVer 2](http://semver.org) versions.
 
 ## semver
 
