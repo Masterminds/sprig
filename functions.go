@@ -185,10 +185,12 @@ var genericMap = map[string]interface{}{
 	"sortAlpha": sortAlpha,
 
 	// Defaults
-	"default":  dfault,
-	"empty":    empty,
-	"coalesce": coalesce,
-	"compact":  compact,
+	"default":      dfault,
+	"empty":        empty,
+	"coalesce":     coalesce,
+	"compact":      compact,
+	"toJson":       toJson,
+	"toPrettyJson": toPrettyJson,
 
 	// Reflection
 	"typeOf":     typeOf,

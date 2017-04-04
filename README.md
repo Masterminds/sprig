@@ -152,6 +152,8 @@ parse, it returns the time unaltered. See `time.ParseDuration` for info on durat
   because it is an empty value.
 - compact: Return a copy of a list with all of the empty values removed.
   `list 0 1 2 "" | compact` will return `[1 2]`
+- toJson: Encode an item into a JSON string
+- toPrettyJson: Encode an item into an indented JSON string
 
 ### OS:
 
