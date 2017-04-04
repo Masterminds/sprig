@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"encoding/json"
 	"reflect"
 )
 
@@ -59,4 +60,16 @@ func coalesce(v ...interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+// toJson encodes an item into a JSON string
+func toJson(v interface{}) string {
+	output, _ := json.Marshal(v)
+	return string(output)
+}
+
+// toPrettyJson encodes an item into a pretty (indented) JSON string
+func toPrettyJson(v interface{}) string {
+	output, _ := json.MarshalIndent(v, "", "  ")
+	return string(output)
 }
