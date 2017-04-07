@@ -1,6 +1,7 @@
 package: github.com/Masterminds/sprig
 import:
-- package: github.com/aokoli/goutils
+- package: github.com/Masterminds/goutils
+  version: ^1.0.0
 - package: github.com/satori/go.uuid
   version: ^1.1.0
 - package: golang.org/x/crypto
@@ -8,3 +9,4 @@ import:
   - scrypt
 - package: github.com/Masterminds/semver
   version: v1.2.2
+- package: github.com/stretchr/testify
