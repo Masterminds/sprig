@@ -227,6 +227,7 @@ var genericMap = map[string]interface{}{
 	"keys":   keys,
 	"pick":   pick,
 	"omit":   omit,
+	"merge":  merge,
 
 	"append": push, "push": push,
 	"prepend": prepend,

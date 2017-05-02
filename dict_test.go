@@ -135,3 +135,40 @@ func TestCompact(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestMerge(t *testing.T) {
+	dict := map[string]interface{}{
+		"src": map[string]interface{}{
+			"a": 1,
+			"b": 2,
+			"d": map[string]interface{}{
+				"e": "four",
+			},
+			"g": []int{6, 7},
+		},
+		"dst": map[string]interface{}{
+			"a": "one",
+			"c": 3,
+			"d": map[string]interface{}{
+				"f": 5,
+			},
+			"g": []int{8, 9},
+		},
+	}
+	tpl := `{{merge .dst .src}}`
+	_, err := runRaw(tpl, dict)
+	if err != nil {
+		t.Error(err)
+	}
+	expected := map[string]interface{}{
+		"a": "one", // key overridden
+		"b": 2,     // merged from src
+		"c": 3,     // merged from dst
+		"d": map[string]interface{}{ // deep merge
+			"e": "four",
+			"f": 5,
+		},
+		"g": []int{8, 9}, // overridden - arrays are not merged
+	}
+	assert.Equal(t, expected, dict["dst"])
+}
