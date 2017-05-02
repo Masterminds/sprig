@@ -12,3 +12,4 @@ import:
 - package: github.com/stretchr/testify
 - package: github.com/imdario/mergo
   version: ~0.2.2
+- package: github.com/huandu/xstrings
