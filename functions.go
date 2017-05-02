@@ -10,6 +10,7 @@ import (
 	"time"
 
 	util "github.com/aokoli/goutils"
+	"github.com/huandu/xstrings"
 )
 
 // Produce the function map.
@@ -122,6 +123,9 @@ var genericMap = map[string]interface{}{
 	"randAscii":    randAscii,
 	"randNumeric":  randNumeric,
 	"swapcase":     util.SwapCase,
+	"shuffle":      xstrings.Shuffle,
+	"snakecase":    xstrings.ToSnakeCase,
+	"camelcase":    xstrings.ToCamelCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
