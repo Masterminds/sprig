@@ -75,6 +75,14 @@ inserted.
 A common idiom in Sprig templates is to uses `pluck... | first` to get the first
 matching key out of a collection of dictionaries.
 
+## merge
+
+Merge two dictionaries into one, giving precedence to the source dictionary:
+
+```
+$newdict := merge $dest $source
+```
+
 
 ## keys
 
