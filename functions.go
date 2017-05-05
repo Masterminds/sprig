@@ -183,6 +183,9 @@ var genericMap = map[string]interface{}{
 	"biggest": max,
 	"max":     max,
 	"min":     min,
+	"ceil":    ceil,
+	"floor":   floor,
+	"round":   round,
 
 	// string slices. Note that we reverse the order b/c that's better
 	// for template processing.
