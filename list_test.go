@@ -133,3 +133,13 @@ func TestHas(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestLoop(t *testing.T) {
+	tests := map[string]string{
+		`{{ range $i,$e := loop 3 }}index: {{$i}}, element: {{$e}}|{{end}}`: `index: 0, element: 0|index: 1, element: 0|index: 2, element: 0|`,
+		`{{range $i,$e := loop 0}}this will not be rendered{{end}}`: ``,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
