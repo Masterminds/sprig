@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"errors"
 	"html/template"
 	"os"
 	"path"
@@ -254,4 +255,7 @@ var genericMap = map[string]interface{}{
 	// SemVer:
 	"semver":        semver,
 	"semverCompare": semverCompare,
+
+	// Flow Control:
+	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 }

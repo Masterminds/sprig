@@ -13,6 +13,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Dictionaries and Dict Functions](dicts.html): `dict`, `hasKey`, `pluck`, etc.
 - [Type Conversion Functions](conversion.html): `atoi`, `int64`, `toString`, etc.
 - [File Path Functions](paths.html): `base`, `dir`, `ext`, `clean`, `isAbs`
+- [Flow Control Functions](flow_control.html): `fail`
 - Advanced Functions
   - [UUID Functions](uuid.html): `uuidv4`
   - [OS Functions](os.html): `env`, `expandenv`
