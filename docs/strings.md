@@ -278,6 +278,43 @@ rules. And `0` is considered a plural because the English language treats it
 as such (`zero anchovies`). The Sprig developers are working on a solution for
 better internationalization.
 
+## snakecase
+
+Convert string from camelCase to snake_case.
+
+Introduced in 2.12.0.
+
+```
+snakecase "FirstName"
+```
+
+This above will produce `first_name`.
+
+## camelcase
+
+Convert string from snake_case to CamelCase
+
+Introduced in 2.12.0.
+
+```
+camelcase "http_server"
+```
+
+This above will produce `HttpServer`.
+
+## shuffle
+
+Shuffle a string.
+
+Introduced in 2.12.0.
+
+
+```
+shuffle "hello"
+```
+
+The above will randomize the letters in `hello`, perhaps producing `oelhl`.
+
 ## See Also...
 
 The [Conversion Functions](conversion.html) contain functions for converting
