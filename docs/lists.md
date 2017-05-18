@@ -104,6 +104,17 @@ has $myList 4
 
 The above would return `true`, while `has $myList "hello"` would return false.
 
+## loop 
+
+Creates a new integer list that is filled with zeros. This can be used to execute the `range` function n times. 
+
+```
+loop 3
+
+range $index,$element := loop 3
+
+```
+
 ## A Note on List Internals
 
 A list is implemented in Go as a `[]interface{}`. For Go developers embedding

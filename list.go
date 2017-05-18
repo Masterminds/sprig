@@ -107,3 +107,11 @@ func without(list []interface{}, omit ...interface{}) []interface{} {
 	}
 	return res
 }
+
+func loop(n int) []int {
+	slice := make([]int, n )
+	for i := range slice {
+		slice[i] = 0
+	}
+	return slice
+}
