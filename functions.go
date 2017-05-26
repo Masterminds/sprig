@@ -258,4 +258,12 @@ var genericMap = map[string]interface{}{
 
 	// Flow Control:
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
+
+	// Regex
+	"regexMatch": regexMatch,
+	"regexFindAll": regexFindAll,
+	"regexFind": regexFind,
+	"regexReplaceAll": regexReplaceAll,
+	"regexReplaceAllLiteral": regexReplaceAllLiteral,
+	"regexSplit": regexSplit,
 }
