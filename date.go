@@ -65,7 +65,7 @@ func dateAgo(date interface{}) string {
 	case int:
 		t = time.Unix(int64(date), 0)
 	}
-	// Drop resultion to seconds
+	// Drop resolution to seconds
 	duration := time.Since(t) / time.Second * time.Second
 	return duration.String()
 }
