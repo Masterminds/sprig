@@ -4,6 +4,20 @@
 
 The current date/time. Use this in conjunction with other date functions.
 
+
+## ago
+
+The `ago` function returns duration from time.Now in seconds resolution.
+
+```
+ago .CreatedAt"
+```
+returns in `time.Duration` String() format
+
+```
+2h34m7s
+```
+
 ## date
 
 The `date` function formats a date.
