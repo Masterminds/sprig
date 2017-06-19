@@ -27,3 +27,10 @@ func TestAgo(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestToDate(t *testing.T) {
+	tpl := `{{toDate "2006-01-02" "2017-12-31" | date "02/01/2006"}}`
+	if err := runt(tpl, "31/12/2017"); err != nil {
+		t.Error(err)
+	}
+}
