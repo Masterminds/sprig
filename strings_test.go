@@ -201,6 +201,13 @@ func TestIndent(t *testing.T) {
 	}
 }
 
+func TestNindent(t *testing.T) {
+	tpl := `{{nindent 4 "a\nb\nc"}}`
+	if err := runt(tpl, "\n    a\n    b\n    c"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestReplace(t *testing.T) {
 	tpl := `{{"I Am Henry VIII" | replace " " "-"}}`
 	if err := runt(tpl, "I-Am-Henry-VIII"); err != nil {
