@@ -48,6 +48,10 @@ String Functions
 	- randAlpha: Given a length, generate an alphabetic string
 	- randAscii: Given a length, generate a random ASCII string (symbols included)
 	- randNumeric: Given a length, generate a string of digits.
+	- swapcase: SwapCase swaps the case of a string using a word based algorithm. see https://godoc.org/github.com/Masterminds/goutils#SwapCase
+	- shuffle: Shuffle randomizes runes in a string and returns the result. It uses default random source in `math/rand`
+	- snakecase: convert all upper case characters in a string to underscore format.
+	- camelcase: convert all lower case characters behind underscores to upper case character
 	- wrap: Force a line wrap at the given width. `wrap 80 "imagine a longer string"`
 	- wrapWith: Wrap a line at the given length, but using 'sep' instead of a newline. `wrapWith 50, "<br>", $html`
 	- contains: strings.Contains, but with the arguments switched: `contains substr str`. (This simplifies common pipelines)
