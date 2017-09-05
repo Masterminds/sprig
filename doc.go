@@ -57,6 +57,7 @@ String Functions
 	- squote: Wrap string(s) in double quotation marks, does not escape content.
 	- cat: Concatenate strings, separating them by spaces. `cat $a $b $c`.
 	- indent: Indent a string using space characters. `indent 4 "foo\nbar"` produces "    foo\n    bar"
+	- nindent: Indent a string using space characters and prepend a new line. `indent 4 "foo\nbar"` produces "\n    foo\n    bar"
 	- replace: Replace an old with a new in a string: `$name | replace " " "-"`
 	- plural: Choose singular or plural based on length: `len $fish | plural "one anchovy" "many anchovies"`
 	- sha256sum: Generate a hex encoded sha256 hash of the input

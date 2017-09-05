@@ -138,6 +138,7 @@ var genericMap = map[string]interface{}{
 	"squote":    squote,
 	"cat":       cat,
 	"indent":    indent,
+	"nindent":   nindent,
 	"replace":   replace,
 	"plural":    plural,
 	"sha256sum": sha256sum,
