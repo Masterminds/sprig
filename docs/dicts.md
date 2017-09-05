@@ -77,10 +77,10 @@ matching key out of a collection of dictionaries.
 
 ## merge
 
-Merge two dictionaries into one, giving precedence to the dest dictionary:
+Merge two or more dictionaries into one, giving precedence to the dest dictionary:
 
 ```
-$newdict := merge $dest $source
+$newdict := merge $dest $source1 $source2
 ```
 
 This is a deep merge operation.
