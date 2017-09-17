@@ -272,4 +272,7 @@ var genericMap = map[string]interface{}{
 	"regexReplaceAll":        regexReplaceAll,
 	"regexReplaceAllLiteral": regexReplaceAllLiteral,
 	"regexSplit":             regexSplit,
+
+	// Localization
+	"t": locale.T,
 }
