@@ -1,8 +1,8 @@
 package sprig
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 func TestInitLocale(t *testing.T) {
@@ -43,7 +43,7 @@ func TestTranslateFunction(t *testing.T) {
 	locale.SetTranslation("EN", map[string]string{"test": "en_test"})
 	locale.SetTranslation("FR", map[string]string{"test": "fr_test"})
 	tests := map[string]string{
-		`{{ t "test" }}`: "en_test",
+		`{{ t "test" }}`:  "en_test",
 		`{{ t "test2" }}`: "",
 	}
 
@@ -56,7 +56,7 @@ func TestTranslateFunction(t *testing.T) {
 	locale.SetLocale("FR")
 
 	tests = map[string]string{
-		`{{ t "test" }}`: "fr_test",
+		`{{ t "test" }}`:  "fr_test",
 		`{{ t "test2" }}`: "",
 	}
 

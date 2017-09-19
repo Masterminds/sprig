@@ -20,7 +20,7 @@ func InitLocale(lang string) Localization {
 	var localization = Localization{}
 	localization.SetLocale(lang)
 
-	return  localization
+	return localization
 }
 
 // Sets default locale
