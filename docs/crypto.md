@@ -25,9 +25,9 @@ derivePassword 1 "long" "password" "user" "example.com"
 
 Note that it is considered insecure to store the parts directly in the template.
 
-## generatePrivateKey
+## genPrivateKey
 
-The `generatePrivateKey` function generates a new private key encoded into a PEM
+The `genPrivateKey` function generates a new private key encoded into a PEM
 block.
 
 It takes one of the values for its first param:
@@ -35,3 +35,68 @@ It takes one of the values for its first param:
 - `ecdsa`: Generate an elyptical curve DSA key (P256)
 - `dsa`: Generate a DSA key (L2048N256)
 - `rsa`: Generate an RSA 4096 key
+
+## genCA
+
+The `genCA` function generates a new, self-signed x509 certificate authority.
+
+It takes the following parameters:
+
+- Subject's common name (cn)
+- Cert validity duration in days
+
+It returns an object with the following attributes:
+
+- `Cert`: A PEM-encoded certificate
+- `Key`: A PEM-encoded private key
+
+Example:
+
+```
+$ca := genCA "foo-ca" 365
+```
+
+Note that the returned object can be passed to the `genSignedCert` function
+to sign a certificate using this CA.
+
+## genSelfSignedCert
+
+The `genSelfSignedCert` function generates a new, self-signed x509 certificate.
+
+It takes the following parameters:
+
+- Subject's common name (cn)
+- Optional list of IPs; may be nil
+- Optional list of alternate DNS names; may be nil
+- Cert validity duration in days
+
+It returns an object with the following attributes:
+
+- `Cert`: A PEM-encoded certificate
+- `Key`: A PEM-encoded private key
+
+Example:
+
+```
+$cert := genSelfSignedCert "foo.com" (list "10.0.0.1" "10.0.0.2") (list "bar.com" "bat.com") 365
+```
+
+## genSignedCert
+
+The `genSignedCert` function generates a new, x509 certificate signed by the
+specified CA.
+
+It takes the following parameters:
+
+- Subject's common name (cn)
+- Optional list of IPs; may be nil
+- Optional list of alternate DNS names; may be nil
+- Cert validity duration in days
+- CA (see `genCA`)
+
+Example:
+
+```
+$ca := genCA "foo-ca" 365
+$cert := genSignedCert "foo.com" (list "10.0.0.1" "10.0.0.2") (list "bar.com" "bat.com") 365 $ca
+```
