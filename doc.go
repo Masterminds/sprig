@@ -126,6 +126,10 @@ File Paths:
 Encoding:
 	- b64enc: Base 64 encode a string.
 	- b64dec: Base 64 decode a string.
+	- b32enc: Base 32 encode a string.
+	- b32dec: Base 32 decode a string.
+	- urlEnc: URL encode a string.
+	- urlDec: URL decode a string.
 
 Reflection:
 
