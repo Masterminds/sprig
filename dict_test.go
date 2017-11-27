@@ -125,17 +125,6 @@ func TestSet(t *testing.T) {
 	}
 }
 
-func TestCompact(t *testing.T) {
-	tests := map[string]string{
-		`{{ list 1 0 "" "hello" | compact }}`: `[1 hello]`,
-		`{{ list "" "" | compact }}`:          `[]`,
-		`{{ list | compact }}`:                `[]`,
-	}
-	for tpl, expect := range tests {
-		assert.NoError(t, runt(tpl, expect))
-	}
-}
-
 func TestMerge(t *testing.T) {
 	dict := map[string]interface{}{
 		"src2": map[string]interface{}{
