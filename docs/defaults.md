@@ -57,3 +57,23 @@ coalesce .name .parent.name "Matt"
 The above will first check to see if `.name` is empty. If it is not, it will return
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
+
+## toJson
+
+The `toJson` function encodes an item into a JSON string.
+
+```
+toJson .Item
+```
+
+The above returns JSON string representation of `.Item`.
+
+## toPrettyJson
+
+The `toPrettyJson` function encodes an item into a pretty (indented) JSON string.
+
+```
+toPrettyJson .Item
+```
+
+The above returns indented JSON string representation of `.Item`.
