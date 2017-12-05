@@ -105,3 +105,25 @@ func TestToPrettyJson(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestTernary(t *testing.T) {
+	tpl := `{{true | ternary "foo" "bar"}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ternary "foo" "bar" true}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{false | ternary "foo" "bar"}}`
+	if err := runt(tpl, "bar"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ternary "foo" "bar" false}}`
+	if err := runt(tpl, "bar"); err != nil {
+		t.Error(err)
+	}
+}

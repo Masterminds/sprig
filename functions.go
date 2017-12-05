@@ -202,6 +202,7 @@ var genericMap = map[string]interface{}{
 	"compact":      compact,
 	"toJson":       toJson,
 	"toPrettyJson": toPrettyJson,
+	"ternary":      ternary,
 
 	// Reflection
 	"typeOf":     typeOf,

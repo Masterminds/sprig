@@ -110,6 +110,9 @@ Defaults:
 	  because it is an empty value.
 	- compact: Return a copy of a list with all of the empty values removed.
 	  'list 0 1 2 "" | compact' will return '[1 2]'
+	- ternary: Given a value,'true | ternary "b" "c"' will return "b".
+	  'false | ternary "b" "c"' will return '"c"'. Similar to the JavaScript ternary
+	  operator.
 
 OS:
 	- env: Resolve an environment variable
