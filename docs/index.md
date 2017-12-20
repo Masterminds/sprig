@@ -7,7 +7,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Math Functions](math.md): `add`, `max`, `mul`, etc.
   - [Integer Slice Functions](integer_slice.md): `until`, `untilStep`
 - [Date Functions](date.md): `now`, `date`, etc.
-- [Defaults Functions](defaults.md): `default`, `empty`, `coalesce`
+- [Defaults Functions](defaults.md): `default`, `empty`, `coalesce`, `toJson`, `toPrettyJson`
 - [Encoding Functions](encoding.md): `b64enc`, `b64dec`, etc.
 - [Lists and List Functions](lists.md): `list`, `first`, `uniq`, etc.
 - [Dictionaries and Dict Functions](dicts.md): `dict`, `hasKey`, `pluck`, etc.
