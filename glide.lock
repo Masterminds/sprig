@@ -1,8 +1,10 @@
-hash: 2bfa648e6873b9a1c4379ae36067998bfb313d14d831dafcdfbdc9ffb2f9d40c
-updated: 2018-03-28T15:08:09.37325983-04:00
+hash: 770b6a1132b743dadf6a0bb5fb8bf7083b1a5209f6d6c07826234ab2a97aade9
+updated: 2018-04-02T23:08:56.947456531+02:00
 imports:
 - name: github.com/aokoli/goutils
   version: 9c37978a95bd5c709a15883b6242714ea6709e64
+- name: github.com/google/uuid
+  version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings
   version: 3959339b333561bf62a38b424fd41517c2c90f40
 - name: github.com/imdario/mergo
@@ -11,8 +13,6 @@ imports:
   version: 3391d3790d23d03408670993e957e8f408993c34
 - name: github.com/Masterminds/semver
   version: 59c29afe1a994eacb71c833025ca7acf874bb1da
-- name: github.com/satori/go.uuid
-  version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
 - name: github.com/stretchr/testify
   version: e3a8ff8ce36581f87a15341206f205b1da467059
   subpackages:

@@ -23,7 +23,7 @@ import (
 	"net"
 	"time"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/scrypt"
 )
 
@@ -39,7 +39,7 @@ func sha1sum(input string) string {
 
 // uuidv4 provides a safe and secure UUID v4 implementation
 func uuidv4() string {
-	return fmt.Sprintf("%s", uuid.NewV4())
+	return fmt.Sprintf("%s", uuid.New())
 }
 
 var master_password_seed = "com.lyndir.masterpassword"
