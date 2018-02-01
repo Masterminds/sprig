@@ -160,7 +160,7 @@ Data Structures:
 	  be assigned the empty string. Non-string keys are converted to strings as
 	  follows: []byte are converted, fmt.Stringers will have String() called.
 	  errors will have Error() called. All others will be passed through
-	  fmt.Sprtinf("%v").
+	  fmt.Sprintf("%v").
 
 Lists Functions:
 
