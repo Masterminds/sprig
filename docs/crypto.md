@@ -36,6 +36,20 @@ It takes one of the values for its first param:
 - `dsa`: Generate a DSA key (L2048N256)
 - `rsa`: Generate an RSA 4096 key
 
+## buildCustomCert
+
+The `buildCustomCert` function allows customizing the certificate.
+
+It takes the following string parameters:
+
+- A base64 encoded PEM format certificate
+- A base64 encoded PEM format private key
+
+It returns a certificate object with the following attributes:
+
+- `Cert`: A PEM-encoded certificate
+- `Key`: A PEM-encoded private key
+
 ## genCA
 
 The `genCA` function generates a new, self-signed x509 certificate authority.

@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 	"strings"
@@ -117,6 +118,31 @@ func TestUUIDGeneration(t *testing.T) {
 	if out == out2 {
 		t.Error("Expected subsequent UUID generations to be different")
 	}
+}
+
+func TestBuildCustomCert(t *testing.T) {
+	ca, _ := generateCertificateAuthority("example.com", 365)
+	tpl := fmt.Sprintf(
+		`{{- $ca := buildCustomCert "%s" "%s"}}
+{{- $ca.Cert }}`,
+		base64.StdEncoding.EncodeToString([]byte(ca.Cert)),
+		base64.StdEncoding.EncodeToString([]byte(ca.Key)),
+	)
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	tpl2 := fmt.Sprintf(
+		`{{- $ca := buildCustomCert "%s" "%s"}}
+{{- $ca.Cert }}`,
+		base64.StdEncoding.EncodeToString([]byte("fail")),
+		base64.StdEncoding.EncodeToString([]byte(ca.Key)),
+	)
+	out2, _ := runRaw(tpl2, nil)
+
+	assert.Equal(t, out, ca.Cert)
+	assert.NotEqual(t, out2, ca.Cert)
 }
 
 func TestGenCA(t *testing.T) {

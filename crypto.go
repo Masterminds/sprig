@@ -12,6 +12,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/pem"
@@ -154,6 +155,49 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 type certificate struct {
 	Cert string
 	Key  string
+}
+
+func buildCustomCertificate(b64cert string, b64key string) (certificate, error) {
+	crt := certificate{}
+
+	cert, err := base64.StdEncoding.DecodeString(b64cert)
+	if err != nil {
+		return crt, errors.New("unable to decode base64 certificate")
+	}
+
+	key, err := base64.StdEncoding.DecodeString(b64key)
+	if err != nil {
+		return crt, errors.New("unable to decode base64 private key")
+	}
+
+	decodedCert, _ := pem.Decode(cert)
+	if decodedCert == nil {
+		return crt, errors.New("unable to decode certificate")
+	}
+	_, err = x509.ParseCertificate(decodedCert.Bytes)
+	if err != nil {
+		return crt, fmt.Errorf(
+			"error parsing certificate: decodedCert.Bytes: %s",
+			err,
+		)
+	}
+
+	decodedKey, _ := pem.Decode(key)
+	if decodedKey == nil {
+		return crt, errors.New("unable to decode key")
+	}
+	_, err = x509.ParsePKCS1PrivateKey(decodedKey.Bytes)
+	if err != nil {
+		return crt, fmt.Errorf(
+			"error parsing prive key: decodedKey.Bytes: %s",
+			err,
+		)
+	}
+
+	crt.Cert = string(cert)
+	crt.Key = string(key)
+
+	return crt, nil
 }
 
 func generateCertificateAuthority(
