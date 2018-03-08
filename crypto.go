@@ -32,6 +32,7 @@ func sha256sum(input string) string {
 
 // uuidv4 provides a safe and secure UUID v4 implementation
 func uuidv4() string {
+	uid,_ := uuid.NewV4()
 	return fmt.Sprintf("%s", uuid.NewV4())
 }
 
