@@ -8,6 +8,7 @@ import (
 	"crypto/hmac"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/x509"
 	"crypto/x509/pkix"
@@ -27,6 +28,11 @@ import (
 
 func sha256sum(input string) string {
 	hash := sha256.Sum256([]byte(input))
+	return hex.EncodeToString(hash[:])
+}
+
+func sha1sum(input string) string {
+	hash := sha1.Sum([]byte(input))
 	return hex.EncodeToString(hash[:])
 }
 

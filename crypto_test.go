@@ -21,6 +21,12 @@ func TestSha256Sum(t *testing.T) {
 		t.Error(err)
 	}
 }
+func TestSha1Sum(t *testing.T) {
+	tpl := `{{"abc" | sha1sum}}`
+	if err := runt(tpl, "a9993e364706816aba3e25717850c26c9cd0d89d"); err != nil {
+		t.Error(err)
+	}
+}
 
 func TestDerivePassword(t *testing.T) {
 	expectations := map[string]string{
