@@ -50,6 +50,15 @@ It returns a certificate object with the following attributes:
 - `Cert`: A PEM-encoded certificate
 - `Key`: A PEM-encoded private key
 
+Example:
+
+```
+$ca := buildCustomCert "base64-encoded-ca-key" "base64-encoded-ca-crt"
+```
+
+Note that the returned object can be passed to the `genSignedCert` function
+to sign a certificate using this CA.
+
 ## genCA
 
 The `genCA` function generates a new, self-signed x509 certificate authority.
