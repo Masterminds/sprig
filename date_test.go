@@ -23,7 +23,7 @@ func TestAgo(t *testing.T) {
 		t.Error(err)
 	}
 
-	if err := runtv(tpl, "-4s", map[string]interface{}{"Time": time.Now().Add(5 * time.Second)}); err != nil {
+	if err := runtv(tpl, "-5s", map[string]interface{}{"Time": time.Now().Add(5 * time.Second)}); err != nil {
 		t.Error(err)
 	}
 }
