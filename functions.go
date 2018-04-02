@@ -256,6 +256,7 @@ var genericMap = map[string]interface{}{
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
 	"derivePassword":    derivePassword,
+	"buildCustomCert":   buildCustomCertificate,
 	"genCA":             generateCertificateAuthority,
 	"genSelfSignedCert": generateSelfSignedCertificate,
 	"genSignedCert":     generateSignedCertificate,
