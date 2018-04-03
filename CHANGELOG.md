@@ -1,5 +1,27 @@
 # Changelog
 
+## Release 2.15.0 (2018-04-02)
+
+### Added
+
+- #68 and #69: Add json helpers to docs (thanks @arunvelsriram)
+- #66: Add ternary function (thanks @binoculars)
+- #67: Allow keys function to take multiple dicts (thanks @binoculars)
+- #89: Added sha1sum to crypto function (thanks @benkeil)
+- #81: Allow customizing Root CA that used by genSignedCert (thanks @chenzhiwei)
+- #92: Add travis testing for go 1.10
+- #93: Adding appveyor config for windows testing
+
+### Changed
+
+- #90: Updating to more recent dependencies
+- #73: replace satori/go.uuid with google/uuid (thanks @petterw)
+
+### Fixed
+
+- #76: Fixed documentation typos (thanks @Thiht)
+- Fixed rounding issue on the `ago` function. Note, the removes support for Go 1.8 and older
+
 ## Release 2.14.1 (2017-12-01)
 
 ### Fixed
