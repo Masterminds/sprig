@@ -247,6 +247,9 @@ func generateSelfSignedCertificate(
 	if err != nil {
 		return cert, err
 	}
+	template.KeyUsage = x509.KeyUsageKeyEncipherment |
+		x509.KeyUsageDigitalSignature |
+		x509.KeyUsageCertSign
 
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
