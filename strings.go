@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -198,4 +199,67 @@ func substring(start, length int, s string) string {
 		return s[start:]
 	}
 	return s[start:length]
+}
+
+// Compare version checks based on autoconf ax_compare_version
+// http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_compare_version.m4
+func compareVersionCleaner(v string, pad int) string {
+	var re = regexp.MustCompile(`([0-9]+)`)
+	v = re.ReplaceAllString(v, `Z${1}Z`)
+
+	for i := 1; i < pad; i++ {
+		re = regexp.MustCompile(fmt.Sprintf(`Z([0-9]{%d})Z`, i))
+		v = re.ReplaceAllString(v, `Z0${1}Z`)
+	}
+
+	re = regexp.MustCompile(`([^0-9]+)`)
+	v = re.ReplaceAllString(v, ``)
+
+	return v
+}
+
+func isVersionGreaterEqual(a string, b string) bool {
+	if a == b {
+		return true
+	}
+
+	return isVersionGreaterThan(a, b)
+}
+
+func isVersionGreaterThan(a string, b string) bool {
+	if a == b {
+		return false
+	}
+
+	a = compareVersionCleaner(a, 5)
+	b = compareVersionCleaner(b, 5)
+
+	if strings.Compare(a, b) > 0 {
+		return true
+	}
+
+	return false
+}
+
+func isVersionLesserEqual(a string, b string) bool {
+	if a == b {
+		return true
+	}
+
+	return isVersionLesserThan(a, b)
+}
+
+func isVersionLesserThan(a string, b string) bool {
+	if a == b {
+		return false
+	}
+
+	a = compareVersionCleaner(a, 5)
+	b = compareVersionCleaner(b, 5)
+
+	if strings.Compare(a, b) < 0 {
+		return true
+	}
+
+	return false
 }
