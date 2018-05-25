@@ -104,6 +104,16 @@ has $myList 4
 
 The above would return `true`, while `has $myList "hello"` would return false.
 
+## slice
+
+To get partial elements of a list, use `slice list [n] [m]`. It is
+equivalent of `list[n:m]`.
+
+- `slice $myList` returns `[1 2 3 4 5]`. It is same as `myList[:]`.
+- `slice $myList 3` returns `[4 5]`. It is same as `myList[3:]`.
+- `slice $myList 1 3` returns `[2 3]`. It is same as `myList[1:3]`.
+- `slice $myList 0 3` returns `[1 2 3]`. It is same as `myList[:3]`.
+
 ## A Note on List Internals
 
 A list is implemented in Go as a `[]interface{}`. For Go developers embedding

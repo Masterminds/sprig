@@ -155,3 +155,16 @@ func TestHas(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestSlice(t *testing.T) {
+	tests := map[string]string{
+		`{{ slice (list 1 2 3) }}`:                          "[1 2 3]",
+		`{{ slice (list 1 2 3) 0 1 }}`:                      "[1]",
+		`{{ slice (list 1 2 3) 1 3 }}`:                      "[2 3]",
+		`{{ slice (list 1 2 3) 1 }}`:                        "[2 3]",
+		`{{ slice (regexSplit "/" "foo/bar/baz" -1) 1 2 }}`: "[bar]",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
