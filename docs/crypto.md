@@ -61,7 +61,7 @@ It returns a certificate object with the following attributes:
 Example:
 
 ```
-$ca := buildCustomCert "base64-encoded-ca-key" "base64-encoded-ca-crt"
+$ca := buildCustomCert "base64-encoded-ca-crt" "base64-encoded-ca-key"
 ```
 
 Note that the returned object can be passed to the `genSignedCert` function
