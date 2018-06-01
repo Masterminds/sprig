@@ -286,6 +286,6 @@ func slice(list interface{}, indices ...interface{}) interface{} {
 
 		return l2.Slice(start, end).Interface()
 	default:
-		panic(fmt.Sprintf("Cannot find first on type %s", tp))
+		panic(fmt.Sprintf("list should be type of slice or array but %s", tp))
 	}
 }
