@@ -391,7 +391,7 @@ The above produces `[pi a]`
 
 ## See Also...
 
-The [Conversion Functions](conversion.html) contain functions for converting
-strings. The [String Slice Functions](string_slice.html) contains functions
+The [Conversion Functions](conversion.md) contain functions for converting
+strings. The [String Slice Functions](string_slice.md) contains functions
 for working with an array of strings.
 
