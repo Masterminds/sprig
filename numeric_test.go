@@ -181,21 +181,21 @@ func TestMul(t *testing.T) {
 	}
 }
 
-func TestCeil(t *testing.T){
+func TestCeil(t *testing.T) {
 	assert.Equal(t, 123.0, ceil(123))
 	assert.Equal(t, 123.0, ceil("123"))
 	assert.Equal(t, 124.0, ceil(123.01))
 	assert.Equal(t, 124.0, ceil("123.01"))
 }
 
-func TestFloor(t *testing.T){
+func TestFloor(t *testing.T) {
 	assert.Equal(t, 123.0, floor(123))
 	assert.Equal(t, 123.0, floor("123"))
 	assert.Equal(t, 123.0, floor(123.9999))
 	assert.Equal(t, 123.0, floor("123.9999"))
 }
 
-func TestRound(t *testing.T){
+func TestRound(t *testing.T) {
 	assert.Equal(t, 123.556, round(123.5555, 3))
 	assert.Equal(t, 123.556, round("123.55555", 3))
 	assert.Equal(t, 124.0, round(123.500001, 0))
