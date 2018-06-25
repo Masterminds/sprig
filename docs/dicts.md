@@ -124,6 +124,19 @@ $new := omit $myDict "name1" "name3"
 
 The above returns `{name2: value2}`
 
+## values
+
+The `values` function is similar to `keys`, except it returns a new `list` with
+all the values of the source `dict`.
+
+```
+$vals := values $myDict
+```
+
+The above returns `list["value1", "value2", "value 3"]`. Note that the `values`
+function gives no guarantees about the result ordering- if you care about this,
+then use `sortAlpha`.
+
 ## A Note on Dict Internals
 
 A `dict` is implemented in Go as a `map[string]interface{}`. Go developers can

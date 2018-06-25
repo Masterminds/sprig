@@ -173,3 +173,16 @@ func TestMerge(t *testing.T) {
 	}
 	assert.Equal(t, expected, dict["dst"])
 }
+
+func TestValues(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "a" 1 "b" 2 }}{{ values $d | sortAlpha | join "," }}`:       "1,2",
+		`{{- $d := dict "a" "first" "b" 2 }}{{ values $d | sortAlpha | join "," }}`: "2,first",
+	}
+
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
