@@ -85,6 +85,13 @@ func TestSplit(t *testing.T) {
 	}
 }
 
+func TestSplitn(t *testing.T) {
+	tpl := `{{$v := "foo$bar$baz" | splitn "$" 2}}{{$v._0}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestToString(t *testing.T) {
 	tpl := `{{ toString 1 | kindOf }}`
 	assert.NoError(t, runt(tpl, "string"))
