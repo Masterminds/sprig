@@ -255,6 +255,7 @@ var genericMap = map[string]interface{}{
 	"uniq":    uniq,
 	"without": without,
 	"has":     has,
+	"slice":   slice,
 
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
