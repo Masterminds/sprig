@@ -208,6 +208,7 @@ func TestGenSelfSignedCert(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, cn, cert.Subject.CommonName)
+	assert.Equal(t, 1, cert.SerialNumber.Sign())
 	assert.Equal(t, 2, len(cert.IPAddresses))
 	assert.Equal(t, ip1, cert.IPAddresses[0].String())
 	assert.Equal(t, ip2, cert.IPAddresses[1].String())
@@ -250,6 +251,7 @@ func TestGenSignedCert(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, cn, cert.Subject.CommonName)
+	assert.Equal(t, 1, cert.SerialNumber.Sign())
 	assert.Equal(t, 2, len(cert.IPAddresses))
 	assert.Equal(t, ip1, cert.IPAddresses[0].String())
 	assert.Equal(t, ip2, cert.IPAddresses[1].String())
