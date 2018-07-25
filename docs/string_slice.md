@@ -46,6 +46,23 @@ $a._0
 
 The above produces `foo`
 
+## splitn
+
+`splitn` function splits a string into a `dict`. It is designed to make
+it easy to use template dot notation for accessing members:
+
+```
+$a := splitn "$" 2 "foo$bar$baz"
+```
+
+The above produces a map with index keys. `{_0: foo, _1: bar$baz}`
+
+```
+$a._0
+```
+
+The above produces `foo`
+
 ## sortAlpha
 
 The `sortAlpha` function sorts a list of strings into alphabetical (lexicographical)
