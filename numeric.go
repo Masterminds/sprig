@@ -157,3 +157,16 @@ func round(a interface{}, p int, r_opt ...float64) float64 {
 	}
 	return round / pow
 }
+
+// converts octal to decimal
+func toDecimal(v interface{}) int64 {
+	vStr, ok := v.(string)
+	if !ok {
+		return 0
+	}
+	result, err := strconv.ParseInt(vStr, 8, 64)
+	if err != nil {
+		return 0
+	}
+	return int64(result)
+}

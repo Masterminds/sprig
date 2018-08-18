@@ -167,6 +167,22 @@ func TestToInt(t *testing.T) {
 	}
 }
 
+func TestToDecimal(t *testing.T) {
+	tests := map[interface{}]int64{
+		"0755": 493,
+		//0755:   493,
+		//"0000": 0,
+		//"8888": 0,
+	}
+
+	for input, expectedResult := range tests {
+		result := toDecimal(input)
+		if result != expectedResult {
+			t.Errorf("Expected %v but got %v", expectedResult, result)
+		}
+	}
+}
+
 func TestAdd(t *testing.T) {
 	tpl := `{{ 3 | add 1 2}}`
 	if err := runt(tpl, `6`); err != nil {
