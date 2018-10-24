@@ -264,6 +264,8 @@ var genericMap = map[string]interface{}{
 	"genCA":             generateCertificateAuthority,
 	"genSelfSignedCert": generateSelfSignedCertificate,
 	"genSignedCert":     generateSignedCertificate,
+	"encryptAES":        encryptAES,
+	"decryptAES":        decryptAES,
 
 	// UUIDs:
 	"uuidv4": uuidv4,
