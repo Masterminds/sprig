@@ -314,6 +314,16 @@ camelcase "http_server"
 
 This above will produce `HttpServer`.
 
+## kebabCase
+
+Convert string from camelCase to kebab-case.
+
+```
+kebabcase "FirstName"
+```
+
+This above will produce `first-name`.
+
 ## shuffle
 
 Shuffle a string.

@@ -66,6 +66,15 @@ func TestCamelCase(t *testing.T) {
 	assert.NoError(t, runt(`{{ camelcase "all" }}`, "All"))
 }
 
+func TestKebabCase(t *testing.T) {
+	assert.NoError(t, runt(`{{ kebabcase "FirstName" }}`, "first-name"))
+	assert.NoError(t, runt(`{{ kebabcase "HTTPServer" }}`, "http-server"))
+	assert.NoError(t, runt(`{{ kebabcase "NoHTTPS" }}`, "no-https"))
+	assert.NoError(t, runt(`{{ kebabcase "GO_PATH" }}`, "go-path"))
+	assert.NoError(t, runt(`{{ kebabcase "GO PATH" }}`, "go-path"))
+	assert.NoError(t, runt(`{{ kebabcase "GO-PATH" }}`, "go-path"))
+}
+
 func TestShuffle(t *testing.T) {
 	goutils.RANDOM = rand.New(rand.NewSource(1))
 	// Because we're using a random number generator, we need these to go in

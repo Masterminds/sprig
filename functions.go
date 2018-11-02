@@ -129,6 +129,7 @@ var genericMap = map[string]interface{}{
 	"shuffle":      xstrings.Shuffle,
 	"snakecase":    xstrings.ToSnakeCase,
 	"camelcase":    xstrings.ToCamelCase,
+	"kebabcase":    xstrings.ToKebabCase,
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
