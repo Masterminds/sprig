@@ -99,10 +99,10 @@ That would produce `[2 4]`
 Test to see if a list has a particular element.
 
 ```
-has $myList 4
+has 4 $myList
 ```
 
-The above would return `true`, while `has $myList "hello"` would return false.
+The above would return `true`, while `has "hello" $myList` would return false.
 
 ## slice
 
