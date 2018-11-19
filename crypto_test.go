@@ -29,8 +29,8 @@ func TestSha1Sum(t *testing.T) {
 	}
 }
 
-func TestAlder32Sum(t *testing.T) {
-	tpl := `{{"abc" | alder32sum}}`
+func TestAdler32Sum(t *testing.T) {
+	tpl := `{{"abc" | adler32sum}}`
 	if err := runt(tpl, "38600999"); err != nil {
 		t.Error(err)
 	}

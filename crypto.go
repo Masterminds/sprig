@@ -38,7 +38,7 @@ func sha1sum(input string) string {
 	return hex.EncodeToString(hash[:])
 }
 
-func alder32sum(input string) string {
+func adler32sum(input string) string {
 	hash := adler32.Checksum([]byte(input))
 	return fmt.Sprintf("%d", hash)
 }
