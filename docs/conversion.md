@@ -8,6 +8,7 @@ The following type conversion functions are provided by Sprig:
 - `int64`: Convert to an `int64`
 - `toString`: Convert to a string
 - `toStrings`: Convert a list, slice, or array to a list of strings.
+- `toDecimal`: Converts to a unix octal.
 
 Only `atoi` requires that the input be a specific type. The others will attempt
 to convert from any type to the destination type. For example, `int64` can convert
