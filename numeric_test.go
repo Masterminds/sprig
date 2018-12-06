@@ -169,10 +169,10 @@ func TestToInt(t *testing.T) {
 
 func TestToDecimal(t *testing.T) {
 	tests := map[interface{}]int64{
-		"0755": 493,
-		//0755:   493,
-		//"0000": 0,
-		//"8888": 0,
+		"777": 511,
+		777:   511,
+		770:   504,
+		755:   493,
 	}
 
 	for input, expectedResult := range tests {

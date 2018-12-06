@@ -153,6 +153,7 @@ var genericMap = map[string]interface{}{
 	"int64":   toInt64,
 	"int":     toInt,
 	"float64": toFloat64,
+	"decimal": toDecimal,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
