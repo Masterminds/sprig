@@ -27,7 +27,7 @@ func toFloat64(v interface{}) float64 {
 	case reflect.Float32, reflect.Float64:
 		return val.Float()
 	case reflect.Bool:
-		if val.Bool() == true {
+		if val.Bool() {
 			return 1
 		}
 		return 0
@@ -67,7 +67,7 @@ func toInt64(v interface{}) int64 {
 	case reflect.Float32, reflect.Float64:
 		return int64(val.Float())
 	case reflect.Bool:
-		if val.Bool() == true {
+		if val.Bool() {
 			return 1
 		}
 		return 0
@@ -138,10 +138,10 @@ func ceil(a interface{}) float64 {
 	return math.Ceil(aa)
 }
 
-func round(a interface{}, p int, r_opt ...float64) float64 {
+func round(a interface{}, p int, rOpt ...float64) float64 {
 	roundOn := .5
-	if len(r_opt) > 0 {
-		roundOn = r_opt[0]
+	if len(rOpt) > 0 {
+		roundOn = rOpt[0]
 	}
 	val := toFloat64(a)
 	places := toFloat64(p)

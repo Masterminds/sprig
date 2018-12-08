@@ -99,7 +99,7 @@ func TestGenPrivateKey(t *testing.T) {
 	}
 	// ensure that we can base64 encode the string
 	tpl = `{{genPrivateKey "rsa" | b64enc}}`
-	out, err = runRaw(tpl, nil)
+	_, err = runRaw(tpl, nil)
 	if err != nil {
 		t.Error(err)
 	}

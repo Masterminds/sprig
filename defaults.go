@@ -37,7 +37,7 @@ func empty(given interface{}) bool {
 	case reflect.Array, reflect.Slice, reflect.Map, reflect.String:
 		return g.Len() == 0
 	case reflect.Bool:
-		return g.Bool() == false
+		return !g.Bool()
 	case reflect.Complex64, reflect.Complex128:
 		return g.Complex() == 0
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:

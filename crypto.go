@@ -39,12 +39,12 @@ func sha1sum(input string) string {
 
 // uuidv4 provides a safe and secure UUID v4 implementation
 func uuidv4() string {
-	return fmt.Sprintf("%s", uuid.New())
+	return uuid.New().String()
 }
 
-var master_password_seed = "com.lyndir.masterpassword"
+var masterPasswordSeed = "com.lyndir.masterpassword"
 
-var password_type_templates = map[string][][]byte{
+var passwordTypeTemplates = map[string][][]byte{
 	"maximum": {[]byte("anoxxxxxxxxxxxxxxxxx"), []byte("axxxxxxxxxxxxxxxxxno")},
 	"long": {[]byte("CvcvnoCvcvCvcv"), []byte("CvcvCvcvnoCvcv"), []byte("CvcvCvcvCvcvno"), []byte("CvccnoCvcvCvcv"), []byte("CvccCvcvnoCvcv"),
 		[]byte("CvccCvcvCvcvno"), []byte("CvcvnoCvccCvcv"), []byte("CvcvCvccnoCvcv"), []byte("CvcvCvccCvcvno"), []byte("CvcvnoCvcvCvcc"),
@@ -57,7 +57,7 @@ var password_type_templates = map[string][][]byte{
 	"pin":    {[]byte("nnnn")},
 }
 
-var template_characters = map[byte]string{
+var templateCharacters = map[byte]string{
 	'V': "AEIOU",
 	'C': "BCDFGHJKLMNPQRSTVWXYZ",
 	'v': "aeiou",
@@ -69,14 +69,14 @@ var template_characters = map[byte]string{
 	'x': "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
 }
 
-func derivePassword(counter uint32, password_type, password, user, site string) string {
-	var templates = password_type_templates[password_type]
+func derivePassword(counter uint32, passwordType, password, user, site string) string {
+	var templates = passwordTypeTemplates[passwordType]
 	if templates == nil {
-		return fmt.Sprintf("cannot find password template %s", password_type)
+		return fmt.Sprintf("cannot find password template %s", passwordType)
 	}
 
 	var buffer bytes.Buffer
-	buffer.WriteString(master_password_seed)
+	buffer.WriteString(masterPasswordSeed)
 	binary.Write(&buffer, binary.BigEndian, uint32(len(user)))
 	buffer.WriteString(user)
 
@@ -86,7 +86,7 @@ func derivePassword(counter uint32, password_type, password, user, site string) 
 		return fmt.Sprintf("failed to derive password: %s", err)
 	}
 
-	buffer.Truncate(len(master_password_seed))
+	buffer.Truncate(len(masterPasswordSeed))
 	binary.Write(&buffer, binary.BigEndian, uint32(len(site)))
 	buffer.WriteString(site)
 	binary.Write(&buffer, binary.BigEndian, counter)
@@ -98,9 +98,9 @@ func derivePassword(counter uint32, password_type, password, user, site string) 
 
 	buffer.Truncate(0)
 	for i, element := range temp {
-		pass_chars := template_characters[element]
-		pass_char := pass_chars[int(seed[i+1])%len(pass_chars)]
-		buffer.WriteByte(pass_char)
+		passChars := templateCharacters[element]
+		passChar := passChars[int(seed[i+1])%len(passChars)]
+		buffer.WriteByte(passChar)
 	}
 
 	return buffer.String()
@@ -134,7 +134,7 @@ func generatePrivateKey(typ string) string {
 	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
 }
 
-type DSAKeyFormat struct {
+type dsaKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int
 }
@@ -144,7 +144,7 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 	case *rsa.PrivateKey:
 		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}
 	case *dsa.PrivateKey:
-		val := DSAKeyFormat{
+		val := dsaKeyFormat{
 			P: k.P, Q: k.Q, G: k.G,
 			Y: k.Y, X: k.X,
 		}
@@ -228,11 +228,8 @@ func generateCertificateAuthority(
 	}
 
 	ca.Cert, ca.Key, err = getCertAndKey(template, priv, template, priv)
-	if err != nil {
-		return ca, err
-	}
 
-	return ca, nil
+	return ca, err
 }
 
 func generateSelfSignedCertificate(
@@ -254,11 +251,8 @@ func generateSelfSignedCertificate(
 	}
 
 	cert.Cert, cert.Key, err = getCertAndKey(template, priv, template, priv)
-	if err != nil {
-		return cert, err
-	}
 
-	return cert, nil
+	return cert, err
 }
 
 func generateSignedCertificate(
@@ -309,11 +303,8 @@ func generateSignedCertificate(
 		signerCert,
 		signerKey,
 	)
-	if err != nil {
-		return cert, err
-	}
 
-	return cert, nil
+	return cert, err
 }
 
 func getCertAndKey(
@@ -352,7 +343,7 @@ func getCertAndKey(
 		return "", "", fmt.Errorf("error pem-encoding key: %s", err)
 	}
 
-	return string(certBuffer.Bytes()), string(keyBuffer.Bytes()), nil
+	return certBuffer.String(), keyBuffer.String(), nil
 }
 
 func getBaseCertTemplate(
