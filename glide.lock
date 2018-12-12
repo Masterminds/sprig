@@ -1,8 +1,8 @@
-hash: 770b6a1132b743dadf6a0bb5fb8bf7083b1a5209f6d6c07826234ab2a97aade9
-updated: 2018-11-02T14:53:47.937203+01:00
+hash: e78b6a3a3569c7b735e2104df438473e38c6cede5a31a12cfdd8386b7edb8909
+updated: 2018-12-12T23:46:15.616306+03:00
 imports:
 - name: github.com/aokoli/goutils
-  version: 3391d3790d23d03408670993e957e8f408993c34
+  version: 41ac8693c5c10a92ea1ff5ac3a7f95646f6123b0
 - name: github.com/google/uuid
   version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings
@@ -13,12 +13,14 @@ imports:
   version: 3391d3790d23d03408670993e957e8f408993c34
 - name: github.com/Masterminds/semver
   version: 59c29afe1a994eacb71c833025ca7acf874bb1da
+- name: github.com/spf13/cast
+  version: 8c9545af88b134710ab1cd196795e7f2388358d7
 - name: github.com/stretchr/testify
-  version: 04af85275a5c7ac09d16bb3b9b2e751ed45154e5
+  version: 5b93e2dc01fd8fbf32aa74a198b0ebe78f6f6b6f
   subpackages:
   - assert
 - name: golang.org/x/crypto
-  version: 4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06
+  version: 505ab145d0a99da450461ae2c1a9f6cd10d1f447
   subpackages:
   - pbkdf2
   - scrypt
