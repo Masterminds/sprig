@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"path"
+	"regexp"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
@@ -277,7 +278,7 @@ var genericMap = map[string]interface{}{
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
 	// Regex
-	"regexMatch":             regexMatch,
+	"regexMatch":             func(regex string, s string) (bool, error) { return regexp.MatchString(regex, s) },
 	"regexFindAll":           regexFindAll,
 	"regexFind":              regexFind,
 	"regexReplaceAll":        regexReplaceAll,
