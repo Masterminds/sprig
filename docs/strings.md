@@ -81,7 +81,7 @@ The above returns `hellohellohello`
 Get a substring from a string. It takes three parameters:
 
 - start (int)
-- length (int)
+- end (int)
 - string (string)
 
 ```
