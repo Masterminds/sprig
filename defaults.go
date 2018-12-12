@@ -67,10 +67,26 @@ func toJson(v interface{}) string {
 	return string(output)
 }
 
+func mustToJson(v interface{}) (string, error) {
+	output, err := json.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+	return string(output), nil
+}
+
 // toPrettyJson encodes an item into a pretty (indented) JSON string
 func toPrettyJson(v interface{}) string {
 	output, _ := json.MarshalIndent(v, "", "  ")
 	return string(output)
+}
+
+func mustToPrettyJson(v interface{}) (string, error) {
+	output, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return "", err
+	}
+	return string(output), nil
 }
 
 // ternary returns the first value if the last value is true, otherwise returns the second value.

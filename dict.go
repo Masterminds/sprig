@@ -87,6 +87,15 @@ func merge(dst map[string]interface{}, srcs ...map[string]interface{}) interface
 	return dst
 }
 
+func mustMerge(dst map[string]interface{}, srcs ...map[string]interface{}) (interface{}, error) {
+	for _, src := range srcs {
+		if err := mergo.Merge(&dst, src); err != nil {
+			return nil, err
+		}
+	}
+	return dst, nil
+}
+
 func values(dict map[string]interface{}) []interface{} {
 	values := []interface{}{}
 	for _, value := range dict {
