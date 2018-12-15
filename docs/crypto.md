@@ -21,6 +21,14 @@ sha256sum "Hello world!"
 The above will compute the SHA 256 sum in an "ASCII armored" format that is
 safe to print.
 
+## adler32sum
+
+The `adler32sum` function receives a string, and computes its Adler-32 checksum.
+
+```
+adler32sum "Hello world!"
+```
+
 ## derivePassword
 
 The `derivePassword` function can be used to derive a specific password based on
