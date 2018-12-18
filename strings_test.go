@@ -38,6 +38,11 @@ func TestQuote(t *testing.T) {
 	if err := runt(tpl, `"1" "2" "3"`); err != nil {
 		t.Error(err)
 	}
+	tpl = `{{ .value | quote }}`
+	values := map[string]interface{}{"value": nil}
+	if err := runtv(tpl, ``, values); err != nil {
+		t.Error(err)
+	}
 }
 func TestSquote(t *testing.T) {
 	tpl := `{{squote "a" "b" "c"}}`
@@ -46,6 +51,11 @@ func TestSquote(t *testing.T) {
 	}
 	tpl = `{{squote 1 2 3 }}`
 	if err := runt(tpl, `'1' '2' '3'`); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ .value | squote }}`
+	values := map[string]interface{}{"value": nil}
+	if err := runtv(tpl, ``, values); err != nil {
 		t.Error(err)
 	}
 }
@@ -100,6 +110,11 @@ func TestToString(t *testing.T) {
 func TestToStrings(t *testing.T) {
 	tpl := `{{ $s := list 1 2 3 | toStrings }}{{ index $s 1 | kindOf }}`
 	assert.NoError(t, runt(tpl, "string"))
+	tpl = `{{ list 1 .value 2 | toStrings }}`
+	values := map[string]interface{}{"value": nil}
+	if err := runtv(tpl, `[1 2]`, values); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestJoin(t *testing.T) {
@@ -108,6 +123,7 @@ func TestJoin(t *testing.T) {
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "a-b-c", map[string]interface{}{"V": []string{"a", "b", "c"}}))
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "abc", map[string]interface{}{"V": "abc"}))
 	assert.NoError(t, runtv(`{{ join "-" .V }}`, "1-2-3", map[string]interface{}{"V": []int{1, 2, 3}}))
+	assert.NoError(t, runtv(`{{ join "-" .value }}`, "1-2", map[string]interface{}{"value": []interface{}{"1", nil, "2"}}))
 }
 
 func TestSortAlpha(t *testing.T) {
@@ -197,6 +213,11 @@ func TestRandom(t *testing.T) {
 func TestCat(t *testing.T) {
 	tpl := `{{$b := "b"}}{{"c" | cat "a" $b}}`
 	if err := runt(tpl, "a b c"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ .value | cat "a" "b"}}`
+	values := map[string]interface{}{"value": nil}
+	if err := runtv(tpl, "a b", values); err != nil {
 		t.Error(err)
 	}
 }

@@ -81,22 +81,27 @@ func untitle(str string) string {
 }
 
 func quote(str ...interface{}) string {
-	out := make([]string, len(str))
-	for i, s := range str {
-		out[i] = fmt.Sprintf("%q", strval(s))
+	out := make([]string, 0, len(str))
+	for _, s := range str {
+		if s != nil {
+			out = append(out, fmt.Sprintf("%q", strval(s)))
+		}
 	}
 	return strings.Join(out, " ")
 }
 
 func squote(str ...interface{}) string {
-	out := make([]string, len(str))
-	for i, s := range str {
-		out[i] = fmt.Sprintf("'%v'", s)
+	out := make([]string, 0, len(str))
+	for _, s := range str {
+		if s != nil {
+			out = append(out, fmt.Sprintf("'%v'", s))
+		}
 	}
 	return strings.Join(out, " ")
 }
 
 func cat(v ...interface{}) string {
+	v = removeNilElements(v)
 	r := strings.TrimSpace(strings.Repeat("%v ", len(v)))
 	return fmt.Sprintf(r, v...)
 }
@@ -126,10 +131,11 @@ func strslice(v interface{}) []string {
 	case []string:
 		return v
 	case []interface{}:
-		l := len(v)
-		b := make([]string, l)
-		for i := 0; i < l; i++ {
-			b[i] = strval(v[i])
+		b := make([]string, 0, len(v))
+		for _, s := range v {
+			if s != nil {
+				b = append(b, strval(s))
+			}
 		}
 		return b
 	default:
@@ -137,15 +143,32 @@ func strslice(v interface{}) []string {
 		switch val.Kind() {
 		case reflect.Array, reflect.Slice:
 			l := val.Len()
-			b := make([]string, l)
+			b := make([]string, 0, l)
 			for i := 0; i < l; i++ {
-				b[i] = strval(val.Index(i).Interface())
+				value := val.Index(i).Interface()
+				if value != nil {
+					b = append(b, strval(value))
+				}
 			}
 			return b
 		default:
-			return []string{strval(v)}
+			if v == nil {
+				return []string{}
+			} else {
+				return []string{strval(v)}
+			}
 		}
 	}
+}
+
+func removeNilElements(v []interface{}) []interface{} {
+	newSlice := make([]interface{}, 0, len(v))
+	for _, i := range v {
+		if i != nil {
+			newSlice = append(newSlice, i)
+		}
+	}
+	return newSlice
 }
 
 func strval(v interface{}) string {
