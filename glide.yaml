@@ -13,3 +13,4 @@ import:
 - package: github.com/imdario/mergo
   version: ~0.2.2
 - package: github.com/huandu/xstrings
+  version: ^1.2

@@ -1,12 +1,12 @@
-hash: 770b6a1132b743dadf6a0bb5fb8bf7083b1a5209f6d6c07826234ab2a97aade9
-updated: 2019-01-03T15:59:02.892909-07:00
+hash: f9e13000d2d99ee559a37e9b35d310bab6687b64141e98bd122e772c7e1da63a
+updated: 2019-01-03T16:14:49.53019-07:00
 imports:
 - name: github.com/aokoli/goutils
   version: 9c37978a95bd5c709a15883b6242714ea6709e64
 - name: github.com/google/uuid
   version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings
-  version: 3959339b333561bf62a38b424fd41517c2c90f40
+  version: f02667b379e2fb5916c3cda2cf31e0eb885d79f8
 - name: github.com/imdario/mergo
   version: 7fe0c75c13abdee74b09fcacef5ea1c6bba6a874
 - name: github.com/Masterminds/goutils
