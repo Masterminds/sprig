@@ -10,7 +10,7 @@ import (
 	ttemplate "text/template"
 	"time"
 
-	util "github.com/aokoli/goutils"
+	util "github.com/Masterminds/goutils"
 	"github.com/huandu/xstrings"
 )
 
