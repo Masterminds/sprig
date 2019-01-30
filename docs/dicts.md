@@ -85,6 +85,39 @@ $newdict := merge $dest $source1 $source2
 
 This is a deep merge operation.
 
+## mergeOverwrite
+
+Merge two or more dictionaries into one, giving precedence from **right to left**, effectively
+overwriting values in the dest dictionary:
+
+Given:
+
+```
+dst:
+  default: default
+  overwrite: me
+  key: true
+
+src:
+  overwrite: overwritten
+  key: false
+```
+
+will result in:
+
+```
+newdict:
+  default: default
+  overwrite: overwritten
+  key: false
+```
+
+```
+$newdict := mergeOverwrite $dest $source1 $source2
+```
+
+This is a deep merge operation.
+
 ## keys
 
 The `keys` function will return a `list` of all of the keys in one or more `dict`
