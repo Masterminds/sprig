@@ -11,6 +11,6 @@ import:
   version: v1.2.2
 - package: github.com/stretchr/testify
 - package: github.com/imdario/mergo
-  version: ~0.2.2
+  version: ~0.3.7
 - package: github.com/huandu/xstrings
   version: ^1.2
