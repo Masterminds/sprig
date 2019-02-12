@@ -339,10 +339,10 @@ The above will randomize the letters in `hello`, perhaps producing `oelhl`.
 
 ## regexMatch
 
-Returns true if the input string mratches the regular expression.
+Returns true if the input string contains any match of the regular expression.
 
 ```
-regexMatch "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" "test@acme.com"
+regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" "test@acme.com"
 ```
 
 The above produces `true`
