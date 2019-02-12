@@ -237,17 +237,17 @@ func splitn(sep string, n int, orig string) map[string]string {
 
 // substring creates a substring of the given string.
 //
-// If start is < 0, this calls string[:length].
+// If start is < 0, this calls string[:end].
 //
-// If start is >= 0 and length < 0, this calls string[start:]
+// If start is >= 0 and end < 0, this calls string[start:]
 //
-// Otherwise, this calls string[start, length].
-func substring(start, length int, s string) string {
+// Otherwise, this calls string[start, end].
+func substring(start, end int, s string) string {
 	if start < 0 {
-		return s[:length]
+		return s[:end]
 	}
-	if length < 0 {
+	if end < 0 {
 		return s[start:]
 	}
-	return s[start:length]
+	return s[start:end]
 }
