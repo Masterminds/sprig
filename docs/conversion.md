@@ -33,4 +33,4 @@ Given a unix octal permission, produce a decimal.
 "0777" | decimal
 ```
 
-The above converts `0777` to `551` and returns them as an int64.
+The above converts `0777` to `551` and returns the value as an int64.
