@@ -1,8 +1,6 @@
 hash: 6a3f4f83c443958625ff1bafadd95c96d20d729f34e8e8c2fa72782194fc4807
 updated: 2019-01-30T20:16:27.780177826+01:00
 imports:
-- name: github.com/aokoli/goutils
-  version: 9c37978a95bd5c709a15883b6242714ea6709e64
 - name: github.com/google/uuid
   version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings

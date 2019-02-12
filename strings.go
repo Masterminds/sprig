@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	util "github.com/aokoli/goutils"
+	util "github.com/Masterminds/goutils"
 )
 
 func base64encode(v string) string {
@@ -53,6 +53,26 @@ func abbrevboth(left, right int, s string) string {
 func initials(s string) string {
 	// Wrap this just to eliminate the var args, which templates don't do well.
 	return util.Initials(s)
+}
+
+func cryptoRandAlphaNumeric(count int) string {
+	r, _ := util.CryptoRandomAlphaNumeric(count)
+	return r
+}
+
+func cryptoRandAlpha(count int) string {
+	r, _ := util.CryptoRandomAlphabetic(count)
+	return r
+}
+
+func cryptoRandAscii(count int) string {
+	r, _ := util.CryptoRandomAscii(count)
+	return r
+}
+
+func cryptoRandNumeric(count int) string {
+	r, _ := util.CryptoRandomNumeric(count)
+	return r
 }
 
 func randAlphaNumeric(count int) string {

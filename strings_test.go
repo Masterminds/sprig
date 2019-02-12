@@ -6,8 +6,9 @@ import (
 	"fmt"
 	"math/rand"
 	"testing"
+	"unicode/utf8"
 
-	"github.com/aokoli/goutils"
+	"github.com/Masterminds/goutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -186,6 +187,30 @@ func TestGoutils(t *testing.T) {
 		if err := runt(k, v); err != nil {
 			t.Errorf("Error on tpl %q: %s", k, err)
 		}
+	}
+}
+
+func TestCryptoRandom(t *testing.T) {
+	// These tests have no predictable character sequence. No checks for exact string output are necessary.
+
+	// {{cryptoRandAlphaNum 5}} should yield five random characters
+	if x, _ := runRaw(`{{cryptoRandAlphaNum 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{cryptoRandAlpha 5}} should yield five random characters
+	if x, _ := runRaw(`{{cryptoRandAlpha 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{cryptoRandAscii 5}} should yield five random characters
+	if x, _ := runRaw(`{{cryptoRandAscii 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{cryptoRandNumeric 5}} should yield five random characters
+	if x, _ := runRaw(`{{cryptoRandNumeric 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
 	}
 }
 

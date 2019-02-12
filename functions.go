@@ -10,7 +10,7 @@ import (
 	ttemplate "text/template"
 	"time"
 
-	util "github.com/aokoli/goutils"
+	util "github.com/Masterminds/goutils"
 	"github.com/huandu/xstrings"
 )
 
@@ -75,6 +75,10 @@ var nonhermeticFunctions = []string{
 	"dateModify",
 
 	// Strings
+	"cryptoRandAlphaNum",
+	"cryptoRandAlpha",
+	"cryptoRandAscii",
+	"cryptoRandNumeric",
 	"randAlphaNum",
 	"randAlpha",
 	"randAscii",
@@ -121,6 +125,10 @@ var genericMap = map[string]interface{}{
 	"trimPrefix":   func(a, b string) string { return strings.TrimPrefix(b, a) },
 	"nospace":      util.DeleteWhiteSpace,
 	"initials":     initials,
+	"cryptoRandAlphaNum": cryptoRandAlphaNumeric,
+	"cryptoRandAlpha":    cryptoRandAlpha,
+	"cryptoRandAscii":    cryptoRandAscii,
+	"cryptoRandNumeric":  cryptoRandNumeric,
 	"randAlphaNum": randAlphaNumeric,
 	"randAlpha":    randAlpha,
 	"randAscii":    randAscii,
