@@ -29,6 +29,13 @@ func TestSha1Sum(t *testing.T) {
 	}
 }
 
+func TestAdler32Sum(t *testing.T) {
+	tpl := `{{"abc" | adler32sum}}`
+	if err := runt(tpl, "38600999"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestDerivePassword(t *testing.T) {
 	expectations := map[string]string{
 		`{{derivePassword 1 "long" "password" "user" "example.com"}}`:    "ZedaFaxcZaso9*",

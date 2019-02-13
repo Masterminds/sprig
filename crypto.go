@@ -22,6 +22,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"hash/adler32"
 	"math/big"
 	"net"
 	"time"
@@ -38,6 +39,11 @@ func sha256sum(input string) string {
 func sha1sum(input string) string {
 	hash := sha1.Sum([]byte(input))
 	return hex.EncodeToString(hash[:])
+}
+
+func adler32sum(input string) string {
+	hash := adler32.Checksum([]byte(input))
+	return fmt.Sprintf("%d", hash)
 }
 
 // uuidv4 provides a safe and secure UUID v4 implementation

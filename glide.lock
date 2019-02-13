@@ -1,30 +1,28 @@
-hash: 770b6a1132b743dadf6a0bb5fb8bf7083b1a5209f6d6c07826234ab2a97aade9
-updated: 2018-04-02T23:08:56.947456531+02:00
+hash: 6a3f4f83c443958625ff1bafadd95c96d20d729f34e8e8c2fa72782194fc4807
+updated: 2019-01-30T20:16:27.780177826+01:00
 imports:
-- name: github.com/aokoli/goutils
-  version: 9c37978a95bd5c709a15883b6242714ea6709e64
 - name: github.com/google/uuid
   version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings
-  version: 3959339b333561bf62a38b424fd41517c2c90f40
+  version: f02667b379e2fb5916c3cda2cf31e0eb885d79f8
 - name: github.com/imdario/mergo
-  version: 7fe0c75c13abdee74b09fcacef5ea1c6bba6a874
+  version: 7c29201646fa3de8506f701213473dd407f19646
 - name: github.com/Masterminds/goutils
-  version: 3391d3790d23d03408670993e957e8f408993c34
+  version: 41ac8693c5c10a92ea1ff5ac3a7f95646f6123b0
 - name: github.com/Masterminds/semver
   version: 59c29afe1a994eacb71c833025ca7acf874bb1da
 - name: github.com/stretchr/testify
-  version: e3a8ff8ce36581f87a15341206f205b1da467059
+  version: c679ae2cc0cb27ec3293fea7e254e47386f05d69
   subpackages:
   - assert
 - name: golang.org/x/crypto
-  version: d172538b2cfce0c13cee31e647d0367aa8cd2486
+  version: de0752318171da717af4ce24d0a2e8626afaeb11
   subpackages:
   - pbkdf2
   - scrypt
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  version: 782f4967f2dc4564575ca782fe2d04090b5faca8
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"text/template"
 
-	"github.com/aokoli/goutils"
+	"github.com/Masterminds/goutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -64,6 +64,15 @@ func TestCamelCase(t *testing.T) {
 	assert.NoError(t, runt(`{{ camelcase "no_https" }}`, "NoHttps"))
 	assert.NoError(t, runt(`{{ camelcase "_complex__case_" }}`, "_Complex_Case_"))
 	assert.NoError(t, runt(`{{ camelcase "all" }}`, "All"))
+}
+
+func TestKebabCase(t *testing.T) {
+	assert.NoError(t, runt(`{{ kebabcase "FirstName" }}`, "first-name"))
+	assert.NoError(t, runt(`{{ kebabcase "HTTPServer" }}`, "http-server"))
+	assert.NoError(t, runt(`{{ kebabcase "NoHTTPS" }}`, "no-https"))
+	assert.NoError(t, runt(`{{ kebabcase "GO_PATH" }}`, "go-path"))
+	assert.NoError(t, runt(`{{ kebabcase "GO PATH" }}`, "go-path"))
+	assert.NoError(t, runt(`{{ kebabcase "GO-PATH" }}`, "go-path"))
 }
 
 func TestShuffle(t *testing.T) {
