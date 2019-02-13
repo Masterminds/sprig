@@ -19,6 +19,13 @@ func TestSubstr(t *testing.T) {
 	}
 }
 
+func TestSubstr_shorterString(t *testing.T) {
+	tpl := `{{"foo" | substr 0 10 }}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTrunc(t *testing.T) {
 	tpl := `{{ "foooooo" | trunc 3 }}`
 	if err := runt(tpl, "foo"); err != nil {

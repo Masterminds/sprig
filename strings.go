@@ -239,14 +239,14 @@ func splitn(sep string, n int, orig string) map[string]string {
 //
 // If start is < 0, this calls string[:end].
 //
-// If start is >= 0 and end < 0, this calls string[start:]
+// If start is >= 0 and end < 0 or end bigger than s length, this calls string[start:]
 //
 // Otherwise, this calls string[start, end].
 func substring(start, end int, s string) string {
 	if start < 0 {
 		return s[:end]
 	}
-	if end < 0 {
+	if end < 0 || end > len(s) {
 		return s[start:]
 	}
 	return s[start:end]
