@@ -162,7 +162,7 @@ The above returns `FT`
 ## randAlphaNum, randAlpha, randNumeric, and randAscii
 
 These four functions generate cryptographically secure (uses ```crypto/rand```)
-random strings, but with different base character sets.:
+random strings, but with different base character sets:
 
 - `randAlphaNum` uses `0-9a-zA-Z`
 - `randAlpha` uses `a-zA-Z`
