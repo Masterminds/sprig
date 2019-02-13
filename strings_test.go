@@ -4,11 +4,9 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 	"fmt"
-	"math/rand"
 	"testing"
 	"unicode/utf8"
 
-	"github.com/Masterminds/goutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -190,49 +188,30 @@ func TestGoutils(t *testing.T) {
 	}
 }
 
-func TestCryptoRandom(t *testing.T) {
-	// These tests have no predictable character sequence. No checks for exact string output are necessary.
-
-	// {{cryptoRandAlphaNum 5}} should yield five random characters
-	if x, _ := runRaw(`{{cryptoRandAlphaNum 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{cryptoRandAlpha 5}} should yield five random characters
-	if x, _ := runRaw(`{{cryptoRandAlpha 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{cryptoRandAscii 5}} should yield five random characters
-	if x, _ := runRaw(`{{cryptoRandAscii 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{cryptoRandNumeric 5}} should yield five random characters
-	if x, _ := runRaw(`{{cryptoRandNumeric 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-}
-
 func TestRandom(t *testing.T) {
-	// One of the things I love about Go:
-	goutils.RANDOM = rand.New(rand.NewSource(1))
+	// Randome strings are now using Masterminds/goutils's cryptographically secure random string functions
+	// by default. Consequently, these tests now have no predictable character sequence. No checks for exact
+	// string output are necessary.
 
-	// Because we're using a random number generator, we need these to go in
-	// a predictable sequence:
-	if err := runt(`{{randAlphaNum 5}}`, "9bzRv"); err != nil {
-		t.Errorf("Error on tpl: %s", err)
-	}
-	if err := runt(`{{randAlpha 5}}`, "VjwGe"); err != nil {
-		t.Errorf("Error on tpl: %s", err)
-	}
-	if err := runt(`{{randAscii 5}}`, "1KA5p"); err != nil {
-		t.Errorf("Error on tpl: %s", err)
-	}
-	if err := runt(`{{randNumeric 5}}`, "26018"); err != nil {
-		t.Errorf("Error on tpl: %s", err)
+	// {{randAlphaNum 5}} should yield five random characters
+	if x, _ := runRaw(`{{randAlphaNum 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
 	}
 
+	// {{randAlpha 5}} should yield five random characters
+	if x, _ := runRaw(`{{randAlpha 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{randAscii 5}} should yield five random characters
+	if x, _ := runRaw(`{{randAscii 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{randNumeric 5}} should yield five random characters
+	if x, _ := runRaw(`{{randNumeric 5}}`, nil); utf8.RuneCountInString(x) != 5 {
+		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
 }
 
 func TestCat(t *testing.T) {
