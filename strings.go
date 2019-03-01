@@ -55,44 +55,24 @@ func initials(s string) string {
 	return util.Initials(s)
 }
 
-func cryptoRandAlphaNumeric(count int) string {
+func randAlphaNumeric(count int) string {
+	// It is not possible, it appears, to actually generate an error here.
 	r, _ := util.CryptoRandomAlphaNumeric(count)
 	return r
 }
 
-func cryptoRandAlpha(count int) string {
+func randAlpha(count int) string {
 	r, _ := util.CryptoRandomAlphabetic(count)
 	return r
 }
 
-func cryptoRandAscii(count int) string {
+func randAscii(count int) string {
 	r, _ := util.CryptoRandomAscii(count)
 	return r
 }
 
-func cryptoRandNumeric(count int) string {
-	r, _ := util.CryptoRandomNumeric(count)
-	return r
-}
-
-func randAlphaNumeric(count int) string {
-	// It is not possible, it appears, to actually generate an error here.
-	r, _ := util.RandomAlphaNumeric(count)
-	return r
-}
-
-func randAlpha(count int) string {
-	r, _ := util.RandomAlphabetic(count)
-	return r
-}
-
-func randAscii(count int) string {
-	r, _ := util.RandomAscii(count)
-	return r
-}
-
 func randNumeric(count int) string {
-	r, _ := util.RandomNumeric(count)
+	r, _ := util.CryptoRandomNumeric(count)
 	return r
 }
 

@@ -159,29 +159,10 @@ initials "First Try"
 
 The above returns `FT`
 
-## cryptoRandAlphaNum, cryptoRandAlpha, cryptoRandNumeric, and cryptoRandAscii
-
-These four functions generate cryptographically secure (uses ```crypto/rand```)
-random strings, but with different base character sets. They should be used for
-generating random strings to be used for security purposes:
-
-- `cryptoRandAlphaNum` uses `0-9a-zA-Z`
-- `cryptoRandAlpha` uses `a-zA-Z`
-- `cryptoRandNumeric` uses `0-9`
-- `cryptoRandAscii` uses all printable ASCII characters
-
-Each of them takes one parameter: the integer length of the string.
-
-```
-cryptoRandNumeric 30
-```
-
-The above will produce a cryptographically secure random string with thirty digits.
-
 ## randAlphaNum, randAlpha, randNumeric, and randAscii
 
-These four functions generate random strings, but with different base character
-sets:
+These four functions generate cryptographically secure (uses ```crypto/rand```)
+random strings, but with different base character sets:
 
 - `randAlphaNum` uses `0-9a-zA-Z`
 - `randAlpha` uses `a-zA-Z`
