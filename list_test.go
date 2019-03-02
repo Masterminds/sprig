@@ -150,6 +150,7 @@ func TestHas(t *testing.T) {
 		`{{ list 1 2 3 | has 1 }}`:                          `true`,
 		`{{ list 1 2 3 | has 4 }}`:                          `false`,
 		`{{ regexSplit "/" "foo/bar/baz" -1 | has "bar" }}`: `true`,
+		`{{ has "bar" nil }}`:                               `false`,
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))

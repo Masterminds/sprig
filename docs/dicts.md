@@ -87,6 +87,41 @@ This is a deep merge operation.
 
 `mustMerge` will return an error in case of unsuccessful merge.
 
+## mergeOverwrite, mustMergeOverwrite
+
+Merge two or more dictionaries into one, giving precedence from **right to left**, effectively
+overwriting values in the dest dictionary:
+
+Given:
+
+```
+dst:
+  default: default
+  overwrite: me
+  key: true
+
+src:
+  overwrite: overwritten
+  key: false
+```
+
+will result in:
+
+```
+newdict:
+  default: default
+  overwrite: overwritten
+  key: false
+```
+
+```
+$newdict := mergeOverwrite $dest $source1 $source2
+```
+
+This is a deep merge operation.
+
+`mustMergeOverwrite` will return an error in case of unsuccessful merge.
+
 ## keys
 
 The `keys` function will return a `list` of all of the keys in one or more `dict`

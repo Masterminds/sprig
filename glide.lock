@@ -1,14 +1,12 @@
-hash: f9e13000d2d99ee559a37e9b35d310bab6687b64141e98bd122e772c7e1da63a
-updated: 2019-01-03T16:14:49.53019-07:00
+hash: 6a3f4f83c443958625ff1bafadd95c96d20d729f34e8e8c2fa72782194fc4807
+updated: 2019-01-30T20:16:27.780177826+01:00
 imports:
-- name: github.com/aokoli/goutils
-  version: 9c37978a95bd5c709a15883b6242714ea6709e64
 - name: github.com/google/uuid
   version: 064e2069ce9c359c118179501254f67d7d37ba24
 - name: github.com/huandu/xstrings
   version: f02667b379e2fb5916c3cda2cf31e0eb885d79f8
 - name: github.com/imdario/mergo
-  version: 7fe0c75c13abdee74b09fcacef5ea1c6bba6a874
+  version: 7c29201646fa3de8506f701213473dd407f19646
 - name: github.com/Masterminds/goutils
   version: 41ac8693c5c10a92ea1ff5ac3a7f95646f6123b0
 - name: github.com/Masterminds/semver

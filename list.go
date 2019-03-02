@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 	"sort"
@@ -239,6 +240,9 @@ func without(list interface{}, omit ...interface{}) ([]interface{}, error) {
 }
 
 func has(needle interface{}, haystack interface{}) (bool, error) {
+	if haystack == nil {
+		return false, errors.New("The haystack is empty")
+	}
 	tp := reflect.TypeOf(haystack).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
