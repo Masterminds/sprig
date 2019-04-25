@@ -24,7 +24,7 @@ func FuncMap() template.FuncMap {
 	return HtmlFuncMap()
 }
 
-// HermeticTextFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
+// HermeticTxtFuncMap returns a 'text/template'.FuncMap with only repeatable functions.
 func HermeticTxtFuncMap() ttemplate.FuncMap {
 	r := TxtFuncMap()
 	for _, name := range nonhermeticFunctions {
@@ -42,7 +42,7 @@ func HermeticHtmlFuncMap() template.FuncMap {
 	return r
 }
 
-// TextFuncMap returns a 'text/template'.FuncMap
+// TxtFuncMap returns a 'text/template'.FuncMap
 func TxtFuncMap() ttemplate.FuncMap {
 	return ttemplate.FuncMap(GenericFuncMap())
 }
