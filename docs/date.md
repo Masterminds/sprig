@@ -59,7 +59,7 @@ now | date_modify "-1.5h"
 
 ## htmlDate
 
-The `htmlDate` function formates a date for inserting into an HTML date picker
+The `htmlDate` function formats a date for inserting into an HTML date picker
 input field.
 
 ```
