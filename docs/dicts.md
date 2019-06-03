@@ -160,7 +160,7 @@ The above returns `{name2: value2}`
 ## values
 
 The `values` function is similar to `keys`, except it returns a new `list` with
-all the values of the source `dict`.
+all the values of the source `dict` (only one dictionary is supported).
 
 ```
 $vals := values $myDict
