@@ -375,10 +375,11 @@ The above produces `true`
 
 ## regexFindAll
 
-Returns a slice of all matches of the regular expression in the input string
+Returns a slice of all matches of the regular expression in the input string.
+The last parameter n determines the number of substrings to return, where -1 means return all matches
 
 ```
-regexFindAll "[2,4,6,8]" "123456789 
+regexFindAll "[2,4,6,8]" "123456789" -1
 ```
 
 The above produces `[2 4 6 8]`
