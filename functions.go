@@ -100,6 +100,7 @@ var genericMap = map[string]interface{}{
 	"dateModify":     dateModify,
 	"ago":            dateAgo,
 	"toDate":         toDate,
+	"unixEpoch":      unixEpoch,
 
 	// Strings
 	"abbrev":     abbrev,
