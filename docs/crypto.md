@@ -33,7 +33,7 @@ adler32sum "Hello world!"
 
 The `derivePassword` function can be used to derive a specific password based on
 some shared "master password" constraints. The algorithm for this is
-[well specified](http://masterpasswordapp.com/algorithm.html).
+[well specified](https://masterpassword.app/masterpassword-algorithm.pdf).
 
 ```
 derivePassword 1 "long" "password" "user" "example.com"
