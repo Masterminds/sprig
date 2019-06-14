@@ -322,7 +322,7 @@ camelcase "http_server"
 
 This above will produce `HttpServer`.
 
-## kebabCase
+## kebabcase
 
 Convert string from camelCase to kebab-case.
 
