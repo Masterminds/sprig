@@ -32,7 +32,7 @@ trimSuffix "-" "hello-"
 
 ## trimPrefix
 
-Trim just the suffix from a string:
+Trim just the prefix from a string:
 
 ```
 trimPrefix "-" "-hello"
