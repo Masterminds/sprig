@@ -34,3 +34,15 @@ func TestToDate(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestUnixEpoch(t *testing.T) {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{unixEpoch .Time}}`
+
+	if err = runtv(tpl, "1560458379", map[string]interface{}{"Time": tm}); err != nil {
+		t.Error(err)
+	}
+}

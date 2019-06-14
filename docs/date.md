@@ -47,6 +47,14 @@ Same as `date`, but with a timezone.
 date "2006-01-02" (now) "UTC"
 ```
 
+## unixEpoch
+
+Returns the seconds since the unix epoch for a `time.Time`.
+
+```
+now | unixEpoch
+```
+
 ## dateModify
 
 The `dateModify` takes a modification and a date and returns the timestamp.

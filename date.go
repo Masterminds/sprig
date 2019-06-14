@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -73,4 +74,8 @@ func dateAgo(date interface{}) string {
 func toDate(fmt, str string) time.Time {
 	t, _ := time.ParseInLocation(fmt, str, time.Local)
 	return t
+}
+
+func unixEpoch(date time.Time) string {
+	return strconv.FormatInt(date.Unix(), 10)
 }
