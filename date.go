@@ -29,6 +29,8 @@ func dateInZone(fmt string, date interface{}, zone string) string {
 		t = time.Now()
 	case time.Time:
 		t = date
+	case *time.Time:
+		t = *date
 	case int64:
 		t = time.Unix(date, 0)
 	case int:
