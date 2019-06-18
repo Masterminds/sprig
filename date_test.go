@@ -46,3 +46,48 @@ func TestUnixEpoch(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestDateInZone(t *testing.T) {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{ date_in_zone "02 Jan 06 15:04 -0700" .Time "UTC" }}`
+
+	// Test time.Time input
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": tm}); err != nil {
+		t.Error(err)
+	}
+
+	// Test pointer to time.Time input
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": &tm}); err != nil {
+		t.Error(err)
+	}
+
+	// Test no time input. This should be close enough to time.Now() we can test
+	loc, _ := time.LoadLocation("UTC")
+	if err = runtv(tpl, time.Now().In(loc).Format("02 Jan 06 15:04 -0700"), map[string]interface{}{"Time": ""}); err != nil {
+		t.Error(err)
+	}
+
+	// Test unix timestamp as int64
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": int64(1560458379)}); err != nil {
+		t.Error(err)
+	}
+
+	// Test unix timestamp as int32
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": int32(1560458379)}); err != nil {
+		t.Error(err)
+	}
+
+	// Test unix timestamp as int
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": int(1560458379)}); err != nil {
+		t.Error(err)
+	}
+
+	// Test case of invalid timezone
+	tpl = `{{ date_in_zone "02 Jan 06 15:04 -0700" .Time "foobar" }}`
+	if err = runtv(tpl, "13 Jun 19 20:39 +0000", map[string]interface{}{"Time": tm}); err != nil {
+		t.Error(err)
+	}
+}
