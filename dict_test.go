@@ -3,8 +3,6 @@ package sprig
 import (
 	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func TestDict(t *testing.T) {
@@ -124,120 +122,6 @@ func TestSet(t *testing.T) {
 	if err := runt(tpl, expect); err != nil {
 		t.Error(err)
 	}
-}
-
-func TestMerge(t *testing.T) {
-	dict := map[string]interface{}{
-		"src2": map[string]interface{}{
-			"h": 10,
-			"i": "i",
-			"j": "j",
-		},
-		"src1": map[string]interface{}{
-			"a": 1,
-			"b": 2,
-			"d": map[string]interface{}{
-				"e": "four",
-			},
-			"g": []int{6, 7},
-			"i": "aye",
-			"j": "jay",
-			"k": map[string]interface{}{
-				"l": false,
-			},
-		},
-		"dst": map[string]interface{}{
-			"a": "one",
-			"c": 3,
-			"d": map[string]interface{}{
-				"f": 5,
-			},
-			"g": []int{8, 9},
-			"i": "eye",
-			"k": map[string]interface{}{
-				"l": true,
-			},
-		},
-	}
-	tpl := `{{merge .dst .src1 .src2}}`
-	_, err := runRaw(tpl, dict)
-	if err != nil {
-		t.Error(err)
-	}
-	expected := map[string]interface{}{
-		"a": "one", // key overridden
-		"b": 2,     // merged from src1
-		"c": 3,     // merged from dst
-		"d": map[string]interface{}{ // deep merge
-			"e": "four",
-			"f": 5,
-		},
-		"g": []int{8, 9}, // overridden - arrays are not merged
-		"h": 10,          // merged from src2
-		"i": "eye",       // overridden twice
-		"j": "jay",       // overridden and merged
-		"k": map[string]interface{}{
-			"l": true,      // overriden
-		},
-	}
-	assert.Equal(t, expected, dict["dst"])
-}
-
-func TestMergeOverwrite(t *testing.T) {
-	dict := map[string]interface{}{
-		"src2": map[string]interface{}{
-			"h": 10,
-			"i": "i",
-			"j": "j",
-		},
-		"src1": map[string]interface{}{
-			"a": 1,
-			"b": 2,
-			"d": map[string]interface{}{
-				"e": "four",
-			},
-			"g": []int{6, 7},
-			"i": "aye",
-			"j": "jay",
-			"k": map[string]interface{}{
-				"l": false,
-			},
-		},
-		"dst": map[string]interface{}{
-			"a": "one",
-			"c": 3,
-			"d": map[string]interface{}{
-				"f": 5,
-			},
-			"g": []int{8, 9},
-			"i": "eye",
-			"k": map[string]interface{}{
-				"l": true,
-			},
-		},
-	}
-	tpl := `{{mergeOverwrite .dst .src1 .src2}}`
-	_, err := runRaw(tpl, dict)
-	if err != nil {
-		t.Error(err)
-	}
-	expected := map[string]interface{}{
-		"a": 1,     // key overwritten from src1
-		"b": 2,     // merged from src1
-		"c": 3,     // merged from dst
-		"d": map[string]interface{}{ // deep merge
-			"e": "four",
-			"f": 5,
-		},
-		"g": []int{6, 7}, // overwritten src1 wins
-		"h": 10,          // merged from src2
-		"i": "i",         // overwritten twice src2 wins
-		"j": "j",         // overwritten twice src2 wins
-		"k": map[string]interface{} { // deep merge
-			"l": false, // overwritten src1 wins
-		},
-	}
-	assert.Equal(t, expected, dict["dst"])
 }
 
 func TestValues(t *testing.T) {

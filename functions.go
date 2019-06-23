@@ -9,9 +9,6 @@ import (
 	"strings"
 	ttemplate "text/template"
 	"time"
-
-	util "github.com/Masterminds/goutils"
-	"github.com/huandu/xstrings"
 )
 
 // Produce the function map.
@@ -103,51 +100,35 @@ var genericMap = map[string]interface{}{
 	"unixEpoch":      unixEpoch,
 
 	// Strings
-	"abbrev":     abbrev,
-	"abbrevboth": abbrevboth,
-	"trunc":      trunc,
-	"trim":       strings.TrimSpace,
-	"upper":      strings.ToUpper,
-	"lower":      strings.ToLower,
-	"title":      strings.Title,
-	"untitle":    untitle,
-	"substr":     substring,
+	"trunc":  trunc,
+	"trim":   strings.TrimSpace,
+	"upper":  strings.ToUpper,
+	"lower":  strings.ToLower,
+	"title":  strings.Title,
+	"substr": substring,
 	// Switch order so that "foo" | repeat 5
 	"repeat": func(count int, str string) string { return strings.Repeat(str, count) },
 	// Deprecated: Use trimAll.
 	"trimall": func(a, b string) string { return strings.Trim(b, a) },
 	// Switch order so that "$foo" | trimall "$"
-	"trimAll":      func(a, b string) string { return strings.Trim(b, a) },
-	"trimSuffix":   func(a, b string) string { return strings.TrimSuffix(b, a) },
-	"trimPrefix":   func(a, b string) string { return strings.TrimPrefix(b, a) },
-	"nospace":      util.DeleteWhiteSpace,
-	"initials":     initials,
-	"randAlphaNum": randAlphaNumeric,
-	"randAlpha":    randAlpha,
-	"randAscii":    randAscii,
-	"randNumeric":  randNumeric,
-	"swapcase":     util.SwapCase,
-	"shuffle":      xstrings.Shuffle,
-	"snakecase":    xstrings.ToSnakeCase,
-	"camelcase":    xstrings.ToCamelCase,
-	"kebabcase":    xstrings.ToKebabCase,
-	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
-	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
+	"trimAll":    func(a, b string) string { return strings.Trim(b, a) },
+	"trimSuffix": func(a, b string) string { return strings.TrimSuffix(b, a) },
+	"trimPrefix": func(a, b string) string { return strings.TrimPrefix(b, a) },
 	// Switch order so that "foobar" | contains "foo"
-	"contains":  func(substr string, str string) bool { return strings.Contains(str, substr) },
-	"hasPrefix": func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
-	"hasSuffix": func(substr string, str string) bool { return strings.HasSuffix(str, substr) },
-	"quote":     quote,
-	"squote":    squote,
-	"cat":       cat,
-	"indent":    indent,
-	"nindent":   nindent,
-	"replace":   replace,
-	"plural":    plural,
-	"sha1sum":   sha1sum,
-	"sha256sum": sha256sum,
+	"contains":   func(substr string, str string) bool { return strings.Contains(str, substr) },
+	"hasPrefix":  func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
+	"hasSuffix":  func(substr string, str string) bool { return strings.HasSuffix(str, substr) },
+	"quote":      quote,
+	"squote":     squote,
+	"cat":        cat,
+	"indent":     indent,
+	"nindent":    nindent,
+	"replace":    replace,
+	"plural":     plural,
+	"sha1sum":    sha1sum,
+	"sha256sum":  sha256sum,
 	"adler32sum": adler32sum,
-	"toString":  strval,
+	"toString":   strval,
 
 	// Wrap Atoi to stop errors.
 	"atoi":    func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -245,8 +226,6 @@ var genericMap = map[string]interface{}{
 	"keys":   keys,
 	"pick":   pick,
 	"omit":   omit,
-	"merge":  merge,
-	"mergeOverwrite": mergeOverwrite,
 	"values": values,
 
 	"append": push, "push": push,
@@ -263,18 +242,10 @@ var genericMap = map[string]interface{}{
 
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
-	"derivePassword":    derivePassword,
 	"buildCustomCert":   buildCustomCertificate,
 	"genCA":             generateCertificateAuthority,
 	"genSelfSignedCert": generateSelfSignedCertificate,
 	"genSignedCert":     generateSignedCertificate,
-
-	// UUIDs:
-	"uuidv4": uuidv4,
-
-	// SemVer:
-	"semver":        semver,
-	"semverCompare": semverCompare,
 
 	// Flow Control:
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },

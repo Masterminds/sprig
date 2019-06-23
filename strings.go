@@ -7,8 +7,6 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-
-	util "github.com/Masterminds/goutils"
 )
 
 func base64encode(v string) string {
@@ -33,51 +31,6 @@ func base32decode(v string) string {
 		return err.Error()
 	}
 	return string(data)
-}
-
-func abbrev(width int, s string) string {
-	if width < 4 {
-		return s
-	}
-	r, _ := util.Abbreviate(s, width)
-	return r
-}
-
-func abbrevboth(left, right int, s string) string {
-	if right < 4 || left > 0 && right < 7 {
-		return s
-	}
-	r, _ := util.AbbreviateFull(s, left, right)
-	return r
-}
-func initials(s string) string {
-	// Wrap this just to eliminate the var args, which templates don't do well.
-	return util.Initials(s)
-}
-
-func randAlphaNumeric(count int) string {
-	// It is not possible, it appears, to actually generate an error here.
-	r, _ := util.CryptoRandomAlphaNumeric(count)
-	return r
-}
-
-func randAlpha(count int) string {
-	r, _ := util.CryptoRandomAlphabetic(count)
-	return r
-}
-
-func randAscii(count int) string {
-	r, _ := util.CryptoRandomAscii(count)
-	return r
-}
-
-func randNumeric(count int) string {
-	r, _ := util.CryptoRandomNumeric(count)
-	return r
-}
-
-func untitle(str string) string {
-	return util.Uncapitalize(str)
 }
 
 func quote(str ...interface{}) string {

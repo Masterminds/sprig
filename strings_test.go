@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"testing"
-	"unicode/utf8"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -174,50 +173,6 @@ func TestBase32EncodeDecode(t *testing.T) {
 	tpl = fmt.Sprintf("{{b32dec %q}}", expect)
 	if err := runt(tpl, magicWord); err != nil {
 		t.Error(err)
-	}
-}
-
-func TestGoutils(t *testing.T) {
-	tests := map[string]string{
-		`{{abbrev 5 "hello world"}}`:           "he...",
-		`{{abbrevboth 5 10 "1234 5678 9123"}}`: "...5678...",
-		`{{nospace "h e l l o "}}`:             "hello",
-		`{{untitle "First Try"}}`:              "first try", //https://youtu.be/44-RsrF_V_w
-		`{{initials "First Try"}}`:             "FT",
-		`{{wrap 5 "Hello World"}}`:             "Hello\nWorld",
-		`{{wrapWith 5 "\t" "Hello World"}}`:    "Hello\tWorld",
-	}
-	for k, v := range tests {
-		t.Log(k)
-		if err := runt(k, v); err != nil {
-			t.Errorf("Error on tpl %q: %s", k, err)
-		}
-	}
-}
-
-func TestRandom(t *testing.T) {
-	// Randome strings are now using Masterminds/goutils's cryptographically secure random string functions
-	// by default. Consequently, these tests now have no predictable character sequence. No checks for exact
-	// string output are necessary.
-
-	// {{randAlphaNum 5}} should yield five random characters
-	if x, _ := runRaw(`{{randAlphaNum 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{randAlpha 5}} should yield five random characters
-	if x, _ := runRaw(`{{randAlpha 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{randAscii 5}} should yield five random characters
-	if x, _ := runRaw(`{{randAscii 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
-	}
-
-	// {{randNumeric 5}} should yield five random characters
-	if x, _ := runRaw(`{{randNumeric 5}}`, nil); utf8.RuneCountInString(x) != 5 {
-		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
 	}
 }
 

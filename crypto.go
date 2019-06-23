@@ -5,7 +5,6 @@ import (
 	"crypto/dsa"
 	"crypto/ecdsa"
 	"crypto/elliptic"
-	"crypto/hmac"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha1"
@@ -14,7 +13,6 @@ import (
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/base64"
-	"encoding/binary"
 	"encoding/hex"
 	"encoding/pem"
 	"errors"
@@ -23,9 +21,6 @@ import (
 	"math/big"
 	"net"
 	"time"
-
-	"github.com/google/uuid"
-	"golang.org/x/crypto/scrypt"
 )
 
 func sha256sum(input string) string {
@@ -41,11 +36,6 @@ func sha1sum(input string) string {
 func adler32sum(input string) string {
 	hash := adler32.Checksum([]byte(input))
 	return fmt.Sprintf("%d", hash)
-}
-
-// uuidv4 provides a safe and secure UUID v4 implementation
-func uuidv4() string {
-	return fmt.Sprintf("%s", uuid.New())
 }
 
 var master_password_seed = "com.lyndir.masterpassword"
@@ -73,43 +63,6 @@ var template_characters = map[byte]string{
 	'n': "0123456789",
 	'o': "@&%?,=[]_:-+*$#!'^~;()/.",
 	'x': "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
-}
-
-func derivePassword(counter uint32, password_type, password, user, site string) string {
-	var templates = password_type_templates[password_type]
-	if templates == nil {
-		return fmt.Sprintf("cannot find password template %s", password_type)
-	}
-
-	var buffer bytes.Buffer
-	buffer.WriteString(master_password_seed)
-	binary.Write(&buffer, binary.BigEndian, uint32(len(user)))
-	buffer.WriteString(user)
-
-	salt := buffer.Bytes()
-	key, err := scrypt.Key([]byte(password), salt, 32768, 8, 2, 64)
-	if err != nil {
-		return fmt.Sprintf("failed to derive password: %s", err)
-	}
-
-	buffer.Truncate(len(master_password_seed))
-	binary.Write(&buffer, binary.BigEndian, uint32(len(site)))
-	buffer.WriteString(site)
-	binary.Write(&buffer, binary.BigEndian, counter)
-
-	var hmacv = hmac.New(sha256.New, key)
-	hmacv.Write(buffer.Bytes())
-	var seed = hmacv.Sum(nil)
-	var temp = templates[int(seed[0])%len(templates)]
-
-	buffer.Truncate(0)
-	for i, element := range temp {
-		pass_chars := template_characters[element]
-		pass_char := pass_chars[int(seed[i+1])%len(pass_chars)]
-		buffer.WriteByte(pass_char)
-	}
-
-	return buffer.String()
 }
 
 func generatePrivateKey(typ string) string {

@@ -1,7 +1,5 @@
 package sprig
 
-import "github.com/imdario/mergo"
-
 func set(d map[string]interface{}, key string, value interface{}) map[string]interface{} {
 	d[key] = value
 	return d
@@ -75,26 +73,6 @@ func dict(v ...interface{}) map[string]interface{} {
 		dict[key] = v[i+1]
 	}
 	return dict
-}
-
-func merge(dst map[string]interface{}, srcs ...map[string]interface{}) interface{} {
-	for _, src := range srcs {
-		if err := mergo.Merge(&dst, src); err != nil {
-			// Swallow errors inside of a template.
-			return ""
-		}
-	}
-	return dst
-}
-
-func mergeOverwrite(dst map[string]interface{}, srcs ...map[string]interface{}) interface{} {
-  for _, src := range srcs {
-		if err := mergo.MergeWithOverwrite(&dst, src); err != nil {
-			// Swallow errors inside of a template.
-			return ""
-		}
-  }
-  return dst
 }
 
 func values(dict map[string]interface{}) []interface{} {
