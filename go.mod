@@ -1,4 +1,4 @@
-module github.com/Masterminds/sprig
+module github.com/go-task/slim-sprig
 
 go 1.12
 
