@@ -240,13 +240,6 @@ var genericMap = map[string]interface{}{
 	"has":     has,
 	"slice":   slice,
 
-	// Crypto:
-	"genPrivateKey":     generatePrivateKey,
-	"buildCustomCert":   buildCustomCertificate,
-	"genCA":             generateCertificateAuthority,
-	"genSelfSignedCert": generateSelfSignedCertificate,
-	"genSignedCert":     generateSignedCertificate,
-
 	// Flow Control:
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
