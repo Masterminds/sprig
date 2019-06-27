@@ -286,4 +286,8 @@ var genericMap = map[string]interface{}{
 	"regexReplaceAll":        regexReplaceAll,
 	"regexReplaceAllLiteral": regexReplaceAllLiteral,
 	"regexSplit":             regexSplit,
+
+	// URLs:
+	"urlParse": urlParse,
+	"urlJoin": urlJoin,
 }
