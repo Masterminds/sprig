@@ -48,7 +48,7 @@ The above would set `$new` to `[1 2 3 4 5 6]`. `$myList` would remain unaltered.
 
 ## prepend
 
-Push an alement onto the front of a list, creating a new list.
+Push an element onto the front of a list, creating a new list.
 
 ```
 prepend $myList 0
