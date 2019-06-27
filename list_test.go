@@ -176,7 +176,7 @@ func TestConcat(t *testing.T) {
 		`{{ concat (list 1 2 3) (list 4 5) }}`:                        "[1 2 3 4 5]",
 		`{{ concat (list 1 2 3) (list 4 5) (list) }}`:                 "[1 2 3 4 5]",
 		`{{ concat (list 1 2 3) (list 4 5) (list nil) }}`:             "[1 2 3 4 5 <nil>]",
-		`{{ concat (list 1 2 3) (list 4 5) (list ( list "foo" ) ) }}`: "[1 2 3 4 5 [6]]",
+		`{{ concat (list 1 2 3) (list 4 5) (list ( list "foo" ) ) }}`: "[1 2 3 4 5 [foo]]",
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))
