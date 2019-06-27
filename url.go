@@ -18,8 +18,8 @@ func dictGetOrEmpty(dict map[string]interface{}, key string) string {
 }
 
 // parses given URL to return dict object
-func urlParse(v string) map[string]string {
-	dict := map[string]string{}
+func urlParse(v string) map[string]interface{} {
+	dict := map[string]interface{}{}
 	parsedUrl, err := url.Parse(v)
 	if err != nil {
 		panic(fmt.Sprintf("unable to parse url: %s", err))
@@ -31,7 +31,11 @@ func urlParse(v string) map[string]string {
 	dict["query"]     = parsedUrl.RawQuery
 	dict["opaque"]    = parsedUrl.Opaque
 	dict["fragment"]  = parsedUrl.Fragment
-	dict["userinfo"]  = parsedUrl.User.String()
+	if parsedUrl.User != nil {
+		dict["userinfo"]  = parsedUrl.User.String()
+	} else {
+		dict["userinfo"] = ""
+	}
 
 	return dict
 }
