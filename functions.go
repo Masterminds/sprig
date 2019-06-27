@@ -260,6 +260,7 @@ var genericMap = map[string]interface{}{
 	"without": without,
 	"has":     has,
 	"slice":   slice,
+	"concat":  concat,
 
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
