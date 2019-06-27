@@ -56,6 +56,16 @@ prepend $myList 0
 
 The above would produce `[0 1 2 3 4 5]`. `$myList` would remain unaltered.
 
+## concat
+
+Concatenate arbitrary number of lists into one.
+
+```
+concat $myList ( list 6 7 ) ( list 8 )
+```
+
+The above would produce `[1 2 3 4 5 6 7 8]`. `$myList` would remain unaltered.
+
 ## reverse
 
 Produce a new list with the reversed elements of the given list.
