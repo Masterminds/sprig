@@ -84,6 +84,9 @@ var nonhermeticFunctions = []string{
 	// OS
 	"env",
 	"expandenv",
+
+	// Network
+	"getHostByName",
 }
 
 var genericMap = map[string]interface{}{
@@ -134,20 +137,20 @@ var genericMap = map[string]interface{}{
 	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
-	"contains":  func(substr string, str string) bool { return strings.Contains(str, substr) },
-	"hasPrefix": func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
-	"hasSuffix": func(substr string, str string) bool { return strings.HasSuffix(str, substr) },
-	"quote":     quote,
-	"squote":    squote,
-	"cat":       cat,
-	"indent":    indent,
-	"nindent":   nindent,
-	"replace":   replace,
-	"plural":    plural,
-	"sha1sum":   sha1sum,
-	"sha256sum": sha256sum,
+	"contains":   func(substr string, str string) bool { return strings.Contains(str, substr) },
+	"hasPrefix":  func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
+	"hasSuffix":  func(substr string, str string) bool { return strings.HasSuffix(str, substr) },
+	"quote":      quote,
+	"squote":     squote,
+	"cat":        cat,
+	"indent":     indent,
+	"nindent":    nindent,
+	"replace":    replace,
+	"plural":     plural,
+	"sha1sum":    sha1sum,
+	"sha256sum":  sha256sum,
 	"adler32sum": adler32sum,
-	"toString":  strval,
+	"toString":   strval,
 
 	// Wrap Atoi to stop errors.
 	"atoi":    func(a string) int { i, _ := strconv.Atoi(a); return i },
@@ -221,6 +224,9 @@ var genericMap = map[string]interface{}{
 	"env":       func(s string) string { return os.Getenv(s) },
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
 
+	// Network:
+	"getHostByName": getHostByName,
+
 	// File Paths:
 	"base":  path.Base,
 	"dir":   path.Dir,
@@ -235,19 +241,19 @@ var genericMap = map[string]interface{}{
 	"b32dec": base32decode,
 
 	// Data Structures:
-	"tuple":  list, // FIXME: with the addition of append/prepend these are no longer immutable.
-	"list":   list,
-	"dict":   dict,
-	"set":    set,
-	"unset":  unset,
-	"hasKey": hasKey,
-	"pluck":  pluck,
-	"keys":   keys,
-	"pick":   pick,
-	"omit":   omit,
-	"merge":  merge,
+	"tuple":          list, // FIXME: with the addition of append/prepend these are no longer immutable.
+	"list":           list,
+	"dict":           dict,
+	"set":            set,
+	"unset":          unset,
+	"hasKey":         hasKey,
+	"pluck":          pluck,
+	"keys":           keys,
+	"pick":           pick,
+	"omit":           omit,
+	"merge":          merge,
 	"mergeOverwrite": mergeOverwrite,
-	"values": values,
+	"values":         values,
 
 	"append": push, "push": push,
 	"prepend": prepend,
