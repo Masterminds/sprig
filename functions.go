@@ -85,6 +85,9 @@ var nonhermeticFunctions = []string{
 	// OS
 	"env",
 	"expandenv",
+
+	// Network
+	"getHostByName",
 }
 
 var genericMap = map[string]interface{}{
@@ -223,6 +226,9 @@ var genericMap = map[string]interface{}{
 	// OS:
 	"env":       func(s string) string { return os.Getenv(s) },
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
+
+	// Network:
+	"getHostByName": getHostByName,
 
 	// File Paths:
 	"base":  path.Base,
