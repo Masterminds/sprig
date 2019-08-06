@@ -36,3 +36,15 @@ Types are slightly harder to work with, so there are three different functions:
 
 **Note:** None of these can test whether or not something implements a given
 interface, since doing so would require compiling the interface in ahead of time.
+
+## deepEqual
+
+`deepEqual` returns true if two values are ["deeply equal"](https://golang.org/pkg/reflect/#DeepEqual)
+
+Works for non-primitive types as well (compared to the built-in `eq`).
+
+```
+deepEqual (list 1 2 3) (list 1 2 3)
+```
+
+The above will return `true`
