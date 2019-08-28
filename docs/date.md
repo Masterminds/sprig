@@ -44,7 +44,7 @@ in the format we want.
 Same as `date`, but with a timezone.
 
 ```
-date "2006-01-02" (now) "UTC"
+dateInZone "2006-01-02" (now) "UTC"
 ```
 
 ## unixEpoch
