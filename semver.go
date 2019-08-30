@@ -19,5 +19,6 @@ func semverCompare(constraint, version string) (bool, error) {
 }
 
 func semver(version string) (*sv2.Version, error) {
-	return sv2.NewVersion(version)
+	v, err := sv2.NewVersion(version)
+	return &v, err
 }

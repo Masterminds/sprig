@@ -8,7 +8,6 @@ import:
   subpackages:
   - scrypt
 - package: github.com/Masterminds/semver
-  version: ^v1.2.2
 - package: github.com/stretchr/testify
   version: ^v1.2.2
 - package: github.com/imdario/mergo
