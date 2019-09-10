@@ -48,13 +48,23 @@ The above would set `$new` to `[1 2 3 4 5 6]`. `$myList` would remain unaltered.
 
 ## prepend
 
-Push an alement onto the front of a list, creating a new list.
+Push an element onto the front of a list, creating a new list.
 
 ```
 prepend $myList 0
 ```
 
 The above would produce `[0 1 2 3 4 5]`. `$myList` would remain unaltered.
+
+## concat
+
+Concatenate arbitrary number of lists into one.
+
+```
+concat $myList ( list 6 7 ) ( list 8 )
+```
+
+The above would produce `[1 2 3 4 5 6 7 8]`. `$myList` would remain unaltered.
 
 ## reverse
 
