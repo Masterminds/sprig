@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"path"
+	"reflect"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
@@ -217,6 +218,7 @@ var genericMap = map[string]interface{}{
 	"typeIsLike": typeIsLike,
 	"kindOf":     kindOf,
 	"kindIs":     kindIs,
+	"deepEqual":  reflect.DeepEqual,
 
 	// OS:
 	"env":       func(s string) string { return os.Getenv(s) },
