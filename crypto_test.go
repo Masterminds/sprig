@@ -266,3 +266,10 @@ func TestGenSignedCert(t *testing.T) {
 	assert.Contains(t, cert.DNSNames, dns2)
 	assert.False(t, cert.IsCA)
 }
+
+func TestEncryptDecryptAES(t *testing.T) {
+	tpl := `{{"plaintext" | encryptAES "secretkey" | decryptAES "secretkey"}}`
+	if err := runt(tpl, "plaintext"); err != nil {
+		t.Error(err)
+	}
+}

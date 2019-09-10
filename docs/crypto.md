@@ -139,3 +139,20 @@ Example:
 $ca := genCA "foo-ca" 365
 $cert := genSignedCert "foo.com" (list "10.0.0.1" "10.0.0.2") (list "bar.com" "bat.com") 365 $ca
 ```
+
+## encryptAES
+
+The `encryptAES` function encrypts text with AES-256 CBC and returns a base64 encoded string.
+
+```
+encryptAES "secretkey" "plaintext"
+```
+
+## decryptAES
+
+The `decryptAES` function receives a base64 string encoded by the AES-256 CBC
+algorithm and returns the decoded text.
+
+```
+"30tEfhuJSVRhpG97XCuWgz2okj7L8vQ1s6V9zVUPeDQ=" | decryptAES "secretkey"
+```
