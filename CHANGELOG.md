@@ -1,5 +1,24 @@
 # Changelog
 
+## Release 2.21.0 (2019-09-18)
+
+### Added
+
+- #122: Added encryptAES/decryptAES functions (thanks @n0madic)
+- #128: Added toDecimal support (thanks @Dean-Coakley)
+- #169: Added list contcat (thanks @astorath)
+- #174: Added deepEqual function (thanks @bonifaido)
+- #170: Added url parse and join functions (thanks @astorath)
+
+### Changed
+
+- #171: Updated glide config for Google UUID to v1 and to add ranges to semver and testify
+
+### Fixed
+
+- #172: Fix semver wildcard example (thanks @piepmatz)
+- #175: Fix dateInZone doc example (thanks @s3than)
+
 ## Release 2.20.0 (2019-06-18)
 
 ### Added
