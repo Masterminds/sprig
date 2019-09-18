@@ -1,4 +1,5 @@
 # Sprig: Template functions for Go templates
+
 [![Stability: Sustained](https://masterminds.github.io/stability/sustained.svg)](https://masterminds.github.io/stability/sustained.html)
 [![Build Status](https://travis-ci.org/Masterminds/sprig.svg?branch=master)](https://travis-ci.org/Masterminds/sprig)
 
@@ -10,6 +11,18 @@ used template functions.
 It is inspired by the template functions found in
 [Twig](http://twig.sensiolabs.org/documentation) and in various
 JavaScript libraries, such as [underscore.js](http://underscorejs.org/).
+
+## Package Versions
+
+There are two active major versions of the `sprig` package.
+
+* v3 is currently under development on the `master` branch. The Go API should
+  remain compatible with v2, the current stable version. Behavior change behind
+  some functions is the reason for the new major version.
+* v2 is the current stable release series. It has been more than three years since
+  the initial release of v2. You can read the documentation and see the code
+  on the [release-2](https://github.com/Masterminds/sprig/tree/release-2) branch.
+  Bug fixes to this major version will continue for some time.
 
 ## Usage
 
