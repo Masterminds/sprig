@@ -1,13 +1,9 @@
-
-HAS_GLIDE := $(shell command -v glide;)
-
 .PHONY: test
 test:
-	go test -v .
+	@echo "==> Running tests"
+	GO111MODULE=on go test -v
 
-.PHONY: setup
-setup:
-ifndef HAS_GLIDE
-	go get -u github.com/Masterminds/glide
-endif
-	glide install
+.PHONY: test-cover
+test-cover:
+	@echo "==> Running Tests with coverage"
+	GO111MODULE=on go test -cover .
