@@ -10,10 +10,7 @@ import (
 func TestGetHostByName(t *testing.T) {
 	tpl := `{{"www.google.com" | getHostByName}}`
 
-	resolvedIP, err := runRaw(tpl, nil)
-	if err != nil {
-		t.Error(err)
-	}
+	resolvedIP, _ := runRaw(tpl, nil)
 
 	ip := net.ParseIP(resolvedIP)
 	assert.NotNil(t, ip)
