@@ -1,16 +1,12 @@
 package sprig
 
 import (
-	"fmt"
 	"math/rand"
 	"net"
 )
 
-func getHostByName(name string) (string, error) {
-	addrs, err := net.LookupHost(name)
-	if err != nil {
-		fmt.Printf("unable to resolve %s: %v", name, err)
-		return "", err
-	}
-	return addrs[rand.Intn(len(addrs))], nil
+func getHostByName(name string) string {
+	addrs, _ := net.LookupHost(name)
+	//TODO: add error handing when release v3 cames out
+	return addrs[rand.Intn(len(addrs))]
 }

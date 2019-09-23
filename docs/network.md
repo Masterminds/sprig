@@ -1,6 +1,6 @@
 # Network Functions
 
-Sprig has a number of string manipulation functions.
+Sprig network manipulation functions.
 
 ## getHostByName
 
