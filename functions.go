@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
@@ -15,7 +16,7 @@ import (
 	"github.com/huandu/xstrings"
 )
 
-// Produce the function map.
+// FuncMap produces the function map.
 //
 // Use this to pass the functions into the template engine:
 //
@@ -94,17 +95,21 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-	"date":           date,
-	"date_in_zone":   dateInZone,
-	"date_modify":    dateModify,
-	"now":            func() time.Time { return time.Now() },
-	"htmlDate":       htmlDate,
-	"htmlDateInZone": htmlDateInZone,
-	"dateInZone":     dateInZone,
-	"dateModify":     dateModify,
-	"ago":            dateAgo,
-	"toDate":         toDate,
-	"unixEpoch":      unixEpoch,
+
+	"date":             date,
+	"date_in_zone":     dateInZone,
+	"date_modify":      dateModify,
+	"must_date_modify": mustDateModify,
+	"now":              func() time.Time { return time.Now() },
+	"htmlDate":         htmlDate,
+	"htmlDateInZone":   htmlDateInZone,
+	"dateInZone":       dateInZone,
+	"dateModify":       dateModify,
+	"mustDateModify":   mustDateModify,
+	"ago":              dateAgo,
+	"toDate":           toDate,
+	"mustToDate":       mustToDate,
+	"unixEpoch":        unixEpoch,
 
 	// Strings
 	"abbrev":     abbrev,
@@ -207,13 +212,15 @@ var genericMap = map[string]interface{}{
 	"sortAlpha": sortAlpha,
 
 	// Defaults
-	"default":      dfault,
-	"empty":        empty,
-	"coalesce":     coalesce,
-	"compact":      compact,
-	"toJson":       toJson,
-	"toPrettyJson": toPrettyJson,
-	"ternary":      ternary,
+	"default":          dfault,
+	"empty":            empty,
+	"coalesce":         coalesce,
+	"compact":          compact,
+	"toJson":           toJson,
+	"toPrettyJson":     toPrettyJson,
+	"mustToJson":       mustToJson,
+	"mustToPrettyJson": mustToPrettyJson,
+	"ternary":          ternary,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -244,19 +251,21 @@ var genericMap = map[string]interface{}{
 	"b32dec": base32decode,
 
 	// Data Structures:
-	"tuple":          list, // FIXME: with the addition of append/prepend these are no longer immutable.
-	"list":           list,
-	"dict":           dict,
-	"set":            set,
-	"unset":          unset,
-	"hasKey":         hasKey,
-	"pluck":          pluck,
-	"keys":           keys,
-	"pick":           pick,
-	"omit":           omit,
-	"merge":          merge,
-	"mergeOverwrite": mergeOverwrite,
-	"values":         values,
+	"tuple":              list, // FIXME: with the addition of append/prepend these are no longer immutable.
+	"list":               list,
+	"dict":               dict,
+	"set":                set,
+	"unset":              unset,
+	"hasKey":             hasKey,
+	"pluck":              pluck,
+	"keys":               keys,
+	"pick":               pick,
+	"omit":               omit,
+	"merge":              merge,
+	"mergeOverwrite":     mergeOverwrite,
+	"mustMerge":          mustMerge,
+	"mustMergeOverwrite": mustMergeOverwrite,
+	"values":             values,
 
 	"append": push, "push": push,
 	"prepend": prepend,
@@ -292,7 +301,7 @@ var genericMap = map[string]interface{}{
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
 	// Regex
-	"regexMatch":             regexMatch,
+	"regexMatch":             func(regex string, s string) (bool, error) { return regexp.MatchString(regex, s) },
 	"regexFindAll":           regexFindAll,
 	"regexFind":              regexFind,
 	"regexReplaceAll":        regexReplaceAll,
@@ -301,5 +310,5 @@ var genericMap = map[string]interface{}{
 
 	// URLs:
 	"urlParse": urlParse,
-	"urlJoin": urlJoin,
+	"urlJoin":  urlJoin,
 }

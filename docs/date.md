@@ -55,7 +55,7 @@ Returns the seconds since the unix epoch for a `time.Time`.
 now | unixEpoch
 ```
 
-## dateModify
+## dateModify, mustDateModify
 
 The `dateModify` takes a modification and a date and returns the timestamp.
 
@@ -64,6 +64,7 @@ Subtract an hour and thirty minutes from the current time:
 ```
 now | date_modify "-1.5h"
 ```
+If the modification format is wrong `dateModify` will return the date unmodified. `mustDateModify` will return an error otherwise.
 
 ## htmlDate
 
@@ -82,11 +83,12 @@ Same as htmlDate, but with a timezone.
 htmlDate (now) "UTC"
 ```
 
-## toDate
+## toDate, mustToDate
 
 `toDate` converts a string to a date. The first argument is the date layout and
 the second the date string. If the string can't be convert it returns the zero
 value.
+`mustToDate` will return an error in case the string cannot be converted.
 
 This is useful when you want to convert a string date to another format
 (using pipe). The example below converts "2017-12-31" to "31/12/2017".

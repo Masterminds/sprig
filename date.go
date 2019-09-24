@@ -55,6 +55,14 @@ func dateModify(fmt string, date time.Time) time.Time {
 	return date.Add(d)
 }
 
+func mustDateModify(fmt string, date time.Time) (time.Time, error) {
+	d, err := time.ParseDuration(fmt)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return date.Add(d), nil
+}
+
 func dateAgo(date interface{}) string {
 	var t time.Time
 
@@ -76,6 +84,10 @@ func dateAgo(date interface{}) string {
 func toDate(fmt, str string) time.Time {
 	t, _ := time.ParseInLocation(fmt, str, time.Local)
 	return t
+}
+
+func mustToDate(fmt, str string) (time.Time, error) {
+	return time.ParseInLocation(fmt, str, time.Local)
 }
 
 func unixEpoch(date time.Time) string {

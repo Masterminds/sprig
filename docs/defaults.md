@@ -58,9 +58,10 @@ The above will first check to see if `.name` is empty. If it is not, it will ret
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
 
-## toJson
+## toJson, mustToJson
 
-The `toJson` function encodes an item into a JSON string.
+The `toJson` function encodes an item into a JSON string. If the item cannot be converted to JSON the function will return an empty string.
+`mustToJson` will return an error in case the item cannot be encoded in JSON.
 
 ```
 toJson .Item
@@ -68,7 +69,7 @@ toJson .Item
 
 The above returns JSON string representation of `.Item`.
 
-## toPrettyJson
+## toPrettyJson, mustToPrettyJson
 
 The `toPrettyJson` function encodes an item into a pretty (indented) JSON string.
 
