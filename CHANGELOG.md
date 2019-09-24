@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- #173: Added getHostByName function to resolve dns names to ips (thanks @fcgravalos)
+
 ## Release 2.21.0 (2019-09-18)
 
 ### Added
