@@ -91,15 +91,16 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
+	"ago":            dateAgo,
 	"date":           date,
-	"date_in_zone":   dateInZone,
-	"date_modify":    dateModify,
-	"now":            func() time.Time { return time.Now() },
-	"htmlDate":       htmlDate,
-	"htmlDateInZone": htmlDateInZone,
 	"dateInZone":     dateInZone,
 	"dateModify":     dateModify,
-	"ago":            dateAgo,
+	"date_in_zone":   dateInZone,
+	"date_modify":    dateModify,
+	"durationRound":  durationRound,
+	"htmlDate":       htmlDate,
+	"htmlDateInZone": htmlDateInZone,
+	"now":            func() time.Time { return time.Now() },
 	"toDate":         toDate,
 	"unixEpoch":      unixEpoch,
 
@@ -295,5 +296,5 @@ var genericMap = map[string]interface{}{
 
 	// URLs:
 	"urlParse": urlParse,
-	"urlJoin": urlJoin,
+	"urlJoin":  urlJoin,
 }
