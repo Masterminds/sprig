@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
@@ -216,6 +215,7 @@ var genericMap = map[string]interface{}{
 	"empty":            empty,
 	"coalesce":         coalesce,
 	"compact":          compact,
+	"mustCompact":      mustCompact,
 	"toJson":           toJson,
 	"toPrettyJson":     toPrettyJson,
 	"mustToJson":       mustToJson,
@@ -268,17 +268,28 @@ var genericMap = map[string]interface{}{
 	"values":             values,
 
 	"append": push, "push": push,
-	"prepend": prepend,
-	"first":   first,
-	"rest":    rest,
-	"last":    last,
-	"initial": initial,
-	"reverse": reverse,
-	"uniq":    uniq,
-	"without": without,
-	"has":     has,
-	"slice":   slice,
-	"concat":  concat,
+	"mustAppend": mustPush, "mustPush": mustPush,
+	"prepend":     prepend,
+	"mustPrepend": mustPrepend,
+	"first":       first,
+	"mustFirst":   mustFirst,
+	"rest":        rest,
+	"mustRest":    mustRest,
+	"last":        last,
+	"mustLast":    mustLast,
+	"initial":     initial,
+	"mustInitial": mustInitial,
+	"reverse":     reverse,
+	"mustReverse": mustReverse,
+	"uniq":        uniq,
+	"mustUniq":    mustUniq,
+	"without":     without,
+	"mustWithout": mustWithout,
+	"has":         has,
+	"mustHas":     mustHas,
+	"slice":       slice,
+	"mustSlice":   mustSlice,
+	"concat":      concat,
 
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
@@ -301,12 +312,18 @@ var genericMap = map[string]interface{}{
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
 	// Regex
-	"regexMatch":             func(regex string, s string) (bool, error) { return regexp.MatchString(regex, s) },
-	"regexFindAll":           regexFindAll,
-	"regexFind":              regexFind,
-	"regexReplaceAll":        regexReplaceAll,
-	"regexReplaceAllLiteral": regexReplaceAllLiteral,
-	"regexSplit":             regexSplit,
+	"regexMatch":                 regexMatch,
+	"mustRegexMatch":             mustRegexMatch,
+	"regexFindAll":               regexFindAll,
+	"mustRegexFindAll":           mustRegexFindAll,
+	"regexFind":                  regexFind,
+	"mustRegexFind":              mustRegexFind,
+	"regexReplaceAll":            regexReplaceAll,
+	"mustRegexReplaceAll":        mustRegexReplaceAll,
+	"regexReplaceAllLiteral":     regexReplaceAllLiteral,
+	"mustRegexReplaceAllLiteral": mustRegexReplaceAllLiteral,
+	"regexSplit":                 regexSplit,
+	"mustRegexSplit":             mustRegexSplit,
 
 	// URLs:
 	"urlParse": urlParse,

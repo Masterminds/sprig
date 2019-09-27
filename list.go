@@ -14,7 +14,16 @@ func list(v ...interface{}) []interface{} {
 	return v
 }
 
-func push(list interface{}, v interface{}) ([]interface{}, error) {
+func push(list interface{}, v interface{}) []interface{} {
+	l, err := mustPush(list, v)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustPush(list interface{}, v interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -33,7 +42,16 @@ func push(list interface{}, v interface{}) ([]interface{}, error) {
 	}
 }
 
-func prepend(list interface{}, v interface{}) ([]interface{}, error) {
+func prepend(list interface{}, v interface{}) []interface{} {
+	l, err := mustPrepend(list, v)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustPrepend(list interface{}, v interface{}) ([]interface{}, error) {
 	//return append([]interface{}{v}, list...)
 
 	tp := reflect.TypeOf(list).Kind()
@@ -54,7 +72,16 @@ func prepend(list interface{}, v interface{}) ([]interface{}, error) {
 	}
 }
 
-func last(list interface{}) (interface{}, error) {
+func last(list interface{}) interface{} {
+	l, err := mustLast(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustLast(list interface{}) (interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -71,7 +98,16 @@ func last(list interface{}) (interface{}, error) {
 	}
 }
 
-func first(list interface{}) (interface{}, error) {
+func first(list interface{}) interface{} {
+	l, err := mustFirst(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustFirst(list interface{}) (interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -88,7 +124,16 @@ func first(list interface{}) (interface{}, error) {
 	}
 }
 
-func rest(list interface{}) ([]interface{}, error) {
+func rest(list interface{}) []interface{} {
+	l, err := mustRest(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustRest(list interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -110,7 +155,16 @@ func rest(list interface{}) ([]interface{}, error) {
 	}
 }
 
-func initial(list interface{}) ([]interface{}, error) {
+func initial(list interface{}) []interface{} {
+	l, err := mustInitial(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustInitial(list interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -144,7 +198,16 @@ func sortAlpha(list interface{}) []string {
 	return []string{strval(list)}
 }
 
-func reverse(v interface{}) ([]interface{}, error) {
+func reverse(v interface{}) []interface{} {
+	l, err := mustReverse(v)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustReverse(v interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(v).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -163,7 +226,16 @@ func reverse(v interface{}) ([]interface{}, error) {
 	}
 }
 
-func compact(list interface{}) ([]interface{}, error) {
+func compact(list interface{}) []interface{} {
+	l, err := mustCompact(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustCompact(list interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -185,7 +257,16 @@ func compact(list interface{}) ([]interface{}, error) {
 	}
 }
 
-func uniq(list interface{}) ([]interface{}, error) {
+func uniq(list interface{}) []interface{} {
+	l, err := mustUniq(list)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustUniq(list interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -216,7 +297,16 @@ func inList(haystack []interface{}, needle interface{}) bool {
 	return false
 }
 
-func without(list interface{}, omit ...interface{}) ([]interface{}, error) {
+func without(list interface{}, omit ...interface{}) []interface{} {
+	l, err := mustWithout(list, omit...)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustWithout(list interface{}, omit ...interface{}) ([]interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
@@ -238,7 +328,16 @@ func without(list interface{}, omit ...interface{}) ([]interface{}, error) {
 	}
 }
 
-func has(needle interface{}, haystack interface{}) (bool, error) {
+func has(needle interface{}, haystack interface{}) bool {
+	l, err := mustHas(needle, haystack)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustHas(needle interface{}, haystack interface{}) (bool, error) {
 	if haystack == nil {
 		return false, nil
 	}
@@ -266,7 +365,16 @@ func has(needle interface{}, haystack interface{}) (bool, error) {
 // slice $list 0 3 -> list[0:3] = list[:3]
 // slice $list 3 5 -> list[3:5]
 // slice $list 3   -> list[3:5] = list[3:]
-func slice(list interface{}, indices ...interface{}) (interface{}, error) {
+func slice(list interface{}, indices ...interface{}) interface{} {
+	l, err := mustSlice(list, indices...)
+	if err != nil {
+		panic(err)
+	}
+
+	return l
+}
+
+func mustSlice(list interface{}, indices ...interface{}) (interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:

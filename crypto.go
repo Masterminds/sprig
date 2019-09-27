@@ -21,8 +21,8 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"io"
 	"hash/adler32"
+	"io"
 	"math/big"
 	"net"
 	"time"
@@ -143,7 +143,7 @@ func generatePrivateKey(typ string) string {
 	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
 }
 
-type dsaKeyFormat struct {
+type DSAKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int
 }
@@ -153,7 +153,7 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 	case *rsa.PrivateKey:
 		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}
 	case *dsa.PrivateKey:
-		val := dsaKeyFormat{
+		val := DSAKeyFormat{
 			P: k.P, Q: k.Q, G: k.G,
 			Y: k.Y, X: k.X,
 		}
