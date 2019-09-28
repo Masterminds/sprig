@@ -104,7 +104,7 @@ func durationRound(duration interface{}) string {
 	case u > year:
 		return strconv.FormatUint(u/year, 10) + "y"
 	case u > month:
-		return strconv.FormatUint(u/month, 10) + "m"
+		return strconv.FormatUint(u/month, 10) + "mo"
 	case u > day:
 		return strconv.FormatUint(u/day, 10) + "d"
 	case u > hour:
