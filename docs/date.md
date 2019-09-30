@@ -47,6 +47,21 @@ Same as `date`, but with a timezone.
 dateInZone "2006-01-02" (now) "UTC"
 ```
 
+## durationRound
+
+Rounds a given duration to the most significant unit. Strings and `time.Duration`
+gets parsed as a duration, while a `time.Time` is calculated as the duration since.
+
+This return 2h
+```
+durationRound "2h10m5s"
+```
+
+This returns 3mo
+```
+durationRound "2400h10m5s"
+```
+
 ## unixEpoch
 
 Returns the seconds since the unix epoch for a `time.Time`.
