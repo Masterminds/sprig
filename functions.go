@@ -94,20 +94,20 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-
+  "ago":              dateAgo,
 	"date":             date,
 	"date_in_zone":     dateInZone,
 	"date_modify":      dateModify,
-	"must_date_modify": mustDateModify,
-	"now":              func() time.Time { return time.Now() },
-	"htmlDate":         htmlDate,
-	"htmlDateInZone":   htmlDateInZone,
-	"dateInZone":       dateInZone,
+  "dateInZone":       dateInZone,
 	"dateModify":       dateModify,
-	"mustDateModify":   mustDateModify,
-	"ago":              dateAgo,
+  "durationRound":    durationRound,
+  "htmlDate":         htmlDate,
+	"htmlDateInZone":   htmlDateInZone,
+	"must_date_modify": mustDateModify,
+  "mustDateModify":   mustDateModify,
+  "mustToDate":       mustToDate,
+	"now":              func() time.Time { return time.Now() },
 	"toDate":           toDate,
-	"mustToDate":       mustToDate,
 	"unixEpoch":        unixEpoch,
 
 	// Strings

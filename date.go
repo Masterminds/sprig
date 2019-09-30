@@ -81,6 +81,50 @@ func dateAgo(date interface{}) string {
 	return duration.String()
 }
 
+func durationRound(duration interface{}) string {
+	var d time.Duration
+	switch duration := duration.(type) {
+	default:
+		d = 0
+	case string:
+		d, _ = time.ParseDuration(duration)
+	case int64:
+		d = time.Duration(duration)
+	case time.Time:
+		d = time.Since(duration)
+	}
+
+	u := uint64(d)
+	neg := d < 0
+	if neg {
+		u = -u
+	}
+
+	var (
+		year   = uint64(time.Hour) * 24 * 365
+		month  = uint64(time.Hour) * 24 * 30
+		day    = uint64(time.Hour) * 24
+		hour   = uint64(time.Hour)
+		minute = uint64(time.Minute)
+		second = uint64(time.Second)
+	)
+	switch {
+	case u > year:
+		return strconv.FormatUint(u/year, 10) + "y"
+	case u > month:
+		return strconv.FormatUint(u/month, 10) + "mo"
+	case u > day:
+		return strconv.FormatUint(u/day, 10) + "d"
+	case u > hour:
+		return strconv.FormatUint(u/hour, 10) + "h"
+	case u > minute:
+		return strconv.FormatUint(u/minute, 10) + "m"
+	case u > second:
+		return strconv.FormatUint(u/second, 10) + "s"
+	}
+	return "0s"
+}
+
 func toDate(fmt, str string) time.Time {
 	t, _ := time.ParseInLocation(fmt, str, time.Local)
 	return t
