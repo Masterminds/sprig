@@ -29,7 +29,7 @@ func TestKindOf(t *testing.T) {
 		t.Error(err)
 	}
 
-	var f3 *fixtureTO = nil
+	var f3 *fixtureTO
 	if err := runtv(tpl, "ptr", f3); err != nil {
 		t.Error(err)
 	}

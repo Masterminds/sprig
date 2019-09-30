@@ -15,7 +15,7 @@ import (
 	"github.com/huandu/xstrings"
 )
 
-// Produce the function map.
+// FuncMap produces the function map.
 //
 // Use this to pass the functions into the template engine:
 //
@@ -94,18 +94,21 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-	"ago":            dateAgo,
-	"date":           date,
-	"dateInZone":     dateInZone,
-	"dateModify":     dateModify,
-	"date_in_zone":   dateInZone,
-	"date_modify":    dateModify,
-	"durationRound":  durationRound,
-	"htmlDate":       htmlDate,
-	"htmlDateInZone": htmlDateInZone,
-	"now":            func() time.Time { return time.Now() },
-	"toDate":         toDate,
-	"unixEpoch":      unixEpoch,
+  "ago":              dateAgo,
+	"date":             date,
+	"date_in_zone":     dateInZone,
+	"date_modify":      dateModify,
+  "dateInZone":       dateInZone,
+	"dateModify":       dateModify,
+  "durationRound":    durationRound,
+  "htmlDate":         htmlDate,
+	"htmlDateInZone":   htmlDateInZone,
+	"must_date_modify": mustDateModify,
+  "mustDateModify":   mustDateModify,
+  "mustToDate":       mustToDate,
+	"now":              func() time.Time { return time.Now() },
+	"toDate":           toDate,
+	"unixEpoch":        unixEpoch,
 
 	// Strings
 	"abbrev":     abbrev,
@@ -208,13 +211,16 @@ var genericMap = map[string]interface{}{
 	"sortAlpha": sortAlpha,
 
 	// Defaults
-	"default":      dfault,
-	"empty":        empty,
-	"coalesce":     coalesce,
-	"compact":      compact,
-	"toJson":       toJson,
-	"toPrettyJson": toPrettyJson,
-	"ternary":      ternary,
+	"default":          dfault,
+	"empty":            empty,
+	"coalesce":         coalesce,
+	"compact":          compact,
+	"mustCompact":      mustCompact,
+	"toJson":           toJson,
+	"toPrettyJson":     toPrettyJson,
+	"mustToJson":       mustToJson,
+	"mustToPrettyJson": mustToPrettyJson,
+	"ternary":          ternary,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -245,32 +251,45 @@ var genericMap = map[string]interface{}{
 	"b32dec": base32decode,
 
 	// Data Structures:
-	"tuple":          list, // FIXME: with the addition of append/prepend these are no longer immutable.
-	"list":           list,
-	"dict":           dict,
-	"set":            set,
-	"unset":          unset,
-	"hasKey":         hasKey,
-	"pluck":          pluck,
-	"keys":           keys,
-	"pick":           pick,
-	"omit":           omit,
-	"merge":          merge,
-	"mergeOverwrite": mergeOverwrite,
-	"values":         values,
+	"tuple":              list, // FIXME: with the addition of append/prepend these are no longer immutable.
+	"list":               list,
+	"dict":               dict,
+	"set":                set,
+	"unset":              unset,
+	"hasKey":             hasKey,
+	"pluck":              pluck,
+	"keys":               keys,
+	"pick":               pick,
+	"omit":               omit,
+	"merge":              merge,
+	"mergeOverwrite":     mergeOverwrite,
+	"mustMerge":          mustMerge,
+	"mustMergeOverwrite": mustMergeOverwrite,
+	"values":             values,
 
 	"append": push, "push": push,
-	"prepend": prepend,
-	"first":   first,
-	"rest":    rest,
-	"last":    last,
-	"initial": initial,
-	"reverse": reverse,
-	"uniq":    uniq,
-	"without": without,
-	"has":     has,
-	"slice":   slice,
-	"concat":  concat,
+	"mustAppend": mustPush, "mustPush": mustPush,
+	"prepend":     prepend,
+	"mustPrepend": mustPrepend,
+	"first":       first,
+	"mustFirst":   mustFirst,
+	"rest":        rest,
+	"mustRest":    mustRest,
+	"last":        last,
+	"mustLast":    mustLast,
+	"initial":     initial,
+	"mustInitial": mustInitial,
+	"reverse":     reverse,
+	"mustReverse": mustReverse,
+	"uniq":        uniq,
+	"mustUniq":    mustUniq,
+	"without":     without,
+	"mustWithout": mustWithout,
+	"has":         has,
+	"mustHas":     mustHas,
+	"slice":       slice,
+	"mustSlice":   mustSlice,
+	"concat":      concat,
 
 	// Crypto:
 	"genPrivateKey":     generatePrivateKey,
@@ -293,12 +312,18 @@ var genericMap = map[string]interface{}{
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
 	// Regex
-	"regexMatch":             regexMatch,
-	"regexFindAll":           regexFindAll,
-	"regexFind":              regexFind,
-	"regexReplaceAll":        regexReplaceAll,
-	"regexReplaceAllLiteral": regexReplaceAllLiteral,
-	"regexSplit":             regexSplit,
+	"regexMatch":                 regexMatch,
+	"mustRegexMatch":             mustRegexMatch,
+	"regexFindAll":               regexFindAll,
+	"mustRegexFindAll":           mustRegexFindAll,
+	"regexFind":                  regexFind,
+	"mustRegexFind":              mustRegexFind,
+	"regexReplaceAll":            regexReplaceAll,
+	"mustRegexReplaceAll":        mustRegexReplaceAll,
+	"regexReplaceAllLiteral":     regexReplaceAllLiteral,
+	"mustRegexReplaceAllLiteral": mustRegexReplaceAllLiteral,
+	"regexSplit":                 regexSplit,
+	"mustRegexSplit":             mustRegexSplit,
 
 	// URLs:
 	"urlParse": urlParse,
