@@ -170,6 +170,17 @@ The above returns `list["value1", "value2", "value 3"]`. Note that the `values`
 function gives no guarantees about the result ordering- if you care about this,
 then use `sortAlpha`.
 
+## deepCopy, mustDeepCopy
+
+The `deepCopy` and `mustDeepCopy` functions takes a value and makes a deep copy
+of the value. This includes dicts and other structures. `deepCopy` panics
+when there is a problem while `mustDeepCopy` returns an error to the template
+system when there is an error.
+
+```
+dict "a" 1 "b" 2 | deepCopy
+```
+
 ## A Note on Dict Internals
 
 A `dict` is implemented in Go as a `map[string]interface{}`. Go developers can

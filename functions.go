@@ -211,6 +211,7 @@ var genericMap = map[string]interface{}{
 	"empty":        empty,
 	"coalesce":     coalesce,
 	"compact":      compact,
+	"deepCopy":     deepCopy,
 	"toJson":       toJson,
 	"toPrettyJson": toPrettyJson,
 	"ternary":      ternary,
@@ -301,5 +302,5 @@ var genericMap = map[string]interface{}{
 
 	// URLs:
 	"urlParse": urlParse,
-	"urlJoin": urlJoin,
+	"urlJoin":  urlJoin,
 }
