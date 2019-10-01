@@ -93,11 +93,11 @@ func mustToPrettyJson(v interface{}) (string, error) {
 
 // toRawJson encodes an item into a JSON string with no escaping of HTML characters.
 func toRawJson(v interface{}) string {
-	buf := new(bytes.Buffer)
-	enc := json.NewEncoder(buf)
-	enc.SetEscapeHTML(false)
-	enc.Encode(&v)
-	return strings.TrimSuffix(buf.String(), "\n")
+	output, err := mustToRawJson(v)
+	if err != nil {
+		panic(err)
+	}
+	return string(output)
 }
 
 // mustToRawJson encodes an item into a JSON string with no escaping of HTML characters.
