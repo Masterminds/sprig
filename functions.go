@@ -94,18 +94,18 @@ var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-  "ago":              dateAgo,
+	"ago":              dateAgo,
 	"date":             date,
 	"date_in_zone":     dateInZone,
 	"date_modify":      dateModify,
-  "dateInZone":       dateInZone,
+	"dateInZone":       dateInZone,
 	"dateModify":       dateModify,
-  "durationRound":    durationRound,
-  "htmlDate":         htmlDate,
+	"durationRound":    durationRound,
+	"htmlDate":         htmlDate,
 	"htmlDateInZone":   htmlDateInZone,
 	"must_date_modify": mustDateModify,
-  "mustDateModify":   mustDateModify,
-  "mustToDate":       mustToDate,
+	"mustDateModify":   mustDateModify,
+	"mustToDate":       mustToDate,
 	"now":              func() time.Time { return time.Now() },
 	"toDate":           toDate,
 	"unixEpoch":        unixEpoch,
@@ -221,6 +221,8 @@ var genericMap = map[string]interface{}{
 	"mustToJson":       mustToJson,
 	"mustToPrettyJson": mustToPrettyJson,
 	"ternary":          ternary,
+	"deepCopy":         deepCopy,
+	"mustDeepCopy":     mustDeepCopy,
 
 	// Reflection
 	"typeOf":     typeOf,
