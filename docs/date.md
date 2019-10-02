@@ -4,7 +4,6 @@
 
 The current date/time. Use this in conjunction with other date functions.
 
-
 ## ago
 
 The `ago` function returns duration from time.Now in seconds resolution.
@@ -12,6 +11,7 @@ The `ago` function returns duration from time.Now in seconds resolution.
 ```
 ago .CreatedAt"
 ```
+
 returns in `time.Duration` String() format
 
 ```
@@ -22,8 +22,8 @@ returns in `time.Duration` String() format
 
 The `date` function formats a date.
 
-
 Format the date to YEAR-MONTH-DAY:
+
 ```
 now | date "2006-01-02"
 ```
@@ -53,11 +53,13 @@ Rounds a given duration to the most significant unit. Strings and `time.Duration
 gets parsed as a duration, while a `time.Time` is calculated as the duration since.
 
 This return 2h
+
 ```
 durationRound "2h10m5s"
 ```
 
 This returns 3mo
+
 ```
 durationRound "2400h10m5s"
 ```
@@ -79,6 +81,7 @@ Subtract an hour and thirty minutes from the current time:
 ```
 now | date_modify "-1.5h"
 ```
+
 If the modification format is wrong `dateModify` will return the date unmodified. `mustDateModify` will return an error otherwise.
 
 ## htmlDate

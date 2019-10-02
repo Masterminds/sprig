@@ -30,6 +30,8 @@ Trim just the suffix from a string:
 trimSuffix "-" "hello-"
 ```
 
+The above returns `hello`
+
 ## trimPrefix
 
 Trim just the prefix from a string:
@@ -129,6 +131,7 @@ The above produces `world`.
 Truncate a string with ellipses (`...`)
 
 Parameters:
+
 - max length
 - the string
 
@@ -308,8 +311,6 @@ better internationalization.
 
 Convert string from camelCase to snake_case.
 
-Introduced in 2.12.0.
-
 ```
 snakecase "FirstName"
 ```
@@ -319,8 +320,6 @@ This above will produce `first_name`.
 ## camelcase
 
 Convert string from snake_case to CamelCase
-
-Introduced in 2.12.0.
 
 ```
 camelcase "http_server"
@@ -348,7 +347,7 @@ Conversion algorithm:
 - Title case character converts to Lower case
 - Lower case character after Whitespace or at start converts to Title case
 - Other Lower case character converts to Upper case
-- Whitespace is defined by unicode.IsSpace(char).
+- Whitespace is defined by unicode.IsSpace(char)
 
 ```
 swapcase "This Is A.Test"
@@ -360,16 +359,13 @@ This above will produce `tHIS iS a.tEST`.
 
 Shuffle a string.
 
-Introduced in 2.12.0.
-
-
 ```
 shuffle "hello"
 ```
 
 The above will randomize the letters in `hello`, perhaps producing `oelhl`.
 
-## regexMatch
+## regexMatch, mustRegexMatch
 
 Returns true if the input string contains any match of the regular expression.
 
@@ -379,7 +375,10 @@ regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" "test@acme.com"
 
 The above produces `true`
 
-## regexFindAll
+`regexMatch` panics if there is a problem and `mustRegexMatch` returns an error to the
+template engine if there is a problem.
+
+## regexFindAll, mustRegexFindAll
 
 Returns a slice of all matches of the regular expression in the input string.
 The last parameter n determines the number of substrings to return, where -1 means return all matches
@@ -390,7 +389,10 @@ regexFindAll "[2,4,6,8]" "123456789" -1
 
 The above produces `[2 4 6 8]`
 
-## regexFind
+`regexFindAll` panics if there is a problem and `mustRegexFindAll` returns an error to the
+template engine if there is a problem.
+
+## regexFind, mustRegexFind
 
 Return the first (left most) match of the regular expression in the input string
 
@@ -400,7 +402,10 @@ regexFind "[a-zA-Z][1-9]" "abcd1234"
 
 The above produces `d1`
 
-## regexReplaceAll
+`regexFind` panics if there is a problem and `mustRegexFind` returns an error to the
+template engine if there is a problem.
+
+## regexReplaceAll, mustRegexReplaceAll
 
 Returns a copy of the input string, replacing matches of the Regexp with the replacement string replacement.
 Inside string replacement, $ signs are interpreted as in Expand, so for instance $1 represents the text of the first submatch
@@ -411,7 +416,10 @@ regexReplaceAll "a(x*)b" "-ab-axxb-" "${1}W"
 
 The above produces `-W-xxW-`
 
-## regexReplaceAllLiteral
+`regexReplaceAll` panics if there is a problem and `mustRegexReplaceAll` returns an error to the
+template engine if there is a problem.
+
+## regexReplaceAllLiteral, mustRegexReplaceAllLiteral
 
 Returns a copy of the input string, replacing matches of the Regexp with the replacement string replacement
 The replacement string is substituted directly, without using Expand
@@ -422,7 +430,10 @@ regexReplaceAllLiteral "a(x*)b" "-ab-axxb-" "${1}"
 
 The above produces `-${1}-${1}-`
 
-## regexSplit
+`regexReplaceAllLiteral` panics if there is a problem and `mustRegexReplaceAllLiteral` returns an error to the
+template engine if there is a problem.
+
+## regexSplit, mustRegexSplit
 
 Slices the input string into substrings separated by the expression and returns a slice of the substrings between those expression matches. The last parameter `n` determines the number of substrings to return, where `-1` means return all matches
 
@@ -432,9 +443,11 @@ regexSplit "z+" "pizza" -1
 
 The above produces `[pi a]`
 
+`regexSplit` panics if there is a problem and `mustRegexSplit` returns an error to the
+template engine if there is a problem.
+
 ## See Also...
 
 The [Conversion Functions](conversion.html) contain functions for converting
 strings. The [String Slice Functions](string_slice.html) contains functions
 for working with an array of strings.
-

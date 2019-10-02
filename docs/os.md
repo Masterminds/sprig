@@ -3,7 +3,7 @@
 _WARNING:_ These functions can lead to information leakage if not used
 appropriately.
 
-_WARNING:_ Some notable implementations of Sprig (such as 
+_WARNING:_ Some notable implementations of Sprig (such as
 [Kubernetes Helm](http://helm.sh) _do not provide these functions for security
 reasons_.
 
