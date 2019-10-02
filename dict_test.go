@@ -177,7 +177,7 @@ func TestMerge(t *testing.T) {
 		"i": "eye",       // overridden twice
 		"j": "jay",       // overridden and merged
 		"k": map[string]interface{}{
-			"l": true,      // overriden
+			"l": true, // overriden
 		},
 	}
 	assert.Equal(t, expected, dict["dst"])
@@ -222,9 +222,9 @@ func TestMergeOverwrite(t *testing.T) {
 		t.Error(err)
 	}
 	expected := map[string]interface{}{
-		"a": 1,     // key overwritten from src1
-		"b": 2,     // merged from src1
-		"c": 3,     // merged from dst
+		"a": 1, // key overwritten from src1
+		"b": 2, // merged from src1
+		"c": 3, // merged from dst
 		"d": map[string]interface{}{ // deep merge
 			"e": "four",
 			"f": 5,
@@ -233,7 +233,7 @@ func TestMergeOverwrite(t *testing.T) {
 		"h": 10,          // merged from src2
 		"i": "i",         // overwritten twice src2 wins
 		"j": "j",         // overwritten twice src2 wins
-		"k": map[string]interface{} { // deep merge
+		"k": map[string]interface{}{ // deep merge
 			"l": false, // overwritten src1 wins
 		},
 	}
@@ -244,6 +244,20 @@ func TestValues(t *testing.T) {
 	tests := map[string]string{
 		`{{- $d := dict "a" 1 "b" 2 }}{{ values $d | sortAlpha | join "," }}`:       "1,2",
 		`{{- $d := dict "a" "first" "b" 2 }}{{ values $d | sortAlpha | join "," }}`: "2,first",
+	}
+
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
+func TestDeepCopy(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "a" 1 "b" 2 | deepCopy }}{{ values $d | sortAlpha | join "," }}`: "1,2",
+		`{{- $d := dict "a" 1 "b" 2 | deepCopy }}{{ keys $d | sortAlpha | join "," }}`:   "a,b",
+		`{{- $one := dict "foo" (dict "bar" "baz") "qux" true -}}{{ deepCopy $one }}`:    "map[foo:map[bar:baz] qux:true]",
 	}
 
 	for tpl, expect := range tests {

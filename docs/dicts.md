@@ -83,7 +83,13 @@ Merge two or more dictionaries into one, giving precedence to the dest dictionar
 $newdict := merge $dest $source1 $source2
 ```
 
-This is a deep merge operation.
+This is a deep merge operation but not a deep copy operation. Nested objects that
+are merged are the same instance on both dicts. If you want a deep copy along
+with the merge than use the `deepCopy` function along with merging. For example,
+
+```
+deepCopy $source | merge $dest
+```
 
 ## mergeOverwrite
 
@@ -116,7 +122,13 @@ newdict:
 $newdict := mergeOverwrite $dest $source1 $source2
 ```
 
-This is a deep merge operation.
+This is a deep merge operation but not a deep copy operation. Nested objects that
+are merged are the same instance on both dicts. If you want a deep copy along
+with the merge than use the `deepCopy` function along with merging. For example,
+
+```
+deepCopy $source | mergeOverwrite $dest
+```
 
 ## keys
 
@@ -169,6 +181,17 @@ $vals := values $myDict
 The above returns `list["value1", "value2", "value 3"]`. Note that the `values`
 function gives no guarantees about the result ordering- if you care about this,
 then use `sortAlpha`.
+
+## deepCopy, mustDeepCopy
+
+The `deepCopy` and `mustDeepCopy` functions takes a value and makes a deep copy
+of the value. This includes dicts and other structures. `deepCopy` panics
+when there is a problem while `mustDeepCopy` returns an error to the template
+system when there is an error.
+
+```
+dict "a" 1 "b" 2 | deepCopy
+```
 
 ## A Note on Dict Internals
 
