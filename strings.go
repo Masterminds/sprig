@@ -154,9 +154,9 @@ func strslice(v interface{}) []string {
 		default:
 			if v == nil {
 				return []string{}
-			} else {
-				return []string{strval(v)}
 			}
+
+			return []string{strval(v)}
 		}
 	}
 }

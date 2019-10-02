@@ -190,7 +190,7 @@ func TestMerge(t *testing.T) {
 		"i": "eye",       // overridden twice
 		"j": "jay",       // overridden and merged
 		"k": map[string]interface{}{
-			"l": true, // overriden
+			"l": true, // overridden
 		},
 	}
 	assert.Equal(t, expected, dict["dst"])
