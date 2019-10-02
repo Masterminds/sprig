@@ -79,7 +79,7 @@ toPrettyJson .Item
 
 The above returns indented JSON string representation of `.Item`.
 
-# toRawJson, mustToRawJson
+## toRawJson, mustToRawJson
 
 The `toRawJson` function encodes an item into JSON string with HTML characters unescaped.
 

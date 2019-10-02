@@ -6,7 +6,11 @@ All math functions operate on `int64` values unless specified otherwise.
 
 ## add
 
-Sum numbers with `add`
+Sum numbers with `add`. Accepts two or more inputs.
+
+```
+add 1 2 3
+```
 
 ## add1
 
@@ -26,7 +30,11 @@ Modulo with `mod`
 
 ## mul
 
-Multiply with `mul`
+Multiply with `mul`. Accepts two or more inputs.
+
+```
+mul 1 2 3
+```
 
 ## max
 
@@ -42,7 +50,7 @@ max 1 2 3
 
 Return the smallest of a series of integers.
 
-`min 1 2 3` will return `1`.
+`min 1 2 3` will return `1`
 
 ## floor
 
@@ -60,4 +68,4 @@ Returns the greatest float value greater than or equal to input value
 
 Returns a float value with the remainder rounded to the given number to digits after the decimal point.
 
-`round 123.555555` will return `123.556`
+`round 123.555555 3` will return `123.556`
