@@ -113,7 +113,7 @@ func TestOmit(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	tests := map[string]string{
-		`{{- $d := dict "one" 1 }}{{ get $d "one"  -}}`:          "1",
+		`{{- $d := dict "one" 1 }}{{ get $d "one" -}}`:           "1",
 		`{{- $d := dict "one" 1 "two" "2" }}{{ get $d "two" -}}`: "2",
 		`{{- $d := dict }}{{ get $d "two" -}}`:                   "",
 	}
