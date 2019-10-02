@@ -5,6 +5,13 @@ import (
 	"github.com/mitchellh/copystructure"
 )
 
+func get(d map[string]interface{}, key string) interface{} {
+	if val, ok := d[key]; ok {
+		return val
+	}
+	return ""
+}
+
 func set(d map[string]interface{}, key string, value interface{}) map[string]interface{} {
 	d[key] = value
 	return d

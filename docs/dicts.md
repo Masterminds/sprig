@@ -20,6 +20,19 @@ The following creates a dictionary with three items:
 $myDict := dict "name1" "value1" "name2" "value2" "name3" "value 3"
 ```
 
+## get
+
+Given a map and a key, get the value from the map.
+
+```
+get $myDict "key1"
+```
+
+The above returns `"value1"`
+
+Note that if the key is not found, this operation will simply return `""`. No error
+will be generated.
+
 ## set
 
 Use `set` to add a new key/value pair to a dictionary.

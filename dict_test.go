@@ -111,6 +111,19 @@ func TestOmit(t *testing.T) {
 	}
 }
 
+func TestGet(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "one" 1 }}{{ get $d "one"  -}}`:          "1",
+		`{{- $d := dict "one" 1 "two" "2" }}{{ get $d "two" -}}`: "2",
+		`{{- $d := dict }}{{ get $d "two" -}}`:                   "",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestSet(t *testing.T) {
 	tpl := `{{- $d := dict "one" 1 "two" 222222 -}}
 	{{- $_ := set $d "two" 2 -}}

@@ -256,6 +256,7 @@ var genericMap = map[string]interface{}{
 	"tuple":              list, // FIXME: with the addition of append/prepend these are no longer immutable.
 	"list":               list,
 	"dict":               dict,
+	"get":                get,
 	"set":                set,
 	"unset":              unset,
 	"hasKey":             hasKey,
