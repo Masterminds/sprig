@@ -187,10 +187,13 @@ func strval(v interface{}) string {
 }
 
 func trunc(c int, s string) string {
-	if len(s) <= c {
-		return s
+	if c < 0 && len(s)+c > 0 {
+		return s[len(s)+c:]
 	}
-	return s[0:c]
+	if c >= 0 && len(s) > c {
+		return s[:c]
+	}
+	return s
 }
 
 func join(sep string, v interface{}) string {
