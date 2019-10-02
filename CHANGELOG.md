@@ -1,10 +1,16 @@
 # Changelog
 
-## Unreleased
+## Release 2.22.0 (2019-10-02)
 
 ### Added
 
 - #173: Added getHostByName function to resolve dns names to ips (thanks @fcgravalos)
+- #195: Added deepCopy function for use with dicts
+
+### Changed
+
+- Updated merge and mergeOverwrite documentation to explain copying and how to
+  use deepCopy with it
 
 ## Release 2.21.0 (2019-09-18)
 
