@@ -1,4 +1,4 @@
-# Sprig: Template functions for Go templates [![GoDoc](https://godoc.org/github.com/Masterminds/sprig?status.svg)](https://godoc.org/github.com/Masterminds/sprig)
+# Sprig: Template functions for Go templates [![GoDoc](https://godoc.org/github.com/Masterminds/sprig?status.svg)](https://godoc.org/github.com/Masterminds/sprig) [![Go Report Card](https://goreportcard.com/badge/github.com/Masterminds/sprig)](https://goreportcard.com/report/github.com/Masterminds/sprig)
 
 [![Stability: Sustained](https://masterminds.github.io/stability/sustained.svg)](https://masterminds.github.io/stability/sustained.html)
 [![Build Status](https://travis-ci.org/Masterminds/sprig.svg?branch=master)](https://travis-ci.org/Masterminds/sprig)
