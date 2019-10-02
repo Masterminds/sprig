@@ -1,8 +1,10 @@
 package sprig
 
 import (
+	"bytes"
 	"encoding/json"
 	"reflect"
+	"strings"
 )
 
 // dfault checks whether `given` is set, and returns default if not set.
@@ -87,6 +89,27 @@ func mustToPrettyJson(v interface{}) (string, error) {
 		return "", err
 	}
 	return string(output), nil
+}
+
+// toRawJson encodes an item into a JSON string with no escaping of HTML characters.
+func toRawJson(v interface{}) string {
+	output, err := mustToRawJson(v)
+	if err != nil {
+		panic(err)
+	}
+	return string(output)
+}
+
+// mustToRawJson encodes an item into a JSON string with no escaping of HTML characters.
+func mustToRawJson(v interface{}) (string, error) {
+	buf := new(bytes.Buffer)
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+	err := enc.Encode(&v)
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSuffix(buf.String(), "\n"), nil
 }
 
 // ternary returns the first value if the last value is true, otherwise returns the second value.

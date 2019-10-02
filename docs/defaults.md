@@ -79,6 +79,16 @@ toPrettyJson .Item
 
 The above returns indented JSON string representation of `.Item`.
 
+# toRawJson, mustToRawJson
+
+The `toRawJson` function encodes an item into JSON string with HTML characters unescaped.
+
+```
+toRawJson .Item
+```
+
+The above returns unescaped JSON string representation of `.Item`.
+
 ## ternary
 
 The `ternary` function takes two values, and a test value. If the test value is
