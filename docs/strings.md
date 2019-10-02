@@ -118,11 +118,17 @@ trunc 5 "hello world"
 
 The above produces `hello`.
 
+```
+trunc -5 "hello world"
+```
+
+The above produces `world`.
+
 ## abbrev
 
 Truncate a string with ellipses (`...`)
 
-Parameters: 
+Parameters:
 - max length
 - the string
 
@@ -284,7 +290,7 @@ len $fish | plural "one anchovy" "many anchovies"
 ```
 
 In the above, if the length of the string is 1, the first argument will be
-printed (`one anchovy`). Otherwise, the second argument will be printed 
+printed (`one anchovy`). Otherwise, the second argument will be printed
 (`many anchovies`).
 
 The arguments are:
@@ -338,10 +344,10 @@ Swap the case of a string using a word based algorithm.
 
 Conversion algorithm:
 
-- Upper case character converts to Lower case 
-- Title case character converts to Lower case 
-- Lower case character after Whitespace or at start converts to Title case 
-- Other Lower case character converts to Upper case 
+- Upper case character converts to Lower case
+- Title case character converts to Lower case
+- Lower case character after Whitespace or at start converts to Title case
+- Other Lower case character converts to Upper case
 - Whitespace is defined by unicode.IsSpace(char).
 
 ```
