@@ -7,7 +7,8 @@ import (
 )
 
 func dictGetOrEmpty(dict map[string]interface{}, key string) string {
-	value, ok := dict[key]; if !ok {
+	value, ok := dict[key]
+	if !ok {
 		return ""
 	}
 	tp := reflect.TypeOf(value).Kind()
@@ -20,19 +21,19 @@ func dictGetOrEmpty(dict map[string]interface{}, key string) string {
 // parses given URL to return dict object
 func urlParse(v string) map[string]interface{} {
 	dict := map[string]interface{}{}
-	parsedUrl, err := url.Parse(v)
+	parsedURL, err := url.Parse(v)
 	if err != nil {
 		panic(fmt.Sprintf("unable to parse url: %s", err))
 	}
-	dict["scheme"]    = parsedUrl.Scheme
-	dict["host"]      = parsedUrl.Host
-	dict["hostname"]  = parsedUrl.Hostname()
-	dict["path"]      = parsedUrl.Path
-	dict["query"]     = parsedUrl.RawQuery
-	dict["opaque"]    = parsedUrl.Opaque
-	dict["fragment"]  = parsedUrl.Fragment
-	if parsedUrl.User != nil {
-		dict["userinfo"]  = parsedUrl.User.String()
+	dict["scheme"] = parsedURL.Scheme
+	dict["host"] = parsedURL.Host
+	dict["hostname"] = parsedURL.Hostname()
+	dict["path"] = parsedURL.Path
+	dict["query"] = parsedURL.RawQuery
+	dict["opaque"] = parsedURL.Opaque
+	dict["fragment"] = parsedURL.Fragment
+	if parsedURL.User != nil {
+		dict["userinfo"] = parsedURL.User.String()
 	} else {
 		dict["userinfo"] = ""
 	}
@@ -42,25 +43,24 @@ func urlParse(v string) map[string]interface{} {
 
 // join given dict to URL string
 func urlJoin(d map[string]interface{}) string {
-	resUrl := url.URL{
+	resURL := url.URL{
 		Scheme:   dictGetOrEmpty(d, "scheme"),
 		Host:     dictGetOrEmpty(d, "host"),
 		Path:     dictGetOrEmpty(d, "path"),
 		RawQuery: dictGetOrEmpty(d, "query"),
 		Opaque:   dictGetOrEmpty(d, "opaque"),
 		Fragment: dictGetOrEmpty(d, "fragment"),
-
 	}
 	userinfo := dictGetOrEmpty(d, "userinfo")
-	var user *url.Userinfo = nil
+	var user *url.Userinfo
 	if userinfo != "" {
-		tempUrl, err := url.Parse(fmt.Sprintf("proto://%s@host", userinfo))
+		tempURL, err := url.Parse(fmt.Sprintf("proto://%s@host", userinfo))
 		if err != nil {
 			panic(fmt.Sprintf("unable to parse userinfo in dict: %s", err))
 		}
-		user = tempUrl.User
+		user = tempURL.User
 	}
 
-	resUrl.User = user
-	return resUrl.String()
+	resURL.User = user
+	return resURL.String()
 }

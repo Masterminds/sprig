@@ -143,6 +143,8 @@ func generatePrivateKey(typ string) string {
 	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
 }
 
+// DSAKeyFormat stores the format for DSA keys.
+// Used by pemBlockForKey
 type DSAKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int

@@ -63,7 +63,7 @@ func GenericFuncMap() map[string]interface{} {
 }
 
 // These functions are not guaranteed to evaluate to the same result for given input, because they
-// refer to the environemnt or global state.
+// refer to the environment or global state.
 var nonhermeticFunctions = []string{
 	// Date functions
 	"date",
