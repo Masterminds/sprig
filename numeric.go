@@ -115,29 +115,41 @@ func toDecimal(v interface{}) int64 {
 }
 
 func seq(params ...int) string {
+	increment := 1
 	switch len(params) {
 	case 0:
-		return "0"
+		return ""
 	case 1:
-		return buildSeq(0, 1, params[0])
+		start := 1
+		end := params[0]
+		if end < start {
+			increment = -1
+		}
+		return intArrayToString(untilStep(start, end+increment, increment), " ")
 	case 3:
-		return buildSeq(params[0], params[1], params[2])
+		start := params[0]
+		end := params[2]
+		step := params[1]
+		if end < start {
+			increment = -1
+			if step > 0 {
+				return ""
+			}
+		}
+		return intArrayToString(untilStep(start, end+increment, step), " ")
 	case 2:
-		fallthrough
+		start := params[0]
+		end := params[1]
+		step := 1
+		if end < start {
+			step = -1
+		}
+		return intArrayToString(untilStep(start, end+step, step), " ")
 	default:
-		return strconv.Itoa(params[0])
+		return ""
 	}
 }
 
-func buildSeq(start, step, end int) string {
-	var sequence []string
-	if start > end {
-		return strconv.Itoa(start)
-	}
-	current := start
-	for current <= end {
-		sequence = append(sequence, strconv.Itoa(current))
-		current += step
-	}
-	return strings.Join(sequence, " ")
+func intArrayToString(slice []int, delimeter string) string {
+	return strings.Trim(strings.Join(strings.Fields(fmt.Sprint(slice)), delimeter), "[]")
 }

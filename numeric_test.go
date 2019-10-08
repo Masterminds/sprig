@@ -222,12 +222,17 @@ func TestRound(t *testing.T) {
 
 func TestSeq(t *testing.T) {
 	tests := map[string]string{
-		`{{seq 0 1 3}}`:  "0 1 2 3",
-		`{{seq 0 3 10}}`: "0 3 6 9",
-		`{{seq 3 3 2}}`:  "3",
-		`{{seq}}`:        "0",
-		`{{seq 0 1}}`:    "0",
-		`{{seq 10}}`:     "0 1 2 3 4 5 6 7 8 9 10",
+		`{{seq 0 1 3}}`:   "0 1 2 3",
+		`{{seq 0 3 10}}`:  "0 3 6 9",
+		`{{seq 3 3 2}}`:   "",
+		`{{seq 3 -3 2}}`:  "3",
+		`{{seq}}`:         "",
+		`{{seq 0 4}}`:     "0 1 2 3 4",
+		`{{seq 5}}`:       "1 2 3 4 5",
+		`{{seq -5}}`:      "1 0 -1 -2 -3 -4 -5",
+		`{{seq 0}}`:       "1 0",
+		`{{seq 0 1 2 3}}`: "",
+		`{{seq 0 -4}}`:    "0 -1 -2 -3 -4",
 	}
 	for tpl, expect := range tests {
 		if err := runt(tpl, expect); err != nil {
