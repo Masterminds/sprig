@@ -219,3 +219,19 @@ func TestRound(t *testing.T) {
 	assert.Equal(t, 123.23, round(123.2329999, 2, .3))
 	assert.Equal(t, 123.24, round(123.233, 2, .3))
 }
+
+func TestSeq(t *testing.T) {
+	tests := map[string]string{
+		`{{seq 0 1 3}}`:  "0 1 2 3",
+		`{{seq 0 3 10}}`: "0 3 6 9",
+		`{{seq 3 3 2}}`:  "3",
+		`{{seq}}`:        "0",
+		`{{seq 0 1}}`:    "0",
+		`{{seq 10}}`:     "0 1 2 3 4 5 6 7 8 9 10",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}

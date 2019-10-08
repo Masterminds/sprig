@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 
 	"github.com/spf13/cast"
 )
@@ -111,4 +112,32 @@ func toDecimal(v interface{}) int64 {
 		return 0
 	}
 	return result
+}
+
+func seq(params ...int) string {
+	switch len(params) {
+	case 0:
+		return "0"
+	case 1:
+		return buildSeq(0, 1, params[0])
+	case 3:
+		return buildSeq(params[0], params[1], params[2])
+	case 2:
+		fallthrough
+	default:
+		return strconv.Itoa(params[0])
+	}
+}
+
+func buildSeq(start, step, end int) string {
+	var sequence []string
+	if start > end {
+		return strconv.Itoa(start)
+	}
+	current := start
+	for current <= end {
+		sequence = append(sequence, strconv.Itoa(current))
+		current += step
+	}
+	return strings.Join(sequence, " ")
 }
