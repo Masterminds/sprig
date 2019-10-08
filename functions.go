@@ -106,7 +106,7 @@ var genericMap = map[string]interface{}{
 	"must_date_modify": mustDateModify,
 	"mustDateModify":   mustDateModify,
 	"mustToDate":       mustToDate,
-	"now":              func() time.Time { return time.Now() },
+	"now":              time.Now,
 	"toDate":           toDate,
 	"unixEpoch":        unixEpoch,
 
@@ -235,8 +235,8 @@ var genericMap = map[string]interface{}{
 	"deepEqual":  reflect.DeepEqual,
 
 	// OS:
-	"env":       func(s string) string { return os.Getenv(s) },
-	"expandenv": func(s string) string { return os.ExpandEnv(s) },
+	"env":       os.Getenv,
+	"expandenv": os.ExpandEnv,
 
 	// Network:
 	"getHostByName": getHostByName,
