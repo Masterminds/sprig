@@ -30,6 +30,8 @@ Trim just the suffix from a string:
 trimSuffix "-" "hello-"
 ```
 
+The above returns `hello`
+
 ## trimPrefix
 
 Trim just the prefix from a string:
@@ -103,6 +105,12 @@ trunc 5 "hello world"
 ```
 
 The above produces `hello`.
+
+```
+trunc -5 "hello world"
+```
+
+The above produces `world`.
 
 ## contains
 
@@ -203,7 +211,7 @@ rules. And `0` is considered a plural because the English language treats it
 as such (`zero anchovies`). The Sprig developers are working on a solution for
 better internationalization.
 
-## regexMatch
+## regexMatch, mustRegexMatch
 
 Returns true if the input string contains any match of the regular expression.
 
@@ -213,7 +221,10 @@ regexMatch "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" "test@acme.com"
 
 The above produces `true`
 
-## regexFindAll
+`regexMatch` panics if there is a problem and `mustRegexMatch` returns an error to the
+template engine if there is a problem.
+
+## regexFindAll, mustRegexFindAll
 
 Returns a slice of all matches of the regular expression in the input string.
 The last parameter n determines the number of substrings to return, where -1 means return all matches
@@ -224,7 +235,10 @@ regexFindAll "[2,4,6,8]" "123456789" -1
 
 The above produces `[2 4 6 8]`
 
-## regexFind
+`regexFindAll` panics if there is a problem and `mustRegexFindAll` returns an error to the
+template engine if there is a problem.
+
+## regexFind, mustRegexFind
 
 Return the first (left most) match of the regular expression in the input string
 
@@ -234,7 +248,10 @@ regexFind "[a-zA-Z][1-9]" "abcd1234"
 
 The above produces `d1`
 
-## regexReplaceAll
+`regexFind` panics if there is a problem and `mustRegexFind` returns an error to the
+template engine if there is a problem.
+
+## regexReplaceAll, mustRegexReplaceAll
 
 Returns a copy of the input string, replacing matches of the Regexp with the replacement string replacement.
 Inside string replacement, $ signs are interpreted as in Expand, so for instance $1 represents the text of the first submatch
@@ -245,7 +262,10 @@ regexReplaceAll "a(x*)b" "-ab-axxb-" "${1}W"
 
 The above produces `-W-xxW-`
 
-## regexReplaceAllLiteral
+`regexReplaceAll` panics if there is a problem and `mustRegexReplaceAll` returns an error to the
+template engine if there is a problem.
+
+## regexReplaceAllLiteral, mustRegexReplaceAllLiteral
 
 Returns a copy of the input string, replacing matches of the Regexp with the replacement string replacement
 The replacement string is substituted directly, without using Expand
@@ -256,7 +276,10 @@ regexReplaceAllLiteral "a(x*)b" "-ab-axxb-" "${1}"
 
 The above produces `-${1}-${1}-`
 
-## regexSplit
+`regexReplaceAllLiteral` panics if there is a problem and `mustRegexReplaceAllLiteral` returns an error to the
+template engine if there is a problem.
+
+## regexSplit, mustRegexSplit
 
 Slices the input string into substrings separated by the expression and returns a slice of the substrings between those expression matches. The last parameter `n` determines the number of substrings to return, where `-1` means return all matches
 
@@ -265,6 +288,9 @@ regexSplit "z+" "pizza" -1
 ```
 
 The above produces `[pi a]`
+
+`regexSplit` panics if there is a problem and `mustRegexSplit` returns an error to the
+template engine if there is a problem.
 
 ## See Also...
 

@@ -1,7 +1,6 @@
 
 version: build-{build}.{branch}
 
-clone_folder: C:\gopath\src\github.com\Masterminds\sprig
 shallow_clone: true
 
 environment:
@@ -11,13 +10,10 @@ platform:
   - x64
 
 install:
-  - go get -u github.com/Masterminds/glide
-  - set PATH=%GOPATH%\bin;%PATH%
   - go version
   - go env
 
 build_script:
-  - glide install
   - go install ./...
 
 test_script:

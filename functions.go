@@ -5,13 +5,14 @@ import (
 	"html/template"
 	"os"
 	"path"
+	"reflect"
 	"strconv"
 	"strings"
 	ttemplate "text/template"
 	"time"
 )
 
-// Produce the function map.
+// FuncMap produces the function map.
 //
 // Use this to pass the functions into the template engine:
 //
@@ -59,7 +60,7 @@ func GenericFuncMap() map[string]interface{} {
 }
 
 // These functions are not guaranteed to evaluate to the same result for given input, because they
-// refer to the environemnt or global state.
+// refer to the environment or global state.
 var nonhermeticFunctions = []string{
 	// Date functions
 	"date",
@@ -81,23 +82,30 @@ var nonhermeticFunctions = []string{
 	// OS
 	"env",
 	"expandenv",
+
+	// Network
+	"getHostByName",
 }
 
 var genericMap = map[string]interface{}{
 	"hello": func() string { return "Hello!" },
 
 	// Date functions
-	"date":           date,
-	"date_in_zone":   dateInZone,
-	"date_modify":    dateModify,
-	"now":            func() time.Time { return time.Now() },
-	"htmlDate":       htmlDate,
-	"htmlDateInZone": htmlDateInZone,
-	"dateInZone":     dateInZone,
-	"dateModify":     dateModify,
-	"ago":            dateAgo,
-	"toDate":         toDate,
-	"unixEpoch":      unixEpoch,
+	"ago":              dateAgo,
+	"date":             date,
+	"date_in_zone":     dateInZone,
+	"date_modify":      dateModify,
+	"dateInZone":       dateInZone,
+	"dateModify":       dateModify,
+	"durationRound":    durationRound,
+	"htmlDate":         htmlDate,
+	"htmlDateInZone":   htmlDateInZone,
+	"must_date_modify": mustDateModify,
+	"mustDateModify":   mustDateModify,
+	"mustToDate":       mustToDate,
+	"now":              func() time.Time { return time.Now() },
+	"toDate":           toDate,
+	"unixEpoch":        unixEpoch,
 
 	// Strings
 	"trunc":  trunc,
@@ -131,10 +139,11 @@ var genericMap = map[string]interface{}{
 	"toString":   strval,
 
 	// Wrap Atoi to stop errors.
-	"atoi":    func(a string) int { i, _ := strconv.Atoi(a); return i },
-	"int64":   toInt64,
-	"int":     toInt,
-	"float64": toFloat64,
+	"atoi":      func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"int64":     toInt64,
+	"int":       toInt,
+	"float64":   toFloat64,
+	"toDecimal": toDecimal,
 
 	//"gt": func(a, b int) bool {return a > b},
 	//"gte": func(a, b int) bool {return a >= b},
@@ -183,13 +192,18 @@ var genericMap = map[string]interface{}{
 	"sortAlpha": sortAlpha,
 
 	// Defaults
-	"default":      dfault,
-	"empty":        empty,
-	"coalesce":     coalesce,
-	"compact":      compact,
-	"toJson":       toJson,
-	"toPrettyJson": toPrettyJson,
-	"ternary":      ternary,
+	"default":          dfault,
+	"empty":            empty,
+	"coalesce":         coalesce,
+	"compact":          compact,
+	"mustCompact":      mustCompact,
+	"toJson":           toJson,
+	"toPrettyJson":     toPrettyJson,
+	"toRawJson":        toRawJson,
+	"mustToJson":       mustToJson,
+	"mustToPrettyJson": mustToPrettyJson,
+	"mustToRawJson":    mustToRawJson,
+	"ternary":          ternary,
 
 	// Reflection
 	"typeOf":     typeOf,
@@ -197,10 +211,14 @@ var genericMap = map[string]interface{}{
 	"typeIsLike": typeIsLike,
 	"kindOf":     kindOf,
 	"kindIs":     kindIs,
+	"deepEqual":  reflect.DeepEqual,
 
 	// OS:
 	"env":       func(s string) string { return os.Getenv(s) },
 	"expandenv": func(s string) string { return os.ExpandEnv(s) },
+
+	// Network:
+	"getHostByName": getHostByName,
 
 	// File Paths:
 	"base":  path.Base,
@@ -219,6 +237,7 @@ var genericMap = map[string]interface{}{
 	"tuple":  list, // FIXME: with the addition of append/prepend these are no longer immutable.
 	"list":   list,
 	"dict":   dict,
+	"get":    get,
 	"set":    set,
 	"unset":  unset,
 	"hasKey": hasKey,
@@ -229,25 +248,47 @@ var genericMap = map[string]interface{}{
 	"values": values,
 
 	"append": push, "push": push,
-	"prepend": prepend,
-	"first":   first,
-	"rest":    rest,
-	"last":    last,
-	"initial": initial,
-	"reverse": reverse,
-	"uniq":    uniq,
-	"without": without,
-	"has":     has,
-	"slice":   slice,
+	"mustAppend": mustPush, "mustPush": mustPush,
+	"prepend":     prepend,
+	"mustPrepend": mustPrepend,
+	"first":       first,
+	"mustFirst":   mustFirst,
+	"rest":        rest,
+	"mustRest":    mustRest,
+	"last":        last,
+	"mustLast":    mustLast,
+	"initial":     initial,
+	"mustInitial": mustInitial,
+	"reverse":     reverse,
+	"mustReverse": mustReverse,
+	"uniq":        uniq,
+	"mustUniq":    mustUniq,
+	"without":     without,
+	"mustWithout": mustWithout,
+	"has":         has,
+	"mustHas":     mustHas,
+	"slice":       slice,
+	"mustSlice":   mustSlice,
+	"concat":      concat,
 
 	// Flow Control:
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
 
 	// Regex
-	"regexMatch":             regexMatch,
-	"regexFindAll":           regexFindAll,
-	"regexFind":              regexFind,
-	"regexReplaceAll":        regexReplaceAll,
-	"regexReplaceAllLiteral": regexReplaceAllLiteral,
-	"regexSplit":             regexSplit,
+	"regexMatch":                 regexMatch,
+	"mustRegexMatch":             mustRegexMatch,
+	"regexFindAll":               regexFindAll,
+	"mustRegexFindAll":           mustRegexFindAll,
+	"regexFind":                  regexFind,
+	"mustRegexFind":              mustRegexFind,
+	"regexReplaceAll":            regexReplaceAll,
+	"mustRegexReplaceAll":        mustRegexReplaceAll,
+	"regexReplaceAllLiteral":     regexReplaceAllLiteral,
+	"mustRegexReplaceAllLiteral": mustRegexReplaceAllLiteral,
+	"regexSplit":                 regexSplit,
+	"mustRegexSplit":             mustRegexSplit,
+
+	// URLs:
+	"urlParse": urlParse,
+	"urlJoin":  urlJoin,
 }

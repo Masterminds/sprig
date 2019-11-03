@@ -91,3 +91,16 @@ func TestDateInZone(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestDurationRound(t *testing.T) {
+	tpl := "{{ durationRound .Time }}"
+	if err := runtv(tpl, "2h", map[string]interface{}{"Time": "2h5s"}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "1d", map[string]interface{}{"Time": "24h5s"}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "3mo", map[string]interface{}{"Time": "2400h5s"}); err != nil {
+		t.Error(err)
+	}
+}

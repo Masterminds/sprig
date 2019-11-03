@@ -28,6 +28,18 @@ func TestTrunc(t *testing.T) {
 	if err := runt(tpl, "foo"); err != nil {
 		t.Error(err)
 	}
+	tpl = `{{ "baaaaaar" | trunc -3 }}`
+	if err := runt(tpl, "aar"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ "baaaaaar" | trunc -999 }}`
+	if err := runt(tpl, "baaaaaar"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ "baaaaaz" | trunc 0 }}`
+	if err := runt(tpl, ""); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestQuote(t *testing.T) {

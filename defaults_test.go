@@ -106,6 +106,16 @@ func TestToPrettyJson(t *testing.T) {
 	}
 }
 
+func TestToRawJson(t *testing.T) {
+	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42, "html": "<HEAD>"}}
+	tpl := `{{.Top | toRawJson}}`
+	expected := `{"bool":true,"html":"<HEAD>","number":42,"string":"test"}`
+
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestTernary(t *testing.T) {
 	tpl := `{{true | ternary "foo" "bar"}}`
 	if err := runt(tpl, "foo"); err != nil {
