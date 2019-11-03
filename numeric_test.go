@@ -1,9 +1,10 @@
 package sprig
 
 import (
-	"testing"
-
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"strconv"
+	"testing"
 )
 
 func TestUntil(t *testing.T) {
@@ -218,4 +219,24 @@ func TestRound(t *testing.T) {
 	assert.Equal(t, 123.0, round(123.49999999, 0))
 	assert.Equal(t, 123.23, round(123.2329999, 2, .3))
 	assert.Equal(t, 123.24, round(123.233, 2, .3))
+}
+
+func TestRandomInt(t *testing.T) {
+	var tests = []struct {
+		min int
+		max int
+	}{
+		{10, 11},
+		{10, 13},
+		{0, 1},
+		{5, 50},
+	}
+	for _, v := range tests {
+		x, _ := runRaw(fmt.Sprintf(`{{ randInt %d %d }}`, v.min, v.max), nil)
+		r, err := strconv.Atoi(x)
+		assert.NoError(t, err)
+		assert.True(t, func(min, max, r int) bool {
+			return r >= v.min && r < v.max
+		}(v.min, v.max, r))
+	}
 }
