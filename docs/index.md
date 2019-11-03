@@ -1,6 +1,6 @@
-# Sprig Function Documentation
+# Slim-Sprig Function Documentation
 
-The Sprig library provides over 70 template functions for Go's template language.
+The Slim-Sprig library provides over 70 template functions for Go's template language.
 
 - [String Functions](strings.md): `trim`, `randAlpha`, `plural`, etc.
   - [String List Functions](string_slice.md): `splitList`, `sortAlpha`, etc.
