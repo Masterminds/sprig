@@ -207,8 +207,8 @@ func TestGoutils(t *testing.T) {
 	}
 }
 
-func TestRandom(t *testing.T) {
-	// Randome strings are now using Masterminds/goutils's cryptographically secure random string functions
+func TestRandomString(t *testing.T) {
+	// Random strings are now using Masterminds/goutils's cryptographically secure random string functions
 	// by default. Consequently, these tests now have no predictable character sequence. No checks for exact
 	// string output are necessary.
 
