@@ -1,5 +1,11 @@
 # Changelog
 
+## Release 3.0.1 (2019-12-08)
+
+## Fixed
+
+- #212: Updated semver fixing broken constraint checking with ^0.0
+
 ## Release 3.0.0 (2019-10-02)
 
 ### Added
