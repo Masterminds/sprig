@@ -1,8 +1,15 @@
 # Changelog
 
+## Release 3.0.2 (2019-12-13)
+
+### Fixed
+
+- #220: Updating to semver v3.0.3 to fix issue with <= ranges
+- #218: fix typo elyptical->elliptic in ecdsa key description (thanks @laverya)
+
 ## Release 3.0.1 (2019-12-08)
 
-## Fixed
+### Fixed
 
 - #212: Updated semver fixing broken constraint checking with ^0.0
 
