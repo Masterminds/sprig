@@ -63,6 +63,19 @@ func coalesce(v ...interface{}) interface{} {
 	return nil
 }
 
+// fromJson decodes JSON into a structured value, ignoring errors.
+func fromJson(v string) interface{} {
+	output, _ := mustFromJson(v)
+	return output
+}
+
+// mustFromJson decodes JSON into a structured value, returning errors.
+func mustFromJson(v string) (interface{}, error) {
+	var output interface{}
+	err := json.Unmarshal([]byte(v), &output)
+	return output, err
+}
+
 // toJson encodes an item into a JSON string
 func toJson(v interface{}) string {
 	output, _ := json.Marshal(v)
