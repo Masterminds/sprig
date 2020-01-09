@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -33,6 +34,34 @@ func TestAdler32Sum(t *testing.T) {
 	tpl := `{{"abc" | adler32sum}}`
 	if err := runt(tpl, "38600999"); err != nil {
 		t.Error(err)
+	}
+}
+
+type HtpasswdCred struct {
+	Username string
+	Password string
+	Valid    bool
+}
+
+func TestHtpasswd(t *testing.T) {
+	expectations := []HtpasswdCred{
+		{Username: "myUser", Password: "myPassword", Valid: true},
+		{Username: "special'o79Cv_*qFe,)<user", Password: "special<j7+3p#6-.Jx2U:m8G;kGypassword", Valid: true},
+		{Username: "wrongus:er", Password: "doesn'tmatter", Valid: false}, // ':' isn't allowed in the username - https://tools.ietf.org/html/rfc2617#page-6
+	}
+
+	for _, credential := range expectations {
+		out, err := runRaw(`{{htpasswd .Username .Password}}`, credential)
+		if err != nil {
+			t.Error(err)
+		}
+		result := strings.Split(out, ":")
+		if 0 != strings.Compare(credential.Username, result[0]) && credential.Valid {
+			t.Error("Generated username did not match for:", credential.Username)
+		}
+		if bcrypt.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
+			t.Error("Generated hash is not the equivalent for password:", credential.Password)
+		}
 	}
 }
 
