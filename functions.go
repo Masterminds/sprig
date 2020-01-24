@@ -100,6 +100,7 @@ var genericMap = map[string]interface{}{
 	"date_modify":      dateModify,
 	"dateInZone":       dateInZone,
 	"dateModify":       dateModify,
+	"duration":         duration,
 	"durationRound":    durationRound,
 	"htmlDate":         htmlDate,
 	"htmlDateInZone":   htmlDateInZone,
