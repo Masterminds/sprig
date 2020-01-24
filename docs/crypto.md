@@ -31,7 +31,7 @@ adler32sum "Hello world!"
 
 ## htpasswd
 
-The `htpasswd` function takes a `username` and `password` and generates a `bcrypt` hash of the psasword. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
+The `htpasswd` function takes a `username` and `password` and generates a `bcrypt` hash of the password. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
 
 ```
 htpasswd "myUser" "myPassword"
