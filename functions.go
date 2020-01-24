@@ -297,6 +297,7 @@ var genericMap = map[string]interface{}{
 	"concat":      concat,
 
 	// Crypto:
+	"htpasswd":          htpasswd,
 	"genPrivateKey":     generatePrivateKey,
 	"derivePassword":    derivePassword,
 	"buildCustomCert":   buildCustomCertificate,
