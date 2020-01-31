@@ -32,7 +32,7 @@ Works like the bash `seq` command.
 * 3 parameters (start, step, end) - will generate all counting integers between `start` and `end` inclusive incrementing or decrementing by `step`.
 
 ```
-seq 5       => 0 1 2 3 4 5
+seq 5       => 1 2 3 4 5
 seq -3      => 1 0 -1 -2 -3
 seq 0 2     => 0 1 2
 seq 2 -2    => 2 1 0 -1 -2
