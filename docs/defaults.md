@@ -58,6 +58,16 @@ The above will first check to see if `.name` is empty. If it is not, it will ret
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
 
+## fromJson
+
+The `fromJson` function decodes data from a JSON string. If the item cannot be decoded the function will return an error.
+
+```
+fromJson .Value
+```
+
+The above decodes the JSON data from `.Value`.
+
 ## toJson, mustToJson
 
 The `toJson` function encodes an item into a JSON string. If the item cannot be converted to JSON the function will return an empty string.

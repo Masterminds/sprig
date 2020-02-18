@@ -3,6 +3,7 @@ package sprig
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -61,6 +62,24 @@ func coalesce(v ...interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+// fromJSON decodes a JSON string to an item.
+func fromJson(v interface{}) interface{} {
+	var result interface{}
+	switch v := v.(type) {
+	case []byte:
+		if err := json.Unmarshal(v, &result); err != nil {
+			panic(err)
+		}
+	case string:
+		if err := json.Unmarshal([]byte(v), &result); err != nil {
+			panic(err)
+		}
+	default:
+		panic(fmt.Errorf("Cannot decode JSON from type %T", v))
+	}
+	return result
 }
 
 // toJson encodes an item into a JSON string

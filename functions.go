@@ -217,6 +217,7 @@ var genericMap = map[string]interface{}{
 	"empty":            empty,
 	"coalesce":         coalesce,
 	"compact":          compact,
+	"fromJson":         fromJson,
 	"mustCompact":      mustCompact,
 	"toJson":           toJson,
 	"toPrettyJson":     toPrettyJson,
