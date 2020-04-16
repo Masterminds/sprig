@@ -1,6 +1,6 @@
 # Changelog
 
-## Release 3.1.0
+## Release 3.1.0 (2020-04-16)
 
 NOTE: The dependency github.com/imdario/mergo made a behavior change in 0.3.9
 that impacts sprig functionality. Do not use sprig with a version newer than 0.3.8.
