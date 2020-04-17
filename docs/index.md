@@ -20,4 +20,5 @@ The Sprig library provides over 70 template functions for Go's template language
   - [Version Comparison Functions](semver.md): `semver`, `semverCompare`
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
   - [Cryptographic and Security Functions](crypto.md): `derivePassword`, `sha256sum`, `genPrivateKey`, etc.
+  - [Network](network.md): `getHostByName`
 
