@@ -28,6 +28,13 @@ The `adler32sum` function receives a string, and computes its Adler-32 checksum.
 ```
 adler32sum "Hello world!"
 ```
+## bcrypt
+
+The `bcrypt` function receives a string, and generates its `bcrypt` hash.
+
+```
+bcrypt "myPassword"
+```
 
 ## htpasswd
 
