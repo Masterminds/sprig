@@ -5,6 +5,7 @@ import (
 	"math"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 // toFloat64 converts 64-bit floats
@@ -166,4 +167,44 @@ func toDecimal(v interface{}) int64 {
 		return 0
 	}
 	return result
+}
+
+func seq(params ...int) string {
+	increment := 1
+	switch len(params) {
+	case 0:
+		return ""
+	case 1:
+		start := 1
+		end := params[0]
+		if end < start {
+			increment = -1
+		}
+		return intArrayToString(untilStep(start, end+increment, increment), " ")
+	case 3:
+		start := params[0]
+		end := params[2]
+		step := params[1]
+		if end < start {
+			increment = -1
+			if step > 0 {
+				return ""
+			}
+		}
+		return intArrayToString(untilStep(start, end+increment, step), " ")
+	case 2:
+		start := params[0]
+		end := params[1]
+		step := 1
+		if end < start {
+			step = -1
+		}
+		return intArrayToString(untilStep(start, end+step, step), " ")
+	default:
+		return ""
+	}
+}
+
+func intArrayToString(slice []int, delimeter string) string {
+	return strings.Trim(strings.Join(strings.Fields(fmt.Sprint(slice)), delimeter), "[]")
 }
