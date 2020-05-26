@@ -108,7 +108,7 @@ now | htmlDate
 Same as htmlDate, but with a timezone.
 
 ```
-htmlDate (now) "UTC"
+htmlDateInZone (now) "UTC"
 ```
 
 ## toDate, mustToDate
