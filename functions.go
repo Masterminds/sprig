@@ -80,6 +80,7 @@ var nonhermeticFunctions = []string{
 	"randAlpha",
 	"randAscii",
 	"randNumeric",
+	"randBytes",
 	"uuidv4",
 
 	// OS
@@ -308,6 +309,7 @@ var genericMap = map[string]interface{}{
 	"genSignedCert":     generateSignedCertificate,
 	"encryptAES":        encryptAES,
 	"decryptAES":        decryptAES,
+	"randBytes":         randBytes,
 
 	// UUIDs:
 	"uuidv4": uuidv4,

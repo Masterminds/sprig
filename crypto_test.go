@@ -141,6 +141,31 @@ func TestGenPrivateKey(t *testing.T) {
 	}
 }
 
+func TestRandBytes(t *testing.T) {
+	tpl := `{{randBytes 12}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	bytes, err := base64.StdEncoding.DecodeString(out)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(bytes) != 12 {
+		t.Error("Expected 12 base64-encoded bytes")
+	}
+
+	out2, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if out == out2 {
+		t.Error("Expected subsequent randBytes to be different")
+	}
+}
+
 func TestUUIDGeneration(t *testing.T) {
 	tpl := `{{uuidv4}}`
 	out, err := runRaw(tpl, nil)
