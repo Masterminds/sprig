@@ -88,6 +88,40 @@ inserted.
 A common idiom in Sprig templates is to uses `pluck... | first` to get the first
 matching key out of a collection of dictionaries.
 
+## dig
+
+The `dig` function traverses a nested set of dicts, selecting keys from a list
+of values. It returns a default value if any of the keys are not found at the
+associated dict.
+
+```
+dig "user" "role" "humanName" "guest" $dict
+```
+
+Given a dict structured like
+```
+{
+  user: {
+    role: {
+      humanName: "curator"
+    }
+  }
+}
+```
+
+the above would return `"curator"`. If the dict lacked even a `user` field,
+the result would be `"guest"`.
+
+Dig can be very useful in cases where you'd like to avoid guard clauses,
+especially since Go's template package's `and` doesn't shortcut. For instance
+`and a.maybeNil a.maybeNil.iNeedThis` will always evaluate
+`a.maybeNil.iNeedThis`, and panic if `a` lacks a `maybeNil` field.)
+
+`dig` accepts its dict argument last in order to support pipelining. For instance:
+```
+merge a b c | dig "one" "two" "three" "<missing>"
+```
+
 ## merge, mustMerge
 
 Merge two or more dictionaries into one, giving precedence to the dest dictionary:
