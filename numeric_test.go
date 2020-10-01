@@ -46,6 +46,17 @@ func TestBiggest(t *testing.T) {
 		t.Error(err)
 	}
 }
+func TestMaxf(t *testing.T) {
+	tpl := `{{ maxf 1 2 3 345.7 5 6 7}}`
+	if err := runt(tpl, `345.7`); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ max 345 }}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+}
 func TestMin(t *testing.T) {
 	tpl := `{{ min 1 2 3 345 5 6 7}}`
 	if err := runt(tpl, `1`); err != nil {
@@ -53,6 +64,18 @@ func TestMin(t *testing.T) {
 	}
 
 	tpl = `{{ min 345}}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMinf(t *testing.T) {
+	tpl := `{{ minf 1.4 2 3 345.6 5 6 7}}`
+	if err := runt(tpl, `1.4`); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ minf 345 }}`
 	if err := runt(tpl, `345`); err != nil {
 		t.Error(err)
 	}
@@ -184,6 +207,20 @@ func TestToDecimal(t *testing.T) {
 	}
 }
 
+func TestAdd1(t *testing.T) {
+	tpl := `{{ 3 | add1 }}`
+	if err := runt(tpl, `4`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAdd1f(t *testing.T) {
+	tpl := `{{ 3.4 | add1f }}`
+	if err := runt(tpl, `4.4`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestAdd(t *testing.T) {
 	tpl := `{{ 3 | add 1 2}}`
 	if err := runt(tpl, `6`); err != nil {
@@ -191,9 +228,51 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+func TestAddf(t *testing.T) {
+	tpl := `{{ 3 | addf 1.5 2.2}}`
+	if err := runt(tpl, `6.7`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestDiv(t *testing.T) {
+	tpl := `{{ 4 | div 5 }}`
+	if err := runt(tpl, `1`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestDivf(t *testing.T) {
+	tpl := `{{ 2 | divf 5 4 }}`
+	if err := runt(tpl, `0.625`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestMul(t *testing.T) {
 	tpl := `{{ 1 | mul "2" 3 "4"}}`
 	if err := runt(tpl, `24`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMulf(t *testing.T) {
+	tpl := `{{ 1.2 | mulf "2.4" 10 "4"}}`
+	if err := runt(tpl, `115.2`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSub(t *testing.T) {
+	tpl := `{{ 3 | sub 14 }}`
+	if err := runt(tpl, `11`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSubf(t *testing.T) {
+	tpl := `{{ 3 | subf 4.5 1 }}`
+	if err := runt(tpl, `0.5`); err != nil {
 		t.Error(err)
 	}
 }
