@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"path"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -243,12 +244,19 @@ var genericMap = map[string]interface{}{
 	// Network:
 	"getHostByName": getHostByName,
 
-	// File Paths:
+	// Paths:
 	"base":  path.Base,
 	"dir":   path.Dir,
 	"clean": path.Clean,
 	"ext":   path.Ext,
 	"isAbs": path.IsAbs,
+
+	// Filepaths:
+	"fpBase":  filepath.Base,
+	"fpClean": filepath.Clean,
+	"fpDir":   filepath.Dir,
+	"fpExt":   filepath.Ext,
+	"fpIsAbs": filepath.IsAbs,
 
 	// Encoding:
 	"b64enc": base64encode,
