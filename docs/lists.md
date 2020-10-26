@@ -168,6 +168,16 @@ equivalent of `list[n:m]`.
 `slice` panics if there is a problem while `mustSlice` returns an error to the
 template engine if there is a problem.
 
+## chunk
+
+To split a list into chunks of given size, use `chunk size list`. This is useful for pagination.
+
+```
+chunk 3 (list 1 2 3 4 5 6 7 8)
+```
+
+This produces list of lists `[ [ 1 2 3 ] [ 4 5 6 ] [ 7 8 ] ]`.
+
 ## A Note on List Internals
 
 A list is implemented in Go as a `[]interface{}`. For Go developers embedding
