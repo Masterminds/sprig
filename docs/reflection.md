@@ -18,7 +18,7 @@ kindOf "hello"
 ```
 
 The above would return `string`. For simple tests (like in `if` blocks), the
-`isKind` function will let you verify that a value is a particular kind:
+`kindIs` function will let you verify that a value is a particular kind:
 
 ```
 kindIs "int" 123
