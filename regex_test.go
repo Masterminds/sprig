@@ -196,3 +196,8 @@ func TestMustRegexSplit(t *testing.T) {
 		assert.Equal(t, c.expected, len(res), "case %#v", c.args)
 	}
 }
+
+func TestRegexQuoteMeta(t *testing.T) {
+	assert.Equal(t, "1\\.2\\.3", regexQuoteMeta("1.2.3"))
+	assert.Equal(t, "pretzel", regexQuoteMeta("pretzel"))
+}
