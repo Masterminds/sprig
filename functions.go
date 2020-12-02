@@ -3,6 +3,7 @@ package sprig
 import (
 	"errors"
 	"html/template"
+	"math/rand"
 	"os"
 	"path"
 	"reflect"
@@ -80,6 +81,7 @@ var nonhermeticFunctions = []string{
 	"randAlpha",
 	"randAscii",
 	"randNumeric",
+	"randBytes",
 	"uuidv4",
 
 	// OS
@@ -200,6 +202,7 @@ var genericMap = map[string]interface{}{
 		}
 		return val
 	},
+	"randInt": func(min, max int) int { return rand.Intn(max-min) + min },
 	"biggest": max,
 	"max":     max,
 	"min":     min,
@@ -218,9 +221,11 @@ var genericMap = map[string]interface{}{
 	"coalesce":         coalesce,
 	"compact":          compact,
 	"mustCompact":      mustCompact,
+	"fromJson":         fromJson,
 	"toJson":           toJson,
 	"toPrettyJson":     toPrettyJson,
 	"toRawJson":        toRawJson,
+	"mustFromJson":     mustFromJson,
 	"mustToJson":       mustToJson,
 	"mustToPrettyJson": mustToPrettyJson,
 	"mustToRawJson":    mustToRawJson,
@@ -300,6 +305,7 @@ var genericMap = map[string]interface{}{
 	"dig":         dig,
 
 	// Crypto:
+	"bcrypt":            bcrypt,
 	"htpasswd":          htpasswd,
 	"genPrivateKey":     generatePrivateKey,
 	"derivePassword":    derivePassword,
@@ -309,6 +315,7 @@ var genericMap = map[string]interface{}{
 	"genSignedCert":     generateSignedCertificate,
 	"encryptAES":        encryptAES,
 	"decryptAES":        decryptAES,
+	"randBytes":         randBytes,
 
 	// UUIDs:
 	"uuidv4": uuidv4,

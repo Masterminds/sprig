@@ -28,6 +28,13 @@ The `adler32sum` function receives a string, and computes its Adler-32 checksum.
 ```
 adler32sum "Hello world!"
 ```
+## bcrypt
+
+The `bcrypt` function receives a string, and generates its `bcrypt` hash.
+
+```
+bcrypt "myPassword"
+```
 
 ## htpasswd
 
@@ -38,6 +45,16 @@ htpasswd "myUser" "myPassword"
 ```
 
 Note that it is insecure to store the password directly in the template.
+
+## randBytes
+
+The `randBytes` function accepts a count `N` and generates a cryptographically
+secure (uses ```crypto/rand```) random sequence of `N` bytes. The sequence is
+returned as a base64 encoded string.
+
+```
+randBytes 24
+```
 
 ## derivePassword
 

@@ -83,6 +83,22 @@ func TestCoalesce(t *testing.T) {
 	}
 }
 
+func TestFromJson(t *testing.T) {
+	dict := map[string]interface{}{"Input": `{"foo": 55}`}
+
+	tpl := `{{.Input | fromJson}}`
+	expected := `map[foo:55]`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{(.Input | fromJson).foo}}`
+	expected = `55`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestToJson(t *testing.T) {
 	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42}}
 

@@ -3,9 +3,15 @@ package sprig
 import (
 	"bytes"
 	"encoding/json"
+	"math/rand"
 	"reflect"
 	"strings"
+	"time"
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 // dfault checks whether `given` is set, and returns default if not set.
 //
@@ -61,6 +67,19 @@ func coalesce(v ...interface{}) interface{} {
 		}
 	}
 	return nil
+}
+
+// fromJson decodes JSON into a structured value, ignoring errors.
+func fromJson(v string) interface{} {
+	output, _ := mustFromJson(v)
+	return output
+}
+
+// mustFromJson decodes JSON into a structured value, returning errors.
+func mustFromJson(v string) (interface{}, error) {
+	var output interface{}
+	err := json.Unmarshal([]byte(v), &output)
+	return output, err
 }
 
 // toJson encodes an item into a JSON string

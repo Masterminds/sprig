@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 	"text/template"
+	"time"
 
-	"github.com/Masterminds/goutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -76,7 +76,8 @@ func TestKebabCase(t *testing.T) {
 }
 
 func TestShuffle(t *testing.T) {
-	goutils.RANDOM = rand.New(rand.NewSource(1))
+	defer rand.Seed(time.Now().UnixNano())
+	rand.Seed(1)
 	// Because we're using a random number generator, we need these to go in
 	// a predictable sequence:
 	assert.NoError(t, runt(`{{ shuffle "Hello World" }}`, "rldo HWlloe"))

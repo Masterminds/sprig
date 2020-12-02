@@ -7,7 +7,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Math Functions](math.md): `add`, `max`, `mul`, etc.
   - [Integer Slice Functions](integer_slice.md): `until`, `untilStep`
 - [Date Functions](date.md): `now`, `date`, etc.
-- [Defaults Functions](defaults.md): `default`, `empty`, `coalesce`, `toJson`, `toPrettyJson`, `toRawJson`, `ternary`
+- [Defaults Functions](defaults.md): `default`, `empty`, `coalesce`, `fromJson`, `toJson`, `toPrettyJson`, `toRawJson`, `ternary`
 - [Encoding Functions](encoding.md): `b64enc`, `b64dec`, etc.
 - [Lists and List Functions](lists.md): `list`, `first`, `uniq`, etc.
 - [Dictionaries and Dict Functions](dicts.md): `get`, `set`, `dict`, `hasKey`, `pluck`, `dig`, `deepCopy`, etc.
@@ -20,3 +20,4 @@ The Sprig library provides over 70 template functions for Go's template language
   - [Version Comparison Functions](semver.md): `semver`, `semverCompare`
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
   - [Cryptographic and Security Functions](crypto.md): `derivePassword`, `sha256sum`, `genPrivateKey`, etc.
+  - [Network](network.md): `getHostByName`
