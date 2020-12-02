@@ -238,6 +238,8 @@ func TestRandomInt(t *testing.T) {
 		assert.True(t, func(min, max, r int) bool {
 			return r >= v.min && r < v.max
 		}(v.min, v.max, r))
+	}
+}
 
 func TestSeq(t *testing.T) {
 	tests := map[string]string{
