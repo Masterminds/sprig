@@ -12,7 +12,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Lists and List Functions](lists.md): `list`, `first`, `uniq`, etc.
 - [Dictionaries and Dict Functions](dicts.md): `get`, `set`, `dict`, `hasKey`, `pluck`, `deepCopy`, etc.
 - [Type Conversion Functions](conversion.md): `atoi`, `int64`, `toString`, etc.
-- [Path and Filepath Functions](paths.md): `base`, `dir`, `ext`, `clean`, `isAbs`, `fpBase`, `fpDir`, `fpExt`, `fpClean`, `fpIsAbs`
+- [Path and Filepath Functions](paths.md): `base`, `dir`, `ext`, `clean`, `isAbs`, `osBase`, `osDir`, `osExt`, `osClean`, `osIsAbs`
 - [Flow Control Functions](flow_control.md): `fail`
 - Advanced Functions
   - [UUID Functions](uuid.md): `uuidv4`
@@ -20,4 +20,3 @@ The Sprig library provides over 70 template functions for Go's template language
   - [Version Comparison Functions](semver.md): `semver`, `semverCompare`
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
   - [Cryptographic and Security Functions](crypto.md): `derivePassword`, `sha256sum`, `genPrivateKey`, etc.
-

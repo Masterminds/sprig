@@ -10,12 +10,12 @@ Paths separated by the slash character (`/`), processed by the `path` package.
 Examples:
 
 - The [Linux](https://en.wikipedia.org/wiki/Linux) and
-[MacOS](https://en.wikipedia.org/wiki/MacOS)
-[filesystems](https://en.wikipedia.org/wiki/File_system):
-`/home/user/file`, `/etc/config`;
+  [MacOS](https://en.wikipedia.org/wiki/MacOS)
+  [filesystems](https://en.wikipedia.org/wiki/File_system):
+  `/home/user/file`, `/etc/config`;
 - The path component of
-[URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier):
-`https://example.com/some/content/`, `ftp://example.com/file/`.
+  [URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier):
+  `https://example.com/some/content/`, `ftp://example.com/file/`.
 
 ### base
 
@@ -65,50 +65,50 @@ These are the recommended functions to use when parsing paths of local filesyste
 Examples:
 
 - Running on Linux or MacOS the filesystem path is separated by the slash character (`/`):
-`/home/user/file`, `/etc/config`;
+  `/home/user/file`, `/etc/config`;
 - Running on [Windows](https://en.wikipedia.org/wiki/Microsoft_Windows)
-the filesystem path is separated by the backslash character (`\`):
-`C:\Users\Username\`, `C:\Program Files\Application\`;
+  the filesystem path is separated by the backslash character (`\`):
+  `C:\Users\Username\`, `C:\Program Files\Application\`;
 
-### fpBase
+### osBase
 
 Return the last element of a filepath.
 
 ```
-fpBase "/foo/bar/baz"
-fpBase "C:\\foo\\bar\\baz"
+osBase "/foo/bar/baz"
+osBase "C:\\foo\\bar\\baz"
 ```
 
 The above prints "baz" on Linux and Windows, respectively.
 
-### fpDir
+### osDir
 
-Return the directory, stripping the last part of the path. So `fpDir "/foo/bar/baz"`
-returns `/foo/bar` on Linux, and `fpDir "C:\\foo\\bar\\baz"`
+Return the directory, stripping the last part of the path. So `osDir "/foo/bar/baz"`
+returns `/foo/bar` on Linux, and `osDir "C:\\foo\\bar\\baz"`
 returns `C:\\foo\\bar` on Windows.
 
-### fpClean
+### osClean
 
 Clean up a path.
 
 ```
-fpClean "/foo/bar/../baz"
-fpClean "C:\\foo\\bar\\..\\baz"
+osClean "/foo/bar/../baz"
+osClean "C:\\foo\\bar\\..\\baz"
 ```
 
 The above resolves the `..` and returns `foo/baz` on Linux and `C:\\foo\\baz` on Windows.
 
-### fpExt
+### osExt
 
 Return the file extension.
 
 ```
-fpExt "/foo.bar"
-fpExt "C:\\foo.bar"
+osExt "/foo.bar"
+osExt "C:\\foo.bar"
 ```
 
 The above returns `.bar` on Linux and Windows, respectively.
 
-### fpIsAbs
+### osIsAbs
 
-To check whether a file path is absolute, use `fpIsAbs`.
+To check whether a file path is absolute, use `osIsAbs`.

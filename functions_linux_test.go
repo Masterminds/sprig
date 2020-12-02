@@ -6,23 +6,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestFpBase(t *testing.T) {
-	assert.NoError(t, runt(`{{ fpBase "foo/bar" }}`, "bar"))
+func TestOsBase(t *testing.T) {
+	assert.NoError(t, runt(`{{ osBase "foo/bar" }}`, "bar"))
 }
 
-func TestFpDir(t *testing.T) {
-	assert.NoError(t, runt(`{{ fpDir "foo/bar/baz" }}`, "foo/bar"))
+func TestOsDir(t *testing.T) {
+	assert.NoError(t, runt(`{{ osDir "foo/bar/baz" }}`, "foo/bar"))
 }
 
-func TestFpIsAbs(t *testing.T) {
-	assert.NoError(t, runt(`{{ fpIsAbs "/foo" }}`, "true"))
-	assert.NoError(t, runt(`{{ fpIsAbs "foo" }}`, "false"))
+func TestOsIsAbs(t *testing.T) {
+	assert.NoError(t, runt(`{{ osIsAbs "/foo" }}`, "true"))
+	assert.NoError(t, runt(`{{ osIsAbs "foo" }}`, "false"))
 }
 
-func TestFpClean(t *testing.T) {
-	assert.NoError(t, runt(`{{ fpClean "/foo/../foo/../bar" }}`, "/bar"))
+func TestOsClean(t *testing.T) {
+	assert.NoError(t, runt(`{{ osClean "/foo/../foo/../bar" }}`, "/bar"))
 }
 
-func TestFpExt(t *testing.T) {
-	assert.NoError(t, runt(`{{ fpExt "/foo/bar/baz.txt" }}`, ".txt"))
+func TestOsExt(t *testing.T) {
+	assert.NoError(t, runt(`{{ osExt "/foo/bar/baz.txt" }}`, ".txt"))
 }

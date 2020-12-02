@@ -252,11 +252,11 @@ var genericMap = map[string]interface{}{
 	"isAbs": path.IsAbs,
 
 	// Filepaths:
-	"fpBase":  filepath.Base,
-	"fpClean": filepath.Clean,
-	"fpDir":   filepath.Dir,
-	"fpExt":   filepath.Ext,
-	"fpIsAbs": filepath.IsAbs,
+	"osBase":  filepath.Base,
+	"osClean": filepath.Clean,
+	"osDir":   filepath.Dir,
+	"osExt":   filepath.Ext,
+	"osIsAbs": filepath.IsAbs,
 
 	// Encoding:
 	"b64enc": base64encode,
