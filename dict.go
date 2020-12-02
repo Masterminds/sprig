@@ -149,7 +149,7 @@ func mustDeepCopy(i interface{}) (interface{}, error) {
 
 func dig(ps ...interface{}) (interface{}, error) {
 	if len(ps) < 3 {
-		panic("dig needs at least tree arguments")
+		panic("dig needs at least three arguments")
 	}
 	dict := ps[len(ps)-1].(map[string]interface{})
 	def := ps[len(ps)-2]
