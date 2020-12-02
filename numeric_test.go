@@ -238,5 +238,24 @@ func TestRandomInt(t *testing.T) {
 		assert.True(t, func(min, max, r int) bool {
 			return r >= v.min && r < v.max
 		}(v.min, v.max, r))
+
+func TestSeq(t *testing.T) {
+	tests := map[string]string{
+		`{{seq 0 1 3}}`:   "0 1 2 3",
+		`{{seq 0 3 10}}`:  "0 3 6 9",
+		`{{seq 3 3 2}}`:   "",
+		`{{seq 3 -3 2}}`:  "3",
+		`{{seq}}`:         "",
+		`{{seq 0 4}}`:     "0 1 2 3 4",
+		`{{seq 5}}`:       "1 2 3 4 5",
+		`{{seq -5}}`:      "1 0 -1 -2 -3 -4 -5",
+		`{{seq 0}}`:       "1 0",
+		`{{seq 0 1 2 3}}`: "",
+		`{{seq 0 -4}}`:    "0 -1 -2 -3 -4",
+	}
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
 	}
 }

@@ -92,6 +92,20 @@ func TestDateInZone(t *testing.T) {
 	}
 }
 
+func TestDuration(t *testing.T) {
+	tpl := "{{ duration .Secs }}"
+	if err := runtv(tpl, "1m1s", map[string]interface{}{"Secs": "61"}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "1h0m0s", map[string]interface{}{"Secs": "3600"}); err != nil {
+		t.Error(err)
+	}
+	// 1d2h3m4s but go is opinionated
+	if err := runtv(tpl, "26h3m4s", map[string]interface{}{"Secs": "93784"}); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestDurationRound(t *testing.T) {
 	tpl := "{{ durationRound .Time }}"
 	if err := runtv(tpl, "2h", map[string]interface{}{"Time": "2h5s"}); err != nil {

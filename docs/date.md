@@ -47,6 +47,16 @@ Same as `date`, but with a timezone.
 dateInZone "2006-01-02" (now) "UTC"
 ```
 
+## duration
+
+Formats a given amount of seconds as a `time.Duration`.
+
+This returns 1m35s
+
+```
+duration 95
+```
+
 ## durationRound
 
 Rounds a given duration to the most significant unit. Strings and `time.Duration`
@@ -98,7 +108,7 @@ now | htmlDate
 Same as htmlDate, but with a timezone.
 
 ```
-htmlDate (now) "UTC"
+htmlDateInZone (now) "UTC"
 ```
 
 ## toDate, mustToDate
