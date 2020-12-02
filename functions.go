@@ -3,6 +3,7 @@ package sprig
 import (
 	"errors"
 	"html/template"
+	"math/rand"
 	"os"
 	"path"
 	"reflect"
@@ -200,6 +201,7 @@ var genericMap = map[string]interface{}{
 		}
 		return val
 	},
+	"randInt": func(min, max int) int { return rand.Intn(max-min) + min },
 	"biggest": max,
 	"max":     max,
 	"min":     min,
