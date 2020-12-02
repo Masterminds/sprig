@@ -10,7 +10,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Defaults Functions](defaults.md): `default`, `empty`, `coalesce`, `fromJson`, `toJson`, `toPrettyJson`, `toRawJson`, `ternary`
 - [Encoding Functions](encoding.md): `b64enc`, `b64dec`, etc.
 - [Lists and List Functions](lists.md): `list`, `first`, `uniq`, etc.
-- [Dictionaries and Dict Functions](dicts.md): `get`, `set`, `dict`, `hasKey`, `pluck`, `deepCopy`, etc.
+- [Dictionaries and Dict Functions](dicts.md): `get`, `set`, `dict`, `hasKey`, `pluck`, `dig`, `deepCopy`, etc.
 - [Type Conversion Functions](conversion.md): `atoi`, `int64`, `toString`, etc.
 - [File Path Functions](paths.md): `base`, `dir`, `ext`, `clean`, `isAbs`
 - [Flow Control Functions](flow_control.md): `fail`
@@ -21,4 +21,3 @@ The Sprig library provides over 70 template functions for Go's template language
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
   - [Cryptographic and Security Functions](crypto.md): `derivePassword`, `sha256sum`, `genPrivateKey`, etc.
   - [Network](network.md): `getHostByName`
-
