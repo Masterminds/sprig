@@ -58,6 +58,15 @@ The above will first check to see if `.name` is empty. If it is not, it will ret
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
 
+## fromJson, mustFromJson
+
+`fromJson` decodes a JSON document into a structure. If the input cannot be decoded as JSON the function will return an empty string.
+`mustFromJson` will return an error in case the JSON is invalid.
+
+```
+fromJson "{\"foo\": 55}"
+```
+
 ## toJson, mustToJson
 
 The `toJson` function encodes an item into a JSON string. If the item cannot be converted to JSON the function will return an empty string.
