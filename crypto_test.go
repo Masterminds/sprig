@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/crypto/bcrypt"
+	bcrypt_lib "golang.org/x/crypto/bcrypt"
 )
 
 const (
@@ -37,6 +37,16 @@ func TestAdler32Sum(t *testing.T) {
 	}
 }
 
+func TestBcrypt(t *testing.T) {
+	out, err := runRaw(`{{"abc" | bcrypt}}`, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if bcrypt_lib.CompareHashAndPassword([]byte(out), []byte("abc")) != nil {
+		t.Error("Generated hash is not the equivalent for password:", "abc")
+	}
+}
+
 type HtpasswdCred struct {
 	Username string
 	Password string
@@ -59,7 +69,7 @@ func TestHtpasswd(t *testing.T) {
 		if 0 != strings.Compare(credential.Username, result[0]) && credential.Valid {
 			t.Error("Generated username did not match for:", credential.Username)
 		}
-		if bcrypt.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
+		if bcrypt_lib.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
 			t.Error("Generated hash is not the equivalent for password:", credential.Password)
 		}
 	}
