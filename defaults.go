@@ -69,6 +69,28 @@ func coalesce(v ...interface{}) interface{} {
 	return nil
 }
 
+// all returns true if empty(x) is false for all values x in the list.
+// If the list is empty, return true.
+func all(v ...interface{}) bool {
+	for _, val := range v {
+		if empty(val) {
+			return false
+		}
+	}
+	return true
+}
+
+// any returns true if empty(x) is false for any x in the list.
+// If the list is empty, return false.
+func any(v ...interface{}) bool {
+	for _, val := range v {
+		if !empty(val) {
+			return true
+		}
+	}
+	return false
+}
+
 // fromJson decodes JSON into a structured value, ignoring errors.
 func fromJson(v string) interface{} {
 	output, _ := mustFromJson(v)

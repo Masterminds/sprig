@@ -220,6 +220,8 @@ var genericMap = map[string]interface{}{
 	"default":          dfault,
 	"empty":            empty,
 	"coalesce":         coalesce,
+	"all":              all,
+	"any":              any,
 	"compact":          compact,
 	"mustCompact":      mustCompact,
 	"fromJson":         fromJson,
