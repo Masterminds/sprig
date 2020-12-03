@@ -194,8 +194,20 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 		b, _ := x509.MarshalECPrivateKey(k)
 		return &pem.Block{Type: "EC PRIVATE KEY", Bytes: b}
 	default:
-		return nil
+		// attempt PKCS#8 format for all other keys
+		b, err := x509.MarshalPKCS8PrivateKey(k)
+		if err != nil {
+			return nil
+		}
+		return &pem.Block{Type: "PRIVATE KEY", Bytes: b}
 	}
+}
+
+func getPublicKey(priv crypto.PrivateKey) (crypto.PublicKey, error) {
+	if withPublicKey, ok := priv.(interface { Public() crypto.PublicKey }); ok {
+		return withPublicKey.Public(), nil
+	}
+	return nil, fmt.Errorf("unable to get public key for type %T", priv)
 }
 
 type certificate struct {
@@ -234,6 +246,31 @@ func generateCertificateAuthority(
 	cn string,
 	daysValid int,
 ) (certificate, error) {
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
+	}
+
+	return generateCertificateAuthorityWithKey(cn, daysValid, priv)
+}
+
+func generateCertificateAuthorityWithPEMKey(
+	cn string,
+	daysValid int,
+	privPEM string,
+) (certificate, error) {
+	priv, err := parsePrivateKeyPEM(privPEM)
+	if err != nil {
+		return certificate{}, fmt.Errorf("error parsing private key PEM: %s", err)
+	}
+	return generateCertificateAuthorityWithKey(cn, daysValid, priv)
+}
+
+func generateCertificateAuthorityWithKey(
+	cn string,
+	daysValid int,
+	priv crypto.PrivateKey,
+) (certificate, error) {
 	ca := certificate{}
 
 	template, err := getBaseCertTemplate(cn, nil, nil, daysValid)
@@ -246,11 +283,6 @@ func generateCertificateAuthority(
 		x509.KeyUsageCertSign
 	template.IsCA = true
 
-	priv, err := rsa.GenerateKey(rand.Reader, 2048)
-	if err != nil {
-		return ca, fmt.Errorf("error generating rsa key: %s", err)
-	}
-
 	ca.Cert, ca.Key, err = getCertAndKey(template, priv, template, priv)
 
 	return ca, err
@@ -262,16 +294,25 @@ func generateSelfSignedCertificate(
 	alternateDNS []interface{},
 	daysValid int,
 ) (certificate, error) {
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
+	}
+	return generateSelfSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, priv)
+}
+
+func generateSelfSignedCertificateWithKey(
+	cn string,
+	ips []interface{},
+	alternateDNS []interface{},
+	daysValid int,
+	priv crypto.PrivateKey,
+) (certificate, error) {
 	cert := certificate{}
 
 	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
 	if err != nil {
 		return cert, err
-	}
-
-	priv, err := rsa.GenerateKey(rand.Reader, 2048)
-	if err != nil {
-		return cert, fmt.Errorf("error generating rsa key: %s", err)
 	}
 
 	cert.Cert, cert.Key, err = getCertAndKey(template, priv, template, priv)
@@ -285,6 +326,21 @@ func generateSignedCertificate(
 	alternateDNS []interface{},
 	daysValid int,
 	ca certificate,
+) (certificate, error) {
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
+	}
+	return generateSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, ca, priv)
+}
+
+func generateSignedCertificateWithKey(
+	cn string,
+	ips []interface{},
+	alternateDNS []interface{},
+	daysValid int,
+	ca certificate,
+	priv crypto.PrivateKey,
 ) (certificate, error) {
 	cert := certificate{}
 
@@ -307,11 +363,6 @@ func generateSignedCertificate(
 		return cert, err
 	}
 
-	priv, err := rsa.GenerateKey(rand.Reader, 2048)
-	if err != nil {
-		return cert, fmt.Errorf("error generating rsa key: %s", err)
-	}
-
 	cert.Cert, cert.Key, err = getCertAndKey(
 		template,
 		priv,
@@ -324,15 +375,19 @@ func generateSignedCertificate(
 
 func getCertAndKey(
 	template *x509.Certificate,
-	signeeKey *rsa.PrivateKey,
+	signeeKey crypto.PrivateKey,
 	parent *x509.Certificate,
 	signingKey crypto.PrivateKey,
 ) (string, string, error) {
+	signeePubKey, err := getPublicKey(signeeKey)
+	if err != nil {
+		return "", "", fmt.Errorf("error retrieving public key from signee key: %s", err)
+	}
 	derBytes, err := x509.CreateCertificate(
 		rand.Reader,
 		template,
 		parent,
-		&signeeKey.PublicKey,
+		signeePubKey,
 		signingKey,
 	)
 	if err != nil {
@@ -350,10 +405,7 @@ func getCertAndKey(
 	keyBuffer := bytes.Buffer{}
 	if err := pem.Encode(
 		&keyBuffer,
-		&pem.Block{
-			Type:  "RSA PRIVATE KEY",
-			Bytes: x509.MarshalPKCS1PrivateKey(signeeKey),
-		},
+		pemBlockForKey(signeeKey),
 	); err != nil {
 		return "", "", fmt.Errorf("error pem-encoding key: %s", err)
 	}
