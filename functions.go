@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"path"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -248,12 +249,19 @@ var genericMap = map[string]interface{}{
 	// Network:
 	"getHostByName": getHostByName,
 
-	// File Paths:
+	// Paths:
 	"base":  path.Base,
 	"dir":   path.Dir,
 	"clean": path.Clean,
 	"ext":   path.Ext,
 	"isAbs": path.IsAbs,
+
+	// Filepaths:
+	"osBase":  filepath.Base,
+	"osClean": filepath.Clean,
+	"osDir":   filepath.Dir,
+	"osExt":   filepath.Ext,
+	"osIsAbs": filepath.IsAbs,
 
 	// Encoding:
 	"b64enc": base64encode,
