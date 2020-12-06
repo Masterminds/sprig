@@ -32,7 +32,6 @@ import (
 
 	"github.com/google/uuid"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
-	"golang.org/x/crypto/ed25519"
 	"golang.org/x/crypto/scrypt"
 )
 
@@ -162,8 +161,9 @@ func generatePrivateKey(typ string) string {
 	case "ecdsa":
 		// again, good enough for government work
 		priv, err = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	case "ed25519":
-		_, priv, err = ed25519.GenerateKey(rand.Reader)
+	// TODO: uncomment once go1.12 support is dropped.
+	//case "ed25519":
+	//	_, priv, err = ed25519.GenerateKey(rand.Reader)
 	default:
 		return "Unknown type " + typ
 	}
