@@ -319,7 +319,7 @@ func generateCertificateAuthority(
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
 
-	return generateCertificateAuthorityWithKey(cn, daysValid, priv)
+	return generateCertificateAuthorityWithKeyInternal(cn, daysValid, priv)
 }
 
 func generateCertificateAuthorityWithPEMKey(
@@ -331,10 +331,10 @@ func generateCertificateAuthorityWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateCertificateAuthorityWithKey(cn, daysValid, priv)
+	return generateCertificateAuthorityWithKeyInternal(cn, daysValid, priv)
 }
 
-func generateCertificateAuthorityWithKey(
+func generateCertificateAuthorityWithKeyInternal(
 	cn string,
 	daysValid int,
 	priv crypto.PrivateKey,
@@ -366,7 +366,7 @@ func generateSelfSignedCertificate(
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
 }
 
 func generateSelfSignedCertificateWithPEMKey(
@@ -380,10 +380,10 @@ func generateSelfSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
 }
 
-func generateSelfSignedCertificateWithKey(
+func generateSelfSignedCertificateWithKeyInternal(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
@@ -413,7 +413,7 @@ func generateSignedCertificate(
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
 }
 
 func generateSignedCertificateWithPEMKey(
@@ -428,10 +428,10 @@ func generateSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSignedCertificateWithKey(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
 }
 
-func generateSignedCertificateWithKey(
+func generateSignedCertificateWithKeyInternal(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
