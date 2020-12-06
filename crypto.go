@@ -14,7 +14,6 @@ import (
 	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/sha256"
-	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
@@ -222,7 +221,7 @@ func parsePrivateKeyPEM(pemBlock string) (crypto.PrivateKey, error) {
 		return nil, fmt.Errorf("no private key data in PEM block of type %s", block.Type)
 	}
 
-	switch block.Type[:len(block.Type) - 12] {  // strip " PRIVATE KEY"
+	switch block.Type[:len(block.Type)-12] { // strip " PRIVATE KEY"
 	case "RSA":
 		priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
@@ -257,10 +256,14 @@ func parsePrivateKeyPEM(pemBlock string) (crypto.PrivateKey, error) {
 }
 
 func getPublicKey(priv crypto.PrivateKey) (crypto.PublicKey, error) {
-	if withPublicKey, ok := priv.(interface { Public() crypto.PublicKey }); ok {
-		return withPublicKey.Public(), nil
+	switch k := priv.(type) {
+	case interface{ Public() crypto.PublicKey }:
+		return k.Public(), nil
+	case *dsa.PrivateKey:
+		return &k.PublicKey, nil
+	default:
+		return nil, fmt.Errorf("unable to get public key for type %T", priv)
 	}
-	return nil, fmt.Errorf("unable to get public key for type %T", priv)
 }
 
 type certificate struct {
@@ -281,10 +284,22 @@ func buildCustomCertificate(b64cert string, b64key string) (certificate, error) 
 		return crt, errors.New("unable to decode base64 private key")
 	}
 
-	_, err = tls.X509KeyPair(cert, key)
+	decodedCert, _ := pem.Decode(cert)
+	if decodedCert == nil {
+		return crt, errors.New("unable to decode certificate")
+	}
+	_, err = x509.ParseCertificate(decodedCert.Bytes)
 	if err != nil {
 		return crt, fmt.Errorf(
-			"error parsing certificate: X509KeyPair: %s",
+			"error parsing certificate: decodedCert.Bytes: %s",
+			err,
+		)
+	}
+
+	_, err = parsePrivateKeyPEM(string(key))
+	if err != nil {
+		return crt, fmt.Errorf(
+			"error parsing private key: %s",
 			err,
 		)
 	}
@@ -426,18 +441,23 @@ func generateSignedCertificateWithKey(
 ) (certificate, error) {
 	cert := certificate{}
 
-	signerTLSCert, err := tls.X509KeyPair([]byte(ca.Cert), []byte(ca.Key))
+	decodedSignerCert, _ := pem.Decode([]byte(ca.Cert))
+	if decodedSignerCert == nil {
+		return cert, errors.New("unable to decode certificate")
+	}
+	signerCert, err := x509.ParseCertificate(decodedSignerCert.Bytes)
 	if err != nil {
 		return cert, fmt.Errorf(
-			"error parsing certificate: X509KeyPair: %s",
+			"error parsing certificate: decodedSignerCert.Bytes: %s",
 			err,
 		)
 	}
-	// Leaf in the returned tls.Certificate is nil because it is not retained per the
-	// X509KeyPair documentation, so we need to parse it again (no need to decode PEM).
-	signerTLSCert.Leaf, err = x509.ParseCertificate(signerTLSCert.Certificate[0])
+	signerKey, err := parsePrivateKeyPEM(ca.Key)
 	if err != nil {
-		return cert, fmt.Errorf("error parsing x509 certificate: %s", err)
+		return cert, fmt.Errorf(
+			"error parsing private key: %s",
+			err,
+		)
 	}
 
 	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
@@ -448,8 +468,8 @@ func generateSignedCertificateWithKey(
 	cert.Cert, cert.Key, err = getCertAndKey(
 		template,
 		priv,
-		signerTLSCert.Leaf,
-		signerTLSCert.PrivateKey,
+		signerCert,
+		signerKey,
 	)
 
 	return cert, err
