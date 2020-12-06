@@ -7,7 +7,6 @@ import (
 	"crypto/cipher"
 	"crypto/dsa"
 	"crypto/ecdsa"
-	"crypto/ed25519"
 	"crypto/elliptic"
 	"crypto/hmac"
 	"crypto/rand"
@@ -33,6 +32,7 @@ import (
 
 	"github.com/google/uuid"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/ed25519"
 	"golang.org/x/crypto/scrypt"
 )
 
