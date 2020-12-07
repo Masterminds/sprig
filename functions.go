@@ -15,6 +15,7 @@ import (
 
 	util "github.com/Masterminds/goutils"
 	"github.com/huandu/xstrings"
+	"github.com/shopspring/decimal"
 )
 
 // FuncMap produces the function map.
@@ -204,9 +205,27 @@ var genericMap = map[string]interface{}{
 		return val
 	},
 	"randInt": func(min, max int) int { return rand.Intn(max-min) + min },
+	"add1f": func(i interface{}) float64 {
+		return execDecimalOp(i, []interface{}{1}, func(d1, d2 decimal.Decimal) decimal.Decimal { return d1.Add(d2) })
+	},
+	"addf": func(i ...interface{}) float64 {
+		a := interface{}(float64(0))
+		return execDecimalOp(a, i, func(d1, d2 decimal.Decimal) decimal.Decimal { return d1.Add(d2) })
+	},
+	"subf": func(a interface{}, v ...interface{}) float64 {
+		return execDecimalOp(a, v, func(d1, d2 decimal.Decimal) decimal.Decimal { return d1.Sub(d2) })
+	},
+	"divf": func(a interface{}, v ...interface{}) float64 {
+		return execDecimalOp(a, v, func(d1, d2 decimal.Decimal) decimal.Decimal { return d1.Div(d2) })
+	},
+	"mulf": func(a interface{}, v ...interface{}) float64 {
+		return execDecimalOp(a, v, func(d1, d2 decimal.Decimal) decimal.Decimal { return d1.Mul(d2) })
+	},
 	"biggest": max,
 	"max":     max,
 	"min":     min,
+	"maxf":    maxf,
+	"minf":    minf,
 	"ceil":    ceil,
 	"floor":   floor,
 	"round":   round,

@@ -1,8 +1,6 @@
-# Math Functions
+# Integer Math Functions
 
-All math functions operate on `int64` values unless specified otherwise.
-
-(In the future, these will be extended to handle floats as well)
+The following math functions operate on `int64` values.
 
 ## add
 
