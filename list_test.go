@@ -44,6 +44,32 @@ func TestMustPush(t *testing.T) {
 	}
 }
 
+func TestChunk(t *testing.T) {
+	tests := map[string]string{
+		`{{ tuple 1 2 3 4 5 6 7 | chunk 3 | len }}`:                                 "3",
+		`{{ tuple | chunk 3 | len }}`:                                               "0",
+		`{{ range ( tuple 1 2 3 4 5 6 7 8 9 | chunk 3 ) }}{{. | join "-"}}|{{end}}`: "1-2-3|4-5-6|7-8-9|",
+		`{{ range ( tuple 1 2 3 4 5 6 7 8 | chunk 3 ) }}{{. | join "-"}}|{{end}}`:   "1-2-3|4-5-6|7-8|",
+		`{{ range ( tuple 1 2 | chunk 3 ) }}{{. | join "-"}}|{{end}}`:               "1-2|",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
+func TestMustChunk(t *testing.T) {
+	tests := map[string]string{
+		`{{ tuple 1 2 3 4 5 6 7 | mustChunk 3 | len }}`:                                 "3",
+		`{{ tuple | mustChunk 3 | len }}`:                                               "0",
+		`{{ range ( tuple 1 2 3 4 5 6 7 8 9 | mustChunk 3 ) }}{{. | join "-"}}|{{end}}`: "1-2-3|4-5-6|7-8-9|",
+		`{{ range ( tuple 1 2 3 4 5 6 7 8 | mustChunk 3 ) }}{{. | join "-"}}|{{end}}`:   "1-2-3|4-5-6|7-8|",
+		`{{ range ( tuple 1 2 | mustChunk 3 ) }}{{. | join "-"}}|{{end}}`:               "1-2|",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
 func TestPrepend(t *testing.T) {
 	tests := map[string]string{
 		`{{ $t := tuple 1 2 3  }}{{ prepend $t 0 | len }}`:                             "4",

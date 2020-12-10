@@ -332,6 +332,8 @@ var genericMap = map[string]interface{}{
 	"mustSlice":   mustSlice,
 	"concat":      concat,
 	"dig":         dig,
+	"chunk":       chunk,
+	"mustChunk":   mustChunk,
 
 	// Crypto:
 	"bcrypt":            bcrypt,
