@@ -7,6 +7,7 @@ import (
 	"crypto/cipher"
 	"crypto/dsa"
 	"crypto/ecdsa"
+	"crypto/ed25519"
 	"crypto/elliptic"
 	"crypto/hmac"
 	"crypto/rand"
@@ -161,9 +162,8 @@ func generatePrivateKey(typ string) string {
 	case "ecdsa":
 		// again, good enough for government work
 		priv, err = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	// TODO: uncomment once go1.12 support is dropped.
-	//case "ed25519":
-	//	_, priv, err = ed25519.GenerateKey(rand.Reader)
+	case "ed25519":
+		_, priv, err = ed25519.GenerateKey(rand.Reader)
 	default:
 		return "Unknown type " + typ
 	}
