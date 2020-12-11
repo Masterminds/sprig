@@ -22,8 +22,7 @@ var (
 	// are fast to generate.
 	fastCertKeyAlgos = []string{
 		"ecdsa",
-		// TODO: Uncomment once go1.12 support is dropped.
-		// "ed25519",
+		"ed25519",
 	}
 )
 
@@ -144,15 +143,14 @@ func TestGenPrivateKey(t *testing.T) {
 	if !strings.Contains(out, "EC PRIVATE KEY") {
 		t.Error("Expected EC PRIVATE KEY")
 	}
-	// TODO: uncomment once go1.12 support is dropped
-	//tpl = `{{genPrivateKey "ed25519"}}`
-	//out, err = runRaw(tpl, nil)
-	//if err != nil {
-	//	t.Error(err)
-	//}
-	//if !strings.Contains(out, "PRIVATE KEY") {
-	//	t.Error("Expected PRIVATE KEY")
-	//}
+	tpl = `{{genPrivateKey "ed25519"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "PRIVATE KEY") {
+		t.Error("Expected PRIVATE KEY")
+	}
 	// test bad
 	tpl = `{{genPrivateKey "bad"}}`
 	out, err = runRaw(tpl, nil)
