@@ -17,6 +17,16 @@ const (
 	endCertificate   = "-----END CERTIFICATE-----"
 )
 
+var (
+	// fastCertKeyAlgos is the list of private key algorithms that are supported for certificate use, and
+	// are fast to generate.
+	fastCertKeyAlgos = []string{
+		"ecdsa",
+		// TODO: Uncomment once go1.12 support is dropped.
+		// "ed25519",
+	}
+)
+
 func TestSha256Sum(t *testing.T) {
 	tpl := `{{"abc" | sha256sum}}`
 	if err := runt(tpl, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"); err != nil {
@@ -134,6 +144,15 @@ func TestGenPrivateKey(t *testing.T) {
 	if !strings.Contains(out, "EC PRIVATE KEY") {
 		t.Error("Expected EC PRIVATE KEY")
 	}
+	// TODO: uncomment once go1.12 support is dropped
+	//tpl = `{{genPrivateKey "ed25519"}}`
+	//out, err = runRaw(tpl, nil)
+	//if err != nil {
+	//	t.Error(err)
+	//}
+	//if !strings.Contains(out, "PRIVATE KEY") {
+	//	t.Error("Expected PRIVATE KEY")
+	//}
 	// test bad
 	tpl = `{{genPrivateKey "bad"}}`
 	out, err = runRaw(tpl, nil)
@@ -223,12 +242,32 @@ func TestBuildCustomCert(t *testing.T) {
 }
 
 func TestGenCA(t *testing.T) {
+	testGenCA(t, nil)
+}
+
+func TestGenCAWithKey(t *testing.T) {
+	for _, keyAlgo := range fastCertKeyAlgos {
+		t.Run(keyAlgo, func(t *testing.T) {
+			testGenCA(t, &keyAlgo)
+		})
+	}
+}
+
+func testGenCA(t *testing.T, keyAlgo *string) {
 	const cn = "foo-ca"
 
+	var genCAExpr string
+	if keyAlgo == nil {
+		genCAExpr = "genCA"
+	} else {
+		genCAExpr = fmt.Sprintf(`genPrivateKey "%s" | genCAWithKey`, *keyAlgo)
+	}
+
 	tpl := fmt.Sprintf(
-		`{{- $ca := genCA "%s" 365 }}
+		`{{- $ca := %s "%s" 365 }}
 {{ $ca.Cert }}
 `,
+		genCAExpr,
 		cn,
 	)
 	out, err := runRaw(tpl, nil)
@@ -248,6 +287,18 @@ func TestGenCA(t *testing.T) {
 }
 
 func TestGenSelfSignedCert(t *testing.T) {
+	testGenSelfSignedCert(t, nil)
+}
+
+func TestGenSelfSignedCertWithKey(t *testing.T) {
+	for _, keyAlgo := range fastCertKeyAlgos {
+		t.Run(keyAlgo, func(t *testing.T) {
+			testGenSelfSignedCert(t, &keyAlgo)
+		})
+	}
+}
+
+func testGenSelfSignedCert(t *testing.T, keyAlgo *string) {
 	const (
 		cn   = "foo.com"
 		ip1  = "10.0.0.1"
@@ -256,9 +307,17 @@ func TestGenSelfSignedCert(t *testing.T) {
 		dns2 = "bat.com"
 	)
 
+	var genSelfSignedCertExpr string
+	if keyAlgo == nil {
+		genSelfSignedCertExpr = "genSelfSignedCert"
+	} else {
+		genSelfSignedCertExpr = fmt.Sprintf(`genPrivateKey "%s" | genSelfSignedCertWithKey`, *keyAlgo)
+	}
+
 	tpl := fmt.Sprintf(
-		`{{- $cert := genSelfSignedCert "%s" (list "%s" "%s") (list "%s" "%s") 365 }}
+		`{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") 365 }}
 {{ $cert.Cert }}`,
+		genSelfSignedCertExpr,
 		cn,
 		ip1,
 		ip2,
@@ -289,6 +348,20 @@ func TestGenSelfSignedCert(t *testing.T) {
 }
 
 func TestGenSignedCert(t *testing.T) {
+	testGenSignedCert(t, nil, nil)
+}
+
+func TestGenSignedCertWithKey(t *testing.T) {
+	for _, caKeyAlgo := range fastCertKeyAlgos {
+		for _, certKeyAlgo := range fastCertKeyAlgos {
+			t.Run(fmt.Sprintf("%s-%s", caKeyAlgo, certKeyAlgo), func(t *testing.T) {
+				testGenSignedCert(t, &caKeyAlgo, &certKeyAlgo)
+			})
+		}
+	}
+}
+
+func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 	const (
 		cn   = "foo.com"
 		ip1  = "10.0.0.1"
@@ -297,11 +370,25 @@ func TestGenSignedCert(t *testing.T) {
 		dns2 = "bat.com"
 	)
 
+	var genCAExpr, genSignedCertExpr string
+	if caKeyAlgo == nil {
+		genCAExpr = "genCA"
+	} else {
+		genCAExpr = fmt.Sprintf(`genPrivateKey "%s" | genCAWithKey`, *caKeyAlgo)
+	}
+	if certKeyAlgo == nil {
+		genSignedCertExpr = "genSignedCert"
+	} else {
+		genSignedCertExpr = fmt.Sprintf(`genPrivateKey "%s" | genSignedCertWithKey`, *certKeyAlgo)
+	}
+
 	tpl := fmt.Sprintf(
-		`{{- $ca := genCA "foo" 365 }}
-{{- $cert := genSignedCert "%s" (list "%s" "%s") (list "%s" "%s") 365 $ca }}
+		`{{- $ca := %s "foo" 365 }}
+{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") 365 $ca }}
 {{ $cert.Cert }}
 `,
+		genCAExpr,
+		genSignedCertExpr,
 		cn,
 		ip1,
 		ip2,
