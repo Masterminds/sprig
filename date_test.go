@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"math"
 	"testing"
 	"time"
 )
@@ -95,6 +96,18 @@ func TestDateInZone(t *testing.T) {
 func TestDuration(t *testing.T) {
 	tpl := "{{ duration .Secs }}"
 	if err := runtv(tpl, "1m1s", map[string]interface{}{"Secs": "61"}); err != nil {
+		t.Error(err)
+	}
+	// check int
+	if err := runtv(tpl, "1m1s", map[string]interface{}{"Secs": 61}); err != nil {
+		t.Error(err)
+	}
+	// check int32
+	if err := runtv(tpl, "596523h14m7s", map[string]interface{}{"Secs": math.MaxInt32}); err != nil {
+		t.Error(err)
+	}
+	// check uint32
+	if err := runtv(tpl, "1193046h28m15s", map[string]interface{}{"Secs": math.MaxUint32}); err != nil {
 		t.Error(err)
 	}
 	if err := runtv(tpl, "1h0m0s", map[string]interface{}{"Secs": "3600"}); err != nil {
