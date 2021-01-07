@@ -47,6 +47,11 @@ func TestExt(t *testing.T) {
 	assert.NoError(t, runt(`{{ ext "/foo/bar/baz.txt" }}`, ".txt"))
 }
 
+func TestRegex(t *testing.T) {
+	assert.NoError(t, runt(`{{ regexQuoteMeta "1.2.3" }}`, "1\\.2\\.3"))
+	assert.NoError(t, runt(`{{ regexQuoteMeta "pretzel" }}`, "pretzel"))
+}
+
 // runt runs a template and checks that the output exactly matches the expected string.
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, map[string]string{})

@@ -89,6 +89,15 @@ func max(a interface{}, i ...interface{}) int64 {
 	return aa
 }
 
+func maxf(a interface{}, i ...interface{}) float64 {
+	aa := toFloat64(a)
+	for _, b := range i {
+		bb := toFloat64(b)
+		aa = math.Max(aa, bb)
+	}
+	return aa
+}
+
 func min(a interface{}, i ...interface{}) int64 {
 	aa := toInt64(a)
 	for _, b := range i {
@@ -96,6 +105,15 @@ func min(a interface{}, i ...interface{}) int64 {
 		if bb < aa {
 			aa = bb
 		}
+	}
+	return aa
+}
+
+func minf(a interface{}, i ...interface{}) float64 {
+	aa := toFloat64(a)
+	for _, b := range i {
+		bb := toFloat64(b)
+		aa = math.Min(aa, bb)
 	}
 	return aa
 }

@@ -3,8 +3,10 @@ package sprig
 import (
 	"errors"
 	"html/template"
+	"math/rand"
 	"os"
 	"path"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -77,6 +79,7 @@ var nonhermeticFunctions = []string{
 	"randAlpha",
 	"randAscii",
 	"randNumeric",
+	"randBytes",
 	"uuidv4",
 
 	// OS
@@ -181,9 +184,12 @@ var genericMap = map[string]interface{}{
 		}
 		return val
 	},
+	"randInt": func(min, max int) int { return rand.Intn(max-min) + min },
 	"biggest": max,
 	"max":     max,
 	"min":     min,
+	"maxf":    maxf,
+	"minf":    minf,
 	"ceil":    ceil,
 	"floor":   floor,
 	"round":   round,
@@ -197,11 +203,15 @@ var genericMap = map[string]interface{}{
 	"default":          dfault,
 	"empty":            empty,
 	"coalesce":         coalesce,
+	"all":              all,
+	"any":              any,
 	"compact":          compact,
 	"mustCompact":      mustCompact,
+	"fromJson":         fromJson,
 	"toJson":           toJson,
 	"toPrettyJson":     toPrettyJson,
 	"toRawJson":        toRawJson,
+	"mustFromJson":     mustFromJson,
 	"mustToJson":       mustToJson,
 	"mustToPrettyJson": mustToPrettyJson,
 	"mustToRawJson":    mustToRawJson,
@@ -222,12 +232,19 @@ var genericMap = map[string]interface{}{
 	// Network:
 	"getHostByName": getHostByName,
 
-	// File Paths:
+	// Paths:
 	"base":  path.Base,
 	"dir":   path.Dir,
 	"clean": path.Clean,
 	"ext":   path.Ext,
 	"isAbs": path.IsAbs,
+
+	// Filepaths:
+	"osBase":  filepath.Base,
+	"osClean": filepath.Clean,
+	"osDir":   filepath.Dir,
+	"osExt":   filepath.Ext,
+	"osIsAbs": filepath.IsAbs,
 
 	// Encoding:
 	"b64enc": base64encode,
@@ -272,6 +289,9 @@ var genericMap = map[string]interface{}{
 	"slice":       slice,
 	"mustSlice":   mustSlice,
 	"concat":      concat,
+	"dig":         dig,
+	"chunk":       chunk,
+	"mustChunk":   mustChunk,
 
 	// Flow Control:
 	"fail": func(msg string) (string, error) { return "", errors.New(msg) },
@@ -289,6 +309,7 @@ var genericMap = map[string]interface{}{
 	"mustRegexReplaceAllLiteral": mustRegexReplaceAllLiteral,
 	"regexSplit":                 regexSplit,
 	"mustRegexSplit":             mustRegexSplit,
+	"regexQuoteMeta":             regexQuoteMeta,
 
 	// URLs:
 	"urlParse": urlParse,

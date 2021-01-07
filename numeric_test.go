@@ -1,6 +1,8 @@
 package sprig
 
 import (
+	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -45,6 +47,17 @@ func TestBiggest(t *testing.T) {
 		t.Error(err)
 	}
 }
+func TestMaxf(t *testing.T) {
+	tpl := `{{ maxf 1 2 3 345.7 5 6 7}}`
+	if err := runt(tpl, `345.7`); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ max 345 }}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+}
 func TestMin(t *testing.T) {
 	tpl := `{{ min 1 2 3 345 5 6 7}}`
 	if err := runt(tpl, `1`); err != nil {
@@ -52,6 +65,18 @@ func TestMin(t *testing.T) {
 	}
 
 	tpl = `{{ min 345}}`
+	if err := runt(tpl, `345`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMinf(t *testing.T) {
+	tpl := `{{ minf 1.4 2 3 345.6 5 6 7}}`
+	if err := runt(tpl, `1.4`); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ minf 345 }}`
 	if err := runt(tpl, `345`); err != nil {
 		t.Error(err)
 	}
@@ -183,6 +208,13 @@ func TestToDecimal(t *testing.T) {
 	}
 }
 
+func TestAdd1(t *testing.T) {
+	tpl := `{{ 3 | add1 }}`
+	if err := runt(tpl, `4`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestAdd(t *testing.T) {
 	tpl := `{{ 3 | add 1 2}}`
 	if err := runt(tpl, `6`); err != nil {
@@ -190,9 +222,23 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+func TestDiv(t *testing.T) {
+	tpl := `{{ 4 | div 5 }}`
+	if err := runt(tpl, `1`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestMul(t *testing.T) {
 	tpl := `{{ 1 | mul "2" 3 "4"}}`
 	if err := runt(tpl, `24`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSub(t *testing.T) {
+	tpl := `{{ 3 | sub 14 }}`
+	if err := runt(tpl, `11`); err != nil {
 		t.Error(err)
 	}
 }
@@ -218,6 +264,26 @@ func TestRound(t *testing.T) {
 	assert.Equal(t, 123.0, round(123.49999999, 0))
 	assert.Equal(t, 123.23, round(123.2329999, 2, .3))
 	assert.Equal(t, 123.24, round(123.233, 2, .3))
+}
+
+func TestRandomInt(t *testing.T) {
+	var tests = []struct {
+		min int
+		max int
+	}{
+		{10, 11},
+		{10, 13},
+		{0, 1},
+		{5, 50},
+	}
+	for _, v := range tests {
+		x, _ := runRaw(fmt.Sprintf(`{{ randInt %d %d }}`, v.min, v.max), nil)
+		r, err := strconv.Atoi(x)
+		assert.NoError(t, err)
+		assert.True(t, func(min, max, r int) bool {
+			return r >= v.min && r < v.max
+		}(v.min, v.max, r))
+	}
 }
 
 func TestSeq(t *testing.T) {

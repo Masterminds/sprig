@@ -292,6 +292,17 @@ The above produces `[pi a]`
 `regexSplit` panics if there is a problem and `mustRegexSplit` returns an error to the
 template engine if there is a problem.
 
+## regexQuoteMeta
+
+Returns a string that escapes all regular expression metacharacters inside the argument text;
+the returned string is a regular expression matching the literal text.
+
+```
+regexQuoteMeta "1.2.3"
+```
+
+The above produces `1\.2\.3`
+
 ## See Also...
 
 The [Conversion Functions](conversion.html) contain functions for converting

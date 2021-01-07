@@ -1,8 +1,6 @@
-# Math Functions
+# Integer Math Functions
 
-All math functions operate on `int64` values unless specified otherwise.
-
-(In the future, these will be extended to handle floats as well)
+The following math functions operate on `int64` values.
 
 ## add
 
@@ -69,3 +67,10 @@ Returns the greatest float value greater than or equal to input value
 Returns a float value with the remainder rounded to the given number to digits after the decimal point.
 
 `round 123.555555 3` will return `123.556`
+
+## randInt
+Returns a random integer value from min (inclusive) to max (exclusive).
+```
+{{ randInt 12 30 }}
+```
+The above will produce a random number in the range [12,30].

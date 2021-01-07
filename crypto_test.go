@@ -4,6 +4,15 @@ import (
 	"testing"
 )
 
+var (
+	// fastCertKeyAlgos is the list of private key algorithms that are supported for certificate use, and
+	// are fast to generate.
+	fastCertKeyAlgos = []string{
+		"ecdsa",
+		"ed25519",
+	}
+)
+
 func TestSha256Sum(t *testing.T) {
 	tpl := `{{"abc" | sha256sum}}`
 	if err := runt(tpl, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"); err != nil {

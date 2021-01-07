@@ -149,3 +149,18 @@ func TestValues(t *testing.T) {
 		}
 	}
 }
+
+func TestDig(t *testing.T) {
+	tests := map[string]string{
+		`{{- $d := dict "a" (dict "b" (dict "c" 1)) }}{{ dig "a" "b" "c" "" $d }}`:  "1",
+		`{{- $d := dict "a" (dict "b" (dict "c" 1)) }}{{ dig "a" "b" "z" "2" $d }}`: "2",
+		`{{ dict "a" 1 | dig "a" "" }}`:                                             "1",
+		`{{ dict "a" 1 | dig "z" "2" }}`:                                            "2",
+	}
+
+	for tpl, expect := range tests {
+		if err := runt(tpl, expect); err != nil {
+			t.Error(err)
+		}
+	}
+}

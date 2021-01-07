@@ -58,6 +58,51 @@ The above will first check to see if `.name` is empty. If it is not, it will ret
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
 
+## all
+
+The `all` function takes a list of values and returns true if all values are non-empty.
+
+```
+all 0 1 2
+```
+
+The above returns `false`.
+
+This function is useful for evaluating multiple conditions of variables or values:
+
+```
+all (eq .Request.TLS.Version 0x0304) (.Request.ProtoAtLeast 2 0) (eq .Request.Method "POST")
+```
+
+The above will check http.Request is POST with tls 1.3 and http/2.
+
+## any
+
+The `any` function takes a list of values and returns true if any value is non-empty.
+
+```
+any 0 1 2
+```
+
+The above returns `true`.
+
+This function is useful for evaluating multiple conditions of variables or values:
+
+```
+any (eq .Request.Method "GET") (eq .Request.Method "POST") (eq .Request.Method "OPTIONS")
+```
+
+The above will check http.Request method is one of GET/POST/OPTIONS.
+
+## fromJson, mustFromJson
+
+`fromJson` decodes a JSON document into a structure. If the input cannot be decoded as JSON the function will return an empty string.
+`mustFromJson` will return an error in case the JSON is invalid.
+
+```
+fromJson "{\"foo\": 55}"
+```
+
 ## toJson, mustToJson
 
 The `toJson` function encodes an item into a JSON string. If the item cannot be converted to JSON the function will return an empty string.
