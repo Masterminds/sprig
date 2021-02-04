@@ -3,7 +3,7 @@ module github.com/Masterminds/sprig/v3
 go 1.13
 
 require (
-	github.com/Masterminds/goutils v1.1.0
+	github.com/Masterminds/goutils v1.1.1
 	github.com/Masterminds/semver/v3 v3.1.1
 	github.com/google/uuid v1.1.1
 	github.com/huandu/xstrings v1.3.1

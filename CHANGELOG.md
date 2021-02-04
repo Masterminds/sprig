@@ -1,5 +1,11 @@
 # Changelog
 
+## Release 3.2.1 (2021-02-04)
+
+### Changed 
+
+- Upgraded `Masterminds/goutils` to `v1.1.1`. see the [Security Advisory](https://github.com/Masterminds/goutils/security/advisories/GHSA-xg2h-wx96-xgxr)
+
 ## Release 3.2.0 (2020-12-14)
 
 ### Added
