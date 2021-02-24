@@ -43,7 +43,7 @@ Multiply with `mulf`
 This will return `6`:
 
 ```
-addf 1.5 2 2
+mulf 1.5 4 
 ```
 
 ## maxf
