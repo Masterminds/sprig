@@ -33,7 +33,7 @@ Perform integer division with `divf`
 This is equivalent to `10 / 2 / 4` and will return `1.25`:
 
 ```
-subf 10 2 4
+divf 10 2 4
 ```
 
 ## mulf
@@ -43,7 +43,7 @@ Multiply with `mulf`
 This will return `6`:
 
 ```
-addf 1.5 2 2
+mulf 1.5 2 2
 ```
 
 ## maxf
