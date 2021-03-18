@@ -186,6 +186,20 @@ randNumeric 3
 
 The above will produce a random string with three digits.
 
+## randSeededNumeric
+
+This function will generate the same random string of numbers for the same input string (seed):
+
+- `randSeededNumeric` uses `0-9`
+
+Usage:
+
+```
+randSeededNumeric "seed" 5
+```
+
+The above will produce a random 5 digit string based on the seed passed as first parameter. In the example case it will be: `67694`
+
 ## wrap
 
 Wrap text at a given column count:

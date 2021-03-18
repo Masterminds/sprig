@@ -4,6 +4,7 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 	"fmt"
+	"strings"
 	"testing"
 	"unicode/utf8"
 
@@ -230,6 +231,11 @@ func TestRandomString(t *testing.T) {
 	// {{randNumeric 5}} should yield five random characters
 	if x, _ := runRaw(`{{randNumeric 5}}`, nil); utf8.RuneCountInString(x) != 5 {
 		t.Errorf("String should be 5 characters; string was %v characters", utf8.RuneCountInString(x))
+	}
+
+	// {{randSeededNumeric "foo" 5}} should yield five random numbers based on the given seed
+	if x, _ := runRaw(`{{randSeededNumeric "foo" 5}}`, nil); strings.Compare(x, "20918") != 0 {
+		t.Errorf("String should be '20918'; string was '%v'", x)
 	}
 }
 

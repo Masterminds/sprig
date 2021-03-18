@@ -1,9 +1,12 @@
 package sprig
 
 import (
+	"crypto/sha256"
 	"encoding/base32"
 	"encoding/base64"
+	"encoding/binary"
 	"fmt"
+	"math/rand"
 	"reflect"
 	"strconv"
 	"strings"
@@ -74,6 +77,17 @@ func randAscii(count int) string {
 func randNumeric(count int) string {
 	r, _ := util.CryptoRandomNumeric(count)
 	return r
+}
+
+func randSeededNumeric(seed string, count int) string {
+	hash := sha256.Sum256([]byte(seed))
+	seedInt := int64(binary.BigEndian.Uint64(hash[:]))
+	random := rand.New(rand.NewSource(seedInt))
+	out := make([]string, 0, count)
+	for i := 0; i < count; i++ {
+		out = append(out, strconv.Itoa(random.Intn(10)))
+	}
+	return strings.Join(out, "")
 }
 
 func untitle(str string) string {
