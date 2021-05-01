@@ -78,6 +78,31 @@ func mustRegexSplit(regex string, s string, n int) ([]string, error) {
 	return r.Split(s, n), nil
 }
 
+func regexFindSubmatch(regex string, s string) []string {
+	r := regexp.MustCompile(regex)
+
+	matches := r.FindStringSubmatch(s)
+	if len(matches) > 0 {
+		return matches[1:]
+	}
+
+	return []string{}
+}
+
+func mustRegexFindSubmatch(regex string, s string) ([]string, error) {
+	r, err := regexp.Compile(regex)
+	if err != nil {
+		return []string{}, err
+	}
+
+	matches := r.FindStringSubmatch(s)
+	if len(matches) > 0 {
+		return matches[1:], nil
+	}
+
+	return []string{}, nil
+}
+
 func regexQuoteMeta(s string) string {
 	return regexp.QuoteMeta(s)
 }
