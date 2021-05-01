@@ -292,6 +292,19 @@ The above produces `[pi a]`
 `regexSplit` panics if there is a problem and `mustRegexSplit` returns an error to the
 template engine if there is a problem.
 
+## regexFindSubmatch, mustRegexFindSubmatch
+
+Returns a slice of submatches (captures) of the regular expression in the input string.
+
+```
+regexFindSubmatch "v2.20.0-174-g348f09d" "([\\d]+)\\.([\\d]+)\\.([\\d]+)-([\\d]+)-(\\w+)"
+```
+
+The above produces `[2 20 0 174 g348f09d]`
+
+`regexFindSubmatch` panics if there is a problem and `mustRegexFindSubmatch` returns an error to the
+template engine if there is a problem.
+
 ## regexQuoteMeta
 
 Returns a string that escapes all regular expression metacharacters inside the argument text;
