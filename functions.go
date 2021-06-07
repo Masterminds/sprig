@@ -299,6 +299,7 @@ var genericMap = map[string]interface{}{
 	"unset":              unset,
 	"hasKey":             hasKey,
 	"pluck":              pluck,
+	"pluckAll":           pluckAll,
 	"keys":               keys,
 	"pick":               pick,
 	"omit":               omit,

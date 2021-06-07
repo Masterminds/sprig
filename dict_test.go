@@ -69,6 +69,21 @@ func TestPluck(t *testing.T) {
 	}
 }
 
+func TestPluckAll(t *testing.T) {
+	tpl := `
+	{{- $d := dict "one" 1 "two" 222222 -}}
+	{{- $d2 := dict "one" 1 "two" 33333 -}}
+	{{- $d3 := dict "one" 1 -}}
+	{{- $d4 := dict "one" 1 "two" 4444 -}}
+	{{- pluckAll "two" (list $d $d2 $d3 $d4) -}}
+	`
+
+	expect := "[222222 33333 4444]"
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestKeys(t *testing.T) {
 	tests := map[string]string{
 		`{{ dict "foo" 1 "bar" 2 | keys | sortAlpha }}`: "[bar foo]",
