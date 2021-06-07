@@ -422,7 +422,7 @@ func slice(list interface{}, indices ...interface{}) interface{} {
 func mustSlice(list interface{}, indices ...interface{}) (interface{}, error) {
 	tp := reflect.TypeOf(list).Kind()
 	switch tp {
-	case reflect.Slice, reflect.Array:
+	case reflect.Slice, reflect.Array, reflect.String:
 		l2 := reflect.ValueOf(list)
 
 		l := l2.Len()
@@ -442,7 +442,7 @@ func mustSlice(list interface{}, indices ...interface{}) (interface{}, error) {
 
 		return l2.Slice(start, end).Interface(), nil
 	default:
-		return nil, fmt.Errorf("list should be type of slice or array but %s", tp)
+		return nil, fmt.Errorf("list should be type of string, slice or array but %s", tp)
 	}
 }
 
