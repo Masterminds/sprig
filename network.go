@@ -6,7 +6,10 @@ import (
 )
 
 func getHostByName(name string) string {
-	addrs, _ := net.LookupHost(name)
-	//TODO: add error handing when release v3 comes out
+	addrs, err := net.LookupHost(name)
+	if err != nil {
+		return ""
+	}
+
 	return addrs[rand.Intn(len(addrs))]
 }

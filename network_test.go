@@ -15,4 +15,10 @@ func TestGetHostByName(t *testing.T) {
 	ip := net.ParseIP(resolvedIP)
 	assert.NotNil(t, ip)
 	assert.NotEmpty(t, ip)
+
+	tpl = `{{"nope.local" | getHostByName}}`
+
+	resolvedIP, _ = runRaw(tpl, nil)
+
+	assert.Empty(t, resolvedIP)
 }
