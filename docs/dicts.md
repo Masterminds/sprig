@@ -88,6 +88,26 @@ inserted.
 A common idiom in Sprig templates is to uses `pluck... | first` to get the first
 matching key out of a collection of dictionaries.
 
+## pluckAll
+
+The `pluckAll` function is exactly the same as `pluck`, but rather than the
+multiple maps being provided as separate parameters the second parameter is
+expected to be a _list_ of dicts.
+
+```
+pluckAll "name1" $listOfDicts
+```
+
+The above will return a `list` containing every found value (`[value1 otherValue1]`).
+
+If any item in the list is _not_ a dict, or is a dict but does not contain the
+requested key, then that item will not have a corresponding item in the result
+list (and the length of the returned list will be less than the length of the
+input list).
+
+If the key is _found_ but the value is an empty value, that value will be
+inserted.
+
 ## dig
 
 The `dig` function traverses a nested set of dicts, selecting keys from a list
