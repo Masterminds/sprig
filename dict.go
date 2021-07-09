@@ -125,6 +125,25 @@ func mustMergeOverwrite(dst map[string]interface{}, srcs ...map[string]interface
 	return dst, nil
 }
 
+func mergeAppendSlice(dst map[string]interface{}, srcs ...map[string]interface{}) interface{}{
+	for _, src := range srcs {
+		if err := mergo.Merge(&dst, src, mergo.WithAppendSlice); err != nil {
+			// Swallow errors inside of a template.
+			return ""
+		}
+	}
+	return dst
+}
+
+func mustMergeAppendSlice(dst map[string]interface{}, srcs ...map[string]interface{}) (interface{}, error){
+	for _, src := range srcs {
+		if err := mergo.Merge(&dst, src, mergo.WithAppendSlice); err != nil {
+			return nil, err
+		}
+	}
+	return dst, nil
+}
+
 func values(dict map[string]interface{}) []interface{} {
 	values := []interface{}{}
 	for _, value := range dict {
