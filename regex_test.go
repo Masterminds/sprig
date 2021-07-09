@@ -197,6 +197,59 @@ func TestMustRegexSplit(t *testing.T) {
 	}
 }
 
+func TestRegexFindSubmatch(t *testing.T) {
+	gitver := "v2.20.0-174-g348f09d"
+
+	type args struct {
+		regex string
+	}
+	cases := []struct {
+		expected []string
+		args     args
+	}{
+		{[]string{"2", "20", "0", "174", "g348f09d"}, args{`([\d]+)\.([\d]+)\.([\d]+)-([\d]+)-(\w+)`}},
+		{[]string{}, args{`[\d]+\.[\d]+\.[\d]+-[\d]+-\w+`}},
+		{[]string{}, args{`[\d]+\.[\d]+\.([\s]+)-[\d]+-\w+`}},
+		{[]string{"2"}, args{`([\d]+)`}},
+	}
+
+	for _, c := range cases {
+		assert.Equal(t, c.expected, regexFindSubmatch(c.args.regex, gitver))
+	}
+}
+
+func TestMustRegexFindSubmatch(t *testing.T) {
+	gitver := "v2.20.0-174-g348f09d"
+
+	type args struct {
+		regex string
+	}
+	cases := []struct {
+		expected []string
+		args     args
+	}{
+		{[]string{"2", "20", "0", "174", "g348f09d"}, args{`([\d]+)\.([\d]+)\.([\d]+)-([\d]+)-(\w+)`}},
+		{[]string{}, args{`[\d]+\.[\d]+\.[\d]+-[\d]+-\w+`}},
+		{[]string{}, args{`[\d]+\.[\d]+\.([\s]+)-[\d]+-\w+`}},
+		{[]string{"2"}, args{`([\d]+)`}},
+	}
+
+	for _, c := range cases {
+		r, err := mustRegexFindSubmatch(c.args.regex, gitver)
+		if err != nil {
+			t.Errorf("mustRegexFindSubmatch test case %v failed with err %s", c, err)
+		}
+		assert.Equal(t, c.expected, r)
+	}
+}
+
+func TestTemplateRegexFindSubmatch(t *testing.T) {
+	tpl := `{{$matches := regexFindSubmatch "([\\d]+)\\.([\\d]+)\\.([\\d]+)-([\\d]+)-(\\w+)" "v2.20.0-174-g348f09d"}}{{index $matches 3}}`
+	if err := runt(tpl, "174"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestRegexQuoteMeta(t *testing.T) {
 	assert.Equal(t, "1\\.2\\.3", regexQuoteMeta("1.2.3"))
 	assert.Equal(t, "pretzel", regexQuoteMeta("pretzel"))
