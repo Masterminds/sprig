@@ -21,6 +21,17 @@ sha256sum "Hello world!"
 The above will compute the SHA 256 sum in an "ASCII armored" format that is
 safe to print.
 
+## md5sum
+
+The `md5sum` function receives a string, and computes it's MD5 digest.
+
+```
+md5sum "Hello world!"
+```
+
+The above will compute the MD5 sum in an "ASCII armored" format that is
+safe to print.
+
 ## adler32sum
 
 The `adler32sum` function receives a string, and computes its Adler-32 checksum.
