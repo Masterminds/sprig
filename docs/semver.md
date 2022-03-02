@@ -43,8 +43,8 @@ comparison operations.)
 
 ## semverCompare
 
-A more robust comparison function is provided as `semverCompare`. This version
-supports version ranges:
+A more robust comparison function is provided as `semverCompare`. It returns `true` if
+the constraint matches, or `false` if it does not match. This version supports version ranges:
 
 - `semverCompare "1.2.3" "1.2.3"` checks for an exact match
 - `semverCompare "^1.2.0" "1.2.3"` checks that the major and minor versions match, and that the patch 
