@@ -33,7 +33,7 @@ Perform integer division with `divf`
 This is equivalent to `10 / 2 / 4` and will return `1.25`:
 
 ```
-subf 10 2 4
+divf 10 2 4
 ```
 
 ## mulf
