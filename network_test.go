@@ -16,3 +16,11 @@ func TestGetHostByName(t *testing.T) {
 	assert.NotNil(t, ip)
 	assert.NotEmpty(t, ip)
 }
+
+func TestGetHostByAddr(t *testing.T) {
+	tpl := `{{"1.1.1.1" | getHostByAddr}}`
+
+	resolvedHost, _ := runRaw(tpl, nil)
+
+	assert.Equal(t, resolvedHost, "one.one.one.one.")
+}
