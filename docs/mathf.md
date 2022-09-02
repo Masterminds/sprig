@@ -63,7 +63,7 @@ Return the smallest of a series of floats.
 This will return `1.5`:
 
 ```
-min 1.5 2 3
+minf 1.5 2 3
 ```
 
 ## floor
