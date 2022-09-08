@@ -1,6 +1,6 @@
 module github.com/Masterminds/sprig/v3
 
-go 1.13
+go 1.16
 
 require (
 	github.com/Masterminds/goutils v1.1.1

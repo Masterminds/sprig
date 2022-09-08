@@ -15,6 +15,14 @@ The `env` function reads an environment variable:
 env "HOME"
 ```
 
+## readDir
+
+The `readDir` function reads the named directory, returning all its directory entries sorted by filename:
+
+```
+readDir "."
+```
+
 ## expandenv
 
 To substitute environment variables in a string, use `expandenv`:
