@@ -43,7 +43,7 @@ Multiply with `mulf`
 This will return `6`:
 
 ```
-addf 1.5 2 2
+mulf 1.5 2 2
 ```
 
 ## maxf
@@ -63,7 +63,7 @@ Return the smallest of a series of floats.
 This will return `1.5`:
 
 ```
-min 1.5 2 3
+minf 1.5 2 3
 ```
 
 ## floor
