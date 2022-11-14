@@ -70,7 +70,9 @@ Returns a float value with the remainder rounded to the given number to digits a
 
 ## randInt
 Returns a random integer value from min (inclusive) to max (exclusive).
+
 ```
-{{ randInt 12 30 }}
+randInt 12 30
 ```
+
 The above will produce a random number in the range [12,30].
