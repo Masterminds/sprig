@@ -1,6 +1,6 @@
 # Changelog
 
-## Release 3.2.2 (2022-11-29)
+## Release 3.2.3 (2022-11-29)
 
 ### Changed
 
@@ -8,6 +8,10 @@
 - #348: Updated huandu/xstrings which fixed a snake case bug (thanks @yxxhero)
 - #353: Updated masterminds/semver which included bug fixes
 - #354: Updated golang.org/x/crypto which included bug fixes
+
+## Release 3.2.2 (2021-02-04)
+
+This is a re-release of 3.2.1 to satisfy something with the Go module system.
 
 ## Release 3.2.1 (2021-02-04)
 
