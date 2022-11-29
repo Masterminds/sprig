@@ -193,4 +193,24 @@ func TestTernary(t *testing.T) {
 	if err := runt(tpl, "bar"); err != nil {
 		t.Error(err)
 	}
+
+	tpl = `{{ternary "foo" "bar" "baz"}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{"baz" | ternary "foo" "bar"}}`
+	if err := runt(tpl, "foo"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ternary "foo" "bar" ""}}`
+	if err := runt(tpl, "bar"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{"" | ternary "foo" "bar"}}`
+	if err := runt(tpl, "bar"); err != nil {
+		t.Error(err)
+	}
 }
