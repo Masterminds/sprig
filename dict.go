@@ -37,6 +37,18 @@ func pluck(key string, d ...map[string]interface{}) []interface{} {
 	return res
 }
 
+func pluckAll(key string, d []interface{}) []interface{} {
+	res := []interface{}{}
+	for _, entry := range d {
+		if e, ok := entry.(map[string]interface{}); ok {
+			if val, ok := e[key]; ok {
+				res = append(res, val)
+			}
+		}
+	}
+	return res
+}
+
 func keys(dicts ...map[string]interface{}) []string {
 	k := []string{}
 	for _, dict := range dicts {
