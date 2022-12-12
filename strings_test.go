@@ -43,6 +43,25 @@ func TestTrunc(t *testing.T) {
 	}
 }
 
+func TestTruncWorksByRune(t *testing.T) {
+	tpl := `{{ "foo🧐ooo" | trunc 4 }}`
+	if err := runt(tpl, "foo🧐"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ "baaaa🧐ar" | trunc -3 }}`
+	if err := runt(tpl, "🧐ar"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ "baaaa🧐ar" | trunc -999 }}`
+	if err := runt(tpl, "baaaa🧐ar"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ "🧐baaaaaz" | trunc 0 }}`
+	if err := runt(tpl, ""); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestQuote(t *testing.T) {
 	tpl := `{{quote "a" "b" "c"}}`
 	if err := runt(tpl, `"a" "b" "c"`); err != nil {
