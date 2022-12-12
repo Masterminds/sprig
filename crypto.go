@@ -27,6 +27,7 @@ import (
 	"io"
 	"math/big"
 	"net"
+	"net/url"
 	"time"
 
 	"strings"
@@ -341,7 +342,7 @@ func generateCertificateAuthorityWithKeyInternal(
 ) (certificate, error) {
 	ca := certificate{}
 
-	template, err := getBaseCertTemplate(cn, nil, nil, daysValid)
+	template, err := getBaseCertTemplate(cn, nil, nil, nil, daysValid)
 	if err != nil {
 		return ca, err
 	}
@@ -360,19 +361,21 @@ func generateSelfSignedCertificate(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 ) (certificate, error) {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, alternateURIs, daysValid, priv)
 }
 
 func generateSelfSignedCertificateWithPEMKey(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 	privPEM string,
 ) (certificate, error) {
@@ -380,19 +383,20 @@ func generateSelfSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, alternateURIs, daysValid, priv)
 }
 
 func generateSelfSignedCertificateWithKeyInternal(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 	priv crypto.PrivateKey,
 ) (certificate, error) {
 	cert := certificate{}
 
-	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
+	template, err := getBaseCertTemplate(cn, ips, alternateDNS, alternateURIs, daysValid)
 	if err != nil {
 		return cert, err
 	}
@@ -406,6 +410,7 @@ func generateSignedCertificate(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 	ca certificate,
 ) (certificate, error) {
@@ -413,13 +418,14 @@ func generateSignedCertificate(
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, alternateURIs, daysValid, ca, priv)
 }
 
 func generateSignedCertificateWithPEMKey(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 	ca certificate,
 	privPEM string,
@@ -428,13 +434,14 @@ func generateSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, alternateURIs, daysValid, ca, priv)
 }
 
 func generateSignedCertificateWithKeyInternal(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 	ca certificate,
 	priv crypto.PrivateKey,
@@ -460,7 +467,7 @@ func generateSignedCertificateWithKeyInternal(
 		)
 	}
 
-	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
+	template, err := getBaseCertTemplate(cn, ips, alternateDNS, alternateURIs, daysValid)
 	if err != nil {
 		return cert, err
 	}
@@ -519,6 +526,7 @@ func getBaseCertTemplate(
 	cn string,
 	ips []interface{},
 	alternateDNS []interface{},
+	alternateURIs []interface{},
 	daysValid int,
 ) (*x509.Certificate, error) {
 	ipAddresses, err := getNetIPs(ips)
@@ -526,6 +534,10 @@ func getBaseCertTemplate(
 		return nil, err
 	}
 	dnsNames, err := getAlternateDNSStrs(alternateDNS)
+	if err != nil {
+		return nil, err
+	}
+	uris, err := getURIs(alternateURIs)
 	if err != nil {
 		return nil, err
 	}
@@ -541,6 +553,7 @@ func getBaseCertTemplate(
 		},
 		IPAddresses: ipAddresses,
 		DNSNames:    dnsNames,
+		URIs:        uris,
 		NotBefore:   time.Now(),
 		NotAfter:    time.Now().Add(time.Hour * 24 * time.Duration(daysValid)),
 		KeyUsage:    x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
@@ -592,6 +605,27 @@ func getAlternateDNSStrs(alternateDNS []interface{}) ([]string, error) {
 		alternateDNSStrs[i] = dnsStr
 	}
 	return alternateDNSStrs, nil
+}
+
+func getURIs(uris []interface{}) ([]*url.URL, error) {
+	if uris == nil {
+		return []*url.URL{}, nil
+	}
+	var uriStr string
+	var ok bool
+	urlURIs := make([]*url.URL, len(uris))
+	for i, uri := range uris {
+		uriStr, ok = uri.(string)
+		if !ok {
+			return nil, fmt.Errorf("error parsing uri: %v is not a string", uri)
+		}
+		u, err := url.Parse(uriStr)
+		if err != nil {
+			return nil, err
+		}
+		urlURIs[i] = u
+	}
+	return urlURIs, nil
 }
 
 func encryptAES(password string, plaintext string) (string, error) {
