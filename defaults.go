@@ -138,7 +138,7 @@ func toRawJson(v interface{}) string {
 	if err != nil {
 		panic(err)
 	}
-	return string(output)
+	return output
 }
 
 // mustToRawJson encodes an item into a JSON string with no escaping of HTML characters.
