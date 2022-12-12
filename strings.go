@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unicode"
 
 	util "github.com/Masterminds/goutils"
 )
@@ -53,6 +54,39 @@ func abbrevboth(left, right int, s string) string {
 func initials(s string) string {
 	// Wrap this just to eliminate the var args, which templates don't do well.
 	return util.Initials(s)
+}
+
+// Guaranteed uppercase, lowercase and number in output >= 3
+func randAlphaNumericG(count int) string {
+	var r string
+	if 3 > count {
+		r, _ = util.CryptoRandomAlphaNumeric(count)
+		return r
+	}
+
+	var hasUppercase, hasLowercase, hasNumber bool
+	for !(hasUppercase && hasLowercase && hasNumber) {
+		r, _ = util.CryptoRandomAlphaNumeric(count)
+		hasUppercase = false
+		hasLowercase = false
+		hasNumber = false
+		// based on https://github.com/Masterminds/goutils/blob/master/cryptorandomstringutils.go#L180
+		for c, _ := range r {
+			if !hasUppercase && unicode.IsUpper(rune(c)) {
+				hasUppercase = true
+				continue
+			}
+			if !hasLowercase && unicode.IsLower(rune(c)) {
+				hasLowercase = true
+				continue
+			}
+			if !hasNumber && unicode.IsNumber(rune(c)) {
+				hasNumber = true
+				continue
+			}
+		}
+	}
+	return r
 }
 
 func randAlphaNumeric(count int) string {
