@@ -46,6 +46,13 @@ func TestAdler32Sum(t *testing.T) {
 	}
 }
 
+func TestMd5Sum(t *testing.T) {
+	tpl := `{{"abc" | md5sum}}`
+	if err := runt(tpl, "900150983cd24fb0d6963f7d28e17f72"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestBcrypt(t *testing.T) {
 	out, err := runRaw(`{{"abc" | bcrypt}}`, nil)
 	if err != nil {
