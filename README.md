@@ -50,7 +50,7 @@ To load the Sprig `FuncMap`:
 ```go
 
 import (
-  "github.com/Masterminds/sprig"
+  "github.com/Masterminds/sprig/v3"
   "html/template"
 )
 
