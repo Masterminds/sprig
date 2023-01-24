@@ -244,6 +244,14 @@ system when there is an error.
 dict "a" 1 "b" 2 | deepCopy
 ```
 
+### `splitToMap`
+
+ Splits the given string on the provided separator and splits each resulting item into a key and value:
+
+ ```golang
+ {{ "foo:bar\nbaz:bat\n" | splitToMap "\n" ":" }}
+ ```
+
 ## A Note on Dict Internals
 
 A `dict` is implemented in Go as a `map[string]interface{}`. Go developers can
