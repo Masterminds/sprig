@@ -150,6 +150,35 @@ func TestToJson(t *testing.T) {
 	}
 }
 
+func TestFromYaml(t *testing.T) {
+	dict := map[string]interface{}{"Input": `"foo": 55`}
+
+	tpl := `{{.Input | fromYaml}}`
+	expected := `map[foo:55]`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{(.Input | fromYaml).foo}}`
+	expected = `55`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestToYaml(t *testing.T) {
+	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42}}
+
+	tpl := `{{.Top | toYaml}}`
+	expected := `bool: true
+number: 42
+string: test
+`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestToPrettyJson(t *testing.T) {
 	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42}}
 	tpl := `{{.Top | toPrettyJson}}`
