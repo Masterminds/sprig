@@ -1,4 +1,4 @@
-# Encoding Functions
+# Encoding
 
 Sprig has the following encoding and decoding functions:
 

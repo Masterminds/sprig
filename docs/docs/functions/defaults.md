@@ -1,4 +1,4 @@
-# Default Functions
+# Default
 
 Sprig provides tools for setting default values for templates.
 

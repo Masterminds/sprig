@@ -1,4 +1,4 @@
-# Dictionaries and Dict Functions
+# Dictionaries and Dict
 
 Sprig provides a key/value storage type called a `dict` (short for "dictionary",
 as in Python). A `dict` is an _unorder_ type.

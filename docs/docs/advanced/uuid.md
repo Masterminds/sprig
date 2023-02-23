@@ -1,4 +1,4 @@
-# UUID Functions
+# UUID
 
 Sprig can generate UUID v4 universally unique IDs.
 

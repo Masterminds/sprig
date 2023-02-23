@@ -1,4 +1,4 @@
-# Network Functions
+# Network
 
 Sprig network manipulation functions.
 

@@ -1,4 +1,4 @@
-# String Slice Functions
+# String Slice
 
 These function operate on or generate slices of strings. In Go, a slice is a
 growable array. In Sprig, it's a special case of a `list`.

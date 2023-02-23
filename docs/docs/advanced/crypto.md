@@ -1,4 +1,4 @@
-# Cryptographic and Security Functions
+# Cryptographic and Security
 
 Sprig provides a couple of advanced cryptographic functions.
 

@@ -1,4 +1,4 @@
-# Float Math Functions
+# Float Math
 
 All math functions operate on `float64` values.
 

@@ -1,4 +1,4 @@
-# Semantic Version Functions
+# Semantic
 
 Some version schemes are easily parseable and comparable. Sprig provides functions
 for working with [SemVer 2](http://semver.org) versions.
@@ -47,7 +47,7 @@ A more robust comparison function is provided as `semverCompare`. It returns `tr
 the constraint matches, or `false` if it does not match. This version supports version ranges:
 
 - `semverCompare "1.2.3" "1.2.3"` checks for an exact match
-- `semverCompare "^1.2.0" "1.2.3"` checks that the major and minor versions match, and that the patch 
+- `semverCompare "^1.2.0" "1.2.3"` checks that the major and minor versions match, and that the patch
   number of the second version is _greater than or equal to_ the first parameter.
 
 The SemVer functions use the [Masterminds semver library](https://github.com/Masterminds/semver),

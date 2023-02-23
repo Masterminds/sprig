@@ -1,4 +1,4 @@
-# URL Functions
+# URL
 
 ## urlParse
 Parses string for URL and produces dict with URL parts
