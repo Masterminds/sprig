@@ -1,4 +1,4 @@
-# Path and Filepath Functions
+# Path and Filepath
 
 While Sprig does not grant access to the filesystem, it does provide functions
 for working with strings that follow file path conventions.

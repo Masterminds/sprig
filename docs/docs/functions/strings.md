@@ -1,4 +1,4 @@
-# String Functions
+# String
 
 Sprig has a number of string manipulation functions.
 
@@ -459,6 +459,6 @@ The above produces `1\.2\.3`
 
 ## See Also...
 
-The [Conversion Functions](conversion.html) contain functions for converting
-strings. The [String Slice Functions](string_slice.html) contains functions
+The [Conversion Functions](./conversion.md) contain functions for converting
+strings. The [String Slice Functions](./string-slice.md) contains functions
 for working with an array of strings.

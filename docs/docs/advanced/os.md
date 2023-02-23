@@ -1,4 +1,4 @@
-# OS Functions
+# OS
 
 _WARNING:_ These functions can lead to information leakage if not used
 appropriately.

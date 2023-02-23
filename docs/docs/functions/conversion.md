@@ -1,4 +1,4 @@
-# Type Conversion Functions
+# Type Conversion
 
 The following type conversion functions are provided by Sprig:
 

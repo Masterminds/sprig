@@ -1,4 +1,4 @@
-# Reflection Functions
+# Reflection
 
 Sprig provides rudimentary reflection tools. These help advanced template
 developers understand the underlying Go type information for a particular value.

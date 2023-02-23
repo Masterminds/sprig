@@ -1,4 +1,4 @@
-# Integer Slice Functions
+# Integer Slice
 
 ## until
 

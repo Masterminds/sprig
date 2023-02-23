@@ -1,4 +1,4 @@
-# Integer Math Functions
+# Integer Math
 
 The following math functions operate on `int64` values.
 

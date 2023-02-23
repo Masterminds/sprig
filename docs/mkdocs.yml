@@ -1,0 +1,26 @@
+site_name: Sprig
+site_url: https://github.com/Masterminds/sprig
+repo_name: Sprig
+repo_url: https://github.com/Masterminds/sprig
+use_directory_urls: true
+theme:
+  name: material
+  features:
+    - content.code.annotate
+    - navigation.instant
+    - navigation.expand
+    - navigation.sections
+    - navigation.tabs.sticky
+
+plugins:
+  - tags
+  - search
+
+markdown_extensions:
+  - def_list
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - attr_list
+  - pymdownx.tabbed
+  - pymdownx.superfences

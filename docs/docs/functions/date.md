@@ -1,4 +1,4 @@
-# Date Functions
+# Date
 
 ## now
 

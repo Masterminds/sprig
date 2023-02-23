@@ -1,4 +1,4 @@
-# Lists and List Functions
+# Lists and List
 
 Sprig provides a simple `list` type that can contain arbitrary sequential lists
 of data. This is similar to arrays or slices, but lists are designed to be used
