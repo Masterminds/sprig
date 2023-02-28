@@ -3,7 +3,7 @@ package sprig
 import (
 	"bytes"
 	"encoding/json"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	"math/rand"
 	"reflect"
 	"strings"
