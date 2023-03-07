@@ -94,47 +94,60 @@ func duration(sec interface{}) string {
 	return (time.Duration(n) * time.Second).String()
 }
 
+const (
+	year  = time.Hour * 24 * 365
+	month = time.Hour * 24 * 30
+	day   = time.Hour * 24
+)
+
 func durationRound(duration interface{}) string {
 	var d time.Duration
+
 	switch duration := duration.(type) {
 	default:
-		d = 0
+		return "0s"
 	case string:
 		d, _ = time.ParseDuration(duration)
+	case int:
+		// We handle these cases similar to how `duration` does.
+		d = time.Duration(duration) * time.Second
 	case int64:
-		d = time.Duration(duration)
+		// Considering the given value as seconds instead of nanoseconds might be a breaking
+		// change, but it is more consistent with the other cases and most likely closer to what
+		// the user expects.
+		d = time.Duration(duration) * time.Second
+	case float64:
+		d = time.Duration(duration) * time.Second
 	case time.Time:
 		d = time.Since(duration)
+	case time.Duration:
+		d = duration
 	}
 
-	u := uint64(d)
-	neg := d < 0
-	if neg {
-		u = -u
+	// Not sure if this actually makes much sense, but removing it would be a breaking change.
+	if d < 0 {
+		d = -d
 	}
 
-	var (
-		year   = uint64(time.Hour) * 24 * 365
-		month  = uint64(time.Hour) * 24 * 30
-		day    = uint64(time.Hour) * 24
-		hour   = uint64(time.Hour)
-		minute = uint64(time.Minute)
-		second = uint64(time.Second)
-	)
-	switch {
-	case u > year:
-		return strconv.FormatUint(u/year, 10) + "y"
-	case u > month:
-		return strconv.FormatUint(u/month, 10) + "mo"
-	case u > day:
-		return strconv.FormatUint(u/day, 10) + "d"
-	case u > hour:
-		return strconv.FormatUint(u/hour, 10) + "h"
-	case u > minute:
-		return strconv.FormatUint(u/minute, 10) + "m"
-	case u > second:
-		return strconv.FormatUint(u/second, 10) + "s"
+	if d > year {
+		return strconv.FormatInt(int64(d/year), 10) + "y"
 	}
+	if d > month {
+		return strconv.FormatInt(int64(d/month), 10) + "mo"
+	}
+	if d > day {
+		return strconv.FormatInt(int64(d/day), 10) + "d"
+	}
+	if d > time.Hour {
+		return strconv.FormatInt(int64(d/time.Hour), 10) + "h"
+	}
+	if d > time.Minute {
+		return strconv.FormatInt(int64(d/time.Minute), 10) + "m"
+	}
+	if d > time.Second {
+		return strconv.FormatInt(int64(d/time.Second), 10) + "s"
+	}
+
 	return "0s"
 }
 
