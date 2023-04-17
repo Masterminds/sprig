@@ -167,3 +167,21 @@ false | ternary "foo" "bar"
 ```
 
 The above returns `"bar"`.
+
+## fromYaml, mustFromYaml
+
+`fromYaml` decodes a YAML document into a structure. If the input cannot be decoded as YAML the function will return an empty string.
+`mustFromYaml` will return an error in case the YAML is invalid.
+
+```
+fromYaml "foo: 55"
+```
+
+## toYaml, mustToYaml
+
+The `toYaml` function encodes an item into a YAML string. If the item cannot be converted to YAML the function will return an empty string.
+`mustToYaml` will return an error in case the item cannot be encoded in YAML.
+
+```
+toYaml .Item
+```

@@ -194,3 +194,29 @@ func TestTernary(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestFromYaml(t *testing.T) {
+	dict := map[string]interface{}{"Input": `foo: 55`}
+
+	tpl := `{{.Input | fromYaml}}`
+	expected := `map[foo:55]`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{(.Input | fromYaml).foo}}`
+	expected = `55`
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestToYaml(t *testing.T) {
+	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42}}
+
+	tpl := `{{.Top | toYaml}}`
+	expected := "bool: true\nnumber: 42\nstring: test\n"
+	if err := runtv(tpl, expected, dict); err != nil {
+		t.Error(err)
+	}
+}
