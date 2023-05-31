@@ -256,3 +256,24 @@ algorithm and returns the decoded text.
 ```
 "30tEfhuJSVRhpG97XCuWgz2okj7L8vQ1s6V9zVUPeDQ=" | decryptAES "secretkey"
 ```
+
+## pbkdf2hash
+
+The `pbkdf2hash` function derives a key by applying a pseudorandom function to a given password and salt.
+
+It takes the following parameters:
+
+- Password (master password to derive the key from)
+- Salt (sequence of bits)
+- Desired number of iterations
+- Desired key length of the derived key
+- Hash-function to use. Supported values are:
+  - sha1
+  - sha224
+  - sha256
+  - sha384
+  - sha512
+
+```
+pbkdf2hash "password" "salt" 4096 32 sha1
+```

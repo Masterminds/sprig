@@ -110,7 +110,7 @@ func runtv(tpl, expect string, vars interface{}) error {
 	return nil
 }
 
-// runRaw runs a template with the given variables and returns the result.
+// runRaw runs a template with the given variables and returns the result as string.
 func runRaw(tpl string, vars interface{}) (string, error) {
 	fmap := TxtFuncMap()
 	t := template.Must(template.New("test").Funcs(fmap).Parse(tpl))
@@ -120,4 +120,16 @@ func runRaw(tpl string, vars interface{}) (string, error) {
 		return "", err
 	}
 	return b.String(), nil
+}
+
+// runBytes runs a template with the given variables and returns the result as byte slice.
+func runBytes(tpl string, vars interface{}) ([]byte, error) {
+	fmap := TxtFuncMap()
+	t := template.Must(template.New("test").Funcs(fmap).Parse(tpl))
+	var b bytes.Buffer
+	err := t.Execute(&b, vars)
+	if err != nil {
+		return []byte(``), err
+	}
+	return b.Bytes(), err
 }
