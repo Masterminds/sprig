@@ -22,5 +22,5 @@ func TestCidrNetmask(t *testing.T) {
 	netmask, _ := runRaw(tpl, nil)
 	assert.NotNil(t, netmask)
 	assert.NotEmpty(t, netmask)
-	assert.Equalf(t, "255.255.255.255", netmask, "")
+	assert.Equal(t, "255.255.255.255", netmask)
 }
