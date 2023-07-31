@@ -1,7 +1,7 @@
 package sprig
 
 import (
-	"github.com/imdario/mergo"
+	"dario.cat/mergo"
 	"github.com/mitchellh/copystructure"
 )
 
@@ -162,7 +162,7 @@ func dig(ps ...interface{}) (interface{}, error) {
 }
 
 func digFromDict(dict map[string]interface{}, d interface{}, ks []string) (interface{}, error) {
-	k, ns := ks[0], ks[1:len(ks)]
+	k, ns := ks[0], ks[1:]
 	step, has := dict[k]
 	if !has {
 		return d, nil
