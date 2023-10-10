@@ -22,8 +22,7 @@ import (
 //
 // Use this to pass the functions into the template engine:
 //
-// 	tpl := template.New("foo").Funcs(sprig.FuncMap()))
-//
+//	tpl := template.New("foo").Funcs(sprig.FuncMap()))
 func FuncMap() template.FuncMap {
 	return HtmlFuncMap()
 }
@@ -130,22 +129,23 @@ var genericMap = map[string]interface{}{
 	// Deprecated: Use trimAll.
 	"trimall": func(a, b string) string { return strings.Trim(b, a) },
 	// Switch order so that "$foo" | trimall "$"
-	"trimAll":      func(a, b string) string { return strings.Trim(b, a) },
-	"trimSuffix":   func(a, b string) string { return strings.TrimSuffix(b, a) },
-	"trimPrefix":   func(a, b string) string { return strings.TrimPrefix(b, a) },
-	"nospace":      util.DeleteWhiteSpace,
-	"initials":     initials,
-	"randAlphaNum": randAlphaNumeric,
-	"randAlpha":    randAlpha,
-	"randAscii":    randAscii,
-	"randNumeric":  randNumeric,
-	"swapcase":     util.SwapCase,
-	"shuffle":      xstrings.Shuffle,
-	"snakecase":    xstrings.ToSnakeCase,
-	"camelcase":    xstrings.ToCamelCase,
-	"kebabcase":    xstrings.ToKebabCase,
-	"wrap":         func(l int, s string) string { return util.Wrap(s, l) },
-	"wrapWith":     func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
+	"trimAll":       func(a, b string) string { return strings.Trim(b, a) },
+	"trimSuffix":    func(a, b string) string { return strings.TrimSuffix(b, a) },
+	"trimPrefix":    func(a, b string) string { return strings.TrimPrefix(b, a) },
+	"nospace":       util.DeleteWhiteSpace,
+	"initials":      initials,
+	"randAlphaNum":  randAlphaNumeric,
+	"randAlpha":     randAlpha,
+	"randAscii":     randAscii,
+	"randNumeric":   randNumeric,
+	"randFromRegex": randFromRegex,
+	"swapcase":      util.SwapCase,
+	"shuffle":       xstrings.Shuffle,
+	"snakecase":     xstrings.ToSnakeCase,
+	"camelcase":     xstrings.ToCamelCase,
+	"kebabcase":     xstrings.ToKebabCase,
+	"wrap":          func(l int, s string) string { return util.Wrap(s, l) },
+	"wrapWith":      func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
 	// Switch order so that "foobar" | contains "foo"
 	"contains":   func(substr string, str string) bool { return strings.Contains(str, substr) },
 	"hasPrefix":  func(substr string, str string) bool { return strings.HasPrefix(str, substr) },
@@ -336,20 +336,20 @@ var genericMap = map[string]interface{}{
 	"mustChunk":   mustChunk,
 
 	// Crypto:
-	"bcrypt":            bcrypt,
-	"htpasswd":          htpasswd,
-	"genPrivateKey":     generatePrivateKey,
-	"derivePassword":    derivePassword,
-	"buildCustomCert":   buildCustomCertificate,
-	"genCA":             generateCertificateAuthority,
-	"genCAWithKey":      generateCertificateAuthorityWithPEMKey,
-	"genSelfSignedCert": generateSelfSignedCertificate,
+	"bcrypt":                   bcrypt,
+	"htpasswd":                 htpasswd,
+	"genPrivateKey":            generatePrivateKey,
+	"derivePassword":           derivePassword,
+	"buildCustomCert":          buildCustomCertificate,
+	"genCA":                    generateCertificateAuthority,
+	"genCAWithKey":             generateCertificateAuthorityWithPEMKey,
+	"genSelfSignedCert":        generateSelfSignedCertificate,
 	"genSelfSignedCertWithKey": generateSelfSignedCertificateWithPEMKey,
-	"genSignedCert":     generateSignedCertificate,
-	"genSignedCertWithKey": generateSignedCertificateWithPEMKey,
-	"encryptAES":        encryptAES,
-	"decryptAES":        decryptAES,
-	"randBytes":         randBytes,
+	"genSignedCert":            generateSignedCertificate,
+	"genSignedCertWithKey":     generateSignedCertificateWithPEMKey,
+	"encryptAES":               encryptAES,
+	"decryptAES":               decryptAES,
+	"randBytes":                randBytes,
 
 	// UUIDs:
 	"uuidv4": uuidv4,

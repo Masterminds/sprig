@@ -88,6 +88,38 @@ func TestRegex(t *testing.T) {
 	assert.NoError(t, runt(`{{ regexQuoteMeta "pretzel" }}`, "pretzel"))
 }
 
+func TestRandStringFromRegex(t *testing.T) {
+	tmplStr := "{{randFromRegex \"https://(www[.])example[.]com/[a-zA-Z0-9]{9,15}\"}}"
+	tmpl, err := template.New("randFromRegex").Funcs(FuncMap()).Parse(tmplStr)
+	if err != nil {
+		panic(err)
+	}
+
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Print the generated random string
+	fmt.Println(buf.String())
+
+	tmplStr = "{{randFromRegex \"/v4/providers/[^/]+/roles/[^/]+/groups$\"}}"
+	tmpl, err = template.New("randFromRegex").Funcs(FuncMap()).Parse(tmplStr)
+	if err != nil {
+		panic(err)
+	}
+
+	var buf2 bytes.Buffer
+	err = tmpl.Execute(&buf2, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Print the generated random string
+	fmt.Println(buf2.String())
+}
+
 // runt runs a template and checks that the output exactly matches the expected string.
 func runt(tpl, expect string) error {
 	return runtv(tpl, expect, map[string]string{})
