@@ -237,8 +237,10 @@ var genericMap = map[string]interface{}{
 
 	// Defaults
 	"default":          dfault,
+	"safeDefault":	    safeDefault,
 	"empty":            empty,
 	"coalesce":         coalesce,
+	"safeCoalesce":	    safeCoalesce,
 	"all":              all,
 	"any":              any,
 	"compact":          compact,

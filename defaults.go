@@ -31,6 +31,14 @@ func dfault(d interface{}, given ...interface{}) interface{} {
 	return given[0]
 }
 
+// Similar to dfault but only considers nil as unset. 0, false, "" are considered set
+func safeDefault(d interface{}, given ...interface{}) interface{} {
+	if given == nil || len(given) == 0 || given[0] == nil {
+		return d
+	}
+	return given[0]
+}
+
 // empty returns true if the given value has the zero value for its type.
 func empty(given interface{}) bool {
 	g := reflect.ValueOf(given)
@@ -63,6 +71,16 @@ func empty(given interface{}) bool {
 func coalesce(v ...interface{}) interface{} {
 	for _, val := range v {
 		if !empty(val) {
+			return val
+		}
+	}
+	return nil
+}
+
+// safeCoalesce returns the first non-nil value
+func safeCoalesce(v ...interface{}) interface{} {
+	for _, val := range v {
+		if val != nil {
 			return val
 		}
 	}
