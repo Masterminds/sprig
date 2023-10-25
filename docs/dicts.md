@@ -181,6 +181,10 @@ deepCopy $source | mergeOverwrite $dest
 
 `mustMergeOverwrite` will return an error in case of unsuccessful merge.
 
+Note that the dest dictionary will be overwritten in-place by this operation.
+If you want to keep the original dest you need to pass a copy of it
+(e.g. with `mergeOverwrite (deepCopy $dest) $source1 $source2`).
+
 ## keys
 
 The `keys` function will return a `list` of all of the keys in one or more `dict`
