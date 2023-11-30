@@ -82,6 +82,7 @@ var nonhermeticFunctions = []string{
 	"randAlpha",
 	"randAscii",
 	"randNumeric",
+	"randFromRegex",
 	"randBytes",
 	"uuidv4",
 
