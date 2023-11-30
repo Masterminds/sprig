@@ -4,9 +4,13 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 	"fmt"
+	regen "github.com/Broadcom/goregen"
+	"log"
+	"math/rand"
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 
 	util "github.com/Masterminds/goutils"
 )
@@ -74,6 +78,23 @@ func randAscii(count int) string {
 func randNumeric(count int) string {
 	r, _ := util.CryptoRandomNumeric(count)
 	return r
+}
+
+func randFromRegex(regexStr string) string {
+	defaultMaxRandLength := 25
+	argsPtr := &regen.GeneratorArgs{
+		RngSource:               rand.NewSource(time.Now().UnixNano()),
+		MaxUnboundedRepeatCount: uint(defaultMaxRandLength),
+		CharSetLowBound:         rune(33),
+		CharSetHighBound:        rune(125),
+	}
+
+	randomStrGenerator, err := regen.NewGenerator(regexStr, argsPtr)
+	if err != nil {
+		log.Printf("failed to generate random string from regex: %s, err: %s", regexStr, err.Error())
+	}
+
+	return randomStrGenerator.Generate()
 }
 
 func untitle(str string) string {
