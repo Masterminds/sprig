@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"reflect"
+	"regexp/syntax"
 	"strconv"
 	"strings"
 	"time"
@@ -87,6 +88,7 @@ func randFromRegex(regexStr string) string {
 		MaxUnboundedRepeatCount: uint(defaultMaxRandLength),
 		CharSetLowBound:         rune(33),
 		CharSetHighBound:        rune(125),
+		Flags:                   syntax.Perl,
 	}
 
 	randomStrGenerator, err := regen.NewGenerator(regexStr, argsPtr)

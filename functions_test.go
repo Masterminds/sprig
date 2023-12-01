@@ -118,6 +118,24 @@ func TestRandStringFromRegex(t *testing.T) {
 
 	// Print the generated random string
 	fmt.Println(buf2.String())
+
+	/*
+		further make sure it accept perl chars
+	*/
+	tmplStr = `{{randFromRegex "/v\\d+/providers/[^/]+/roles\\b"}}`
+	tmpl, err = template.New("randFromRegex").Funcs(FuncMap()).Parse(tmplStr)
+	if err != nil {
+		panic(err)
+	}
+
+	var buf3 bytes.Buffer
+	err = tmpl.Execute(&buf3, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Print the generated random string
+	fmt.Println(buf3.String())
 }
 
 // runt runs a template and checks that the output exactly matches the expected string.
