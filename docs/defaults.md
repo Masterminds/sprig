@@ -25,10 +25,25 @@ The definition of "empty" depends on type:
 For structs, there is no definition of empty, so a struct will never return the
 default.
 
+## safeDefault
+
+Similar to `default` but only considers `nil` as unset value. `0`, `false`,
+`""` are not considered unset, unlike `default`.
+
+```
+safeDefault true .Enabled
+```
+
+In the above, if `.Enabled` evaluates to `false`, same will be returned.
+However, `default` would return `true` here.
+
 ## empty
 
 The `empty` function returns `true` if the given value is considered empty, and
 `false` otherwise. The empty values are listed in the `default` section.
+
+## nonNil
+The `nonNil` function returns `true` if the given value is not `nil`.
 
 ```
 empty .Foo
@@ -57,6 +72,16 @@ coalesce .name .parent.name "Matt"
 The above will first check to see if `.name` is empty. If it is not, it will return
 that value. If it _is_ empty, `coalesce` will evaluate `.parent.name` for emptiness.
 Finally, if both `.name` and `.parent.name` are empty, it will return `Matt`.
+
+## safeCoalesce
+
+Similar to `coalesce` but only considers `nil` as unset value.
+
+```
+safeCoalesce nil 0 1 2
+```
+
+The above evaluates to `0`.
 
 ## all
 
