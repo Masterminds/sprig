@@ -113,6 +113,40 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
+func TestNonNil(t *testing.T) {
+	tpl := `{{if nonNil 1}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{if nonNil 0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil ""}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil 0.0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil false}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+
+	dict := map[string]interface{}{"top": map[string]interface{}{}}
+	tpl = `{{if nonNil .top.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "0", dict); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil .bottom.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "0", dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCoalesce(t *testing.T) {
 	tests := map[string]string{
 		`{{ coalesce 1 }}`:                            "1",
@@ -137,7 +171,7 @@ func TestSafeCoalesce(t *testing.T) {
 	tests := map[string]string{
 		`{{ safeCoalesce 1 }}`:                            "1",
 		`{{ safeCoalesce "" 0 nil 2 }}`:                   "",
-		`{{ safeCoalesce nil 0 "" 2 }}`:				   "0",
+		`{{ safeCoalesce nil 0 "" 2 }}`:                   "0",
 		`{{ $two := 2 }}{{ safeCoalesce nil $two "" 0 }}`: "2",
 		`{{ $two := 2 }}{{ safeCoalesce "" $two 0 0 0 }}`: "",
 		`{{ $two := 2 }}{{ safeCoalesce "" $two 3 4 5 }}`: "",

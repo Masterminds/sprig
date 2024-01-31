@@ -42,6 +42,9 @@ However, `default` would return `true` here.
 The `empty` function returns `true` if the given value is considered empty, and
 `false` otherwise. The empty values are listed in the `default` section.
 
+## nonNil
+The `nonNil` function returns `true` if the given value is not `nil`.
+
 ```
 empty .Foo
 ```

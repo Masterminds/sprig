@@ -67,6 +67,10 @@ func empty(given interface{}) bool {
 	}
 }
 
+func nonNil(given interface{}) bool {
+	return given != nil
+}
+
 // coalesce returns the first non-empty value.
 func coalesce(v ...interface{}) interface{} {
 	for _, val := range v {
