@@ -86,8 +86,8 @@ func randFromRegex(regexStr string) string {
 	argsPtr := &regen.GeneratorArgs{
 		RngSource:               rand.NewSource(time.Now().UnixNano()),
 		MaxUnboundedRepeatCount: uint(defaultMaxRandLength),
-		CharSetLowBound:         rune(33),
-		CharSetHighBound:        rune(125),
+		CharSetLowBound:         rune(97),
+		CharSetHighBound:        rune(122),
 		Flags:                   syntax.Perl,
 	}
 
