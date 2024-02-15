@@ -64,3 +64,40 @@ func urlJoin(d map[string]interface{}) string {
 	resURL.User = user
 	return resURL.String()
 }
+
+// chars reserved or need to be encoded in url
+func getIllegalUrlCharMap() map[rune]bool {
+	return map[rune]bool{
+		// reserved chars
+		':':  true,
+		'/':  true,
+		'?':  true,
+		'#':  true,
+		'[':  true,
+		']':  true,
+		'@':  true,
+		'!':  true,
+		'$':  true,
+		'&':  true,
+		'\'': true,
+		'(':  true,
+		')':  true,
+		'*':  true,
+		'+':  true,
+		',':  true,
+		';':  true,
+		'=':  true,
+		// the following chars have to be encoded in url, so consider as reserved for random generated string
+		' ':  true,
+		'"':  true,
+		'%':  true,
+		'<':  true,
+		'>':  true,
+		'\\': true,
+		'^':  true,
+		'`':  true,
+		'{':  true,
+		'|':  true,
+		'}':  true,
+	}
+}
