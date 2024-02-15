@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"reflect"
+	"regexp"
 	"regexp/syntax"
 	"strconv"
 	"strings"
@@ -86,8 +87,8 @@ func randFromRegex(regexStr string) string {
 	argsPtr := &regen.GeneratorArgs{
 		RngSource:               rand.NewSource(time.Now().UnixNano()),
 		MaxUnboundedRepeatCount: uint(defaultMaxRandLength),
-		CharSetLowBound:         rune(97),
-		CharSetHighBound:        rune(122),
+		CharSetLowBound:         rune(32),
+		CharSetHighBound:        rune(126),
 		Flags:                   syntax.Perl,
 	}
 
@@ -97,6 +98,39 @@ func randFromRegex(regexStr string) string {
 	}
 
 	return randomStrGenerator.Generate()
+}
+
+func randFromUrlRegex(regexStr string) string {
+	randomUrl := randFromRegex(regexStr)
+	randomUrlCharSlice := []rune(randomUrl)
+
+	// define the reserved chars
+	reservedChars := getIllegalUrlCharMap()
+
+	// replace the reserved url chars with X
+	regexMatcher, err := regexp.Compile(regexStr)
+	if err != nil {
+		return fmt.Sprintf("Error compiling regex: %s, error: %s", regexStr, err.Error())
+	}
+
+	for idx, curChar := range randomUrlCharSlice {
+		if _, exists := reservedChars[curChar]; !exists {
+			continue
+		}
+
+		randomUrlCharSlice[idx] = 'X'
+		newUrlStr := string(randomUrlCharSlice)
+		if regexMatcher.MatchString(newUrlStr) {
+			continue
+		}
+
+		// if the string cannot be matched with the regex, then the last replaced char must be a static char of the regex,
+		// revert the replacement
+		randomUrlCharSlice[idx] = curChar
+	}
+
+	finalRandomUrl := string(randomUrlCharSlice)
+	return finalRandomUrl
 }
 
 func untitle(str string) string {
