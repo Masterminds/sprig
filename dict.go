@@ -89,7 +89,7 @@ func dict(v ...interface{}) map[string]interface{} {
 
 func merge(dst map[string]interface{}, srcs ...map[string]interface{}) interface{} {
 	for _, src := range srcs {
-		if err := mergo.Merge(&dst, src); err != nil {
+		if err := mergo.Merge(&dst, src, mergo.WithoutDereference); err != nil {
 			// Swallow errors inside of a template.
 			return ""
 		}
@@ -99,7 +99,7 @@ func merge(dst map[string]interface{}, srcs ...map[string]interface{}) interface
 
 func mustMerge(dst map[string]interface{}, srcs ...map[string]interface{}) (interface{}, error) {
 	for _, src := range srcs {
-		if err := mergo.Merge(&dst, src); err != nil {
+		if err := mergo.Merge(&dst, src, mergo.WithoutDereference); err != nil {
 			return nil, err
 		}
 	}
