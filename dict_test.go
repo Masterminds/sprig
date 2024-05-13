@@ -157,7 +157,9 @@ func TestMerge(t *testing.T) {
 			"j": "jay",
 			"k": map[string]interface{}{
 				"l": false,
+				"m": true,
 			},
+			"z": 10,
 		},
 		"dst": map[string]interface{}{
 			"a": "one",
@@ -167,9 +169,12 @@ func TestMerge(t *testing.T) {
 			},
 			"g": []int{8, 9},
 			"i": "eye",
+			"j": nil,
 			"k": map[string]interface{}{
 				"l": true,
+				"m": false,
 			},
+			"z": 0,
 		},
 	}
 	tpl := `{{merge .dst .src1 .src2}}`
@@ -191,7 +196,9 @@ func TestMerge(t *testing.T) {
 		"j": "jay",       // overridden and merged
 		"k": map[string]interface{}{
 			"l": true, // overridden
+			"m": false,
 		},
+		"z": 0, // zero value should be preserved
 	}
 	assert.Equal(t, expected, dict["dst"])
 }
