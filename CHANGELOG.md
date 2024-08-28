@@ -307,7 +307,7 @@ This release adds new functions, including:
 - Added `semver` and `semverCompare` for Semantic Versions
 - `list` replaces `tuple`
 - Fixed issue with `join`
-- Added `first`, `last`, `intial`, `rest`, `prepend`, `append`, `toString`, `toStrings`, `sortAlpha`, `reverse`, `coalesce`, `pluck`, `pick`, `compact`, `keys`, `omit`, `uniq`, `has`, `without`
+- Added `first`, `last`, `initial`, `rest`, `prepend`, `append`, `toString`, `toStrings`, `sortAlpha`, `reverse`, `coalesce`, `pluck`, `pick`, `compact`, `keys`, `omit`, `uniq`, `has`, `without`
 
 ## Release 2.9.0 (2017-02-23)
 
