@@ -71,7 +71,7 @@ randBytes 24
 
 The `derivePassword` function can be used to derive a specific password based on
 some shared "master password" constraints. The algorithm for this is
-[well specified](https://masterpassword.app/masterpassword-algorithm.pdf).
+[well specified](https://spectre.app/spectre-algorithm.pdf).
 
 ```
 derivePassword 1 "long" "password" "user" "example.com"
