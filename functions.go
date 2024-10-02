@@ -184,6 +184,8 @@ var genericMap = map[string]interface{}{
 	// splitn "/" foo/bar/fuu returns map[int]string{0: foo, 1: bar/fuu}
 	"splitn":    splitn,
 	"toStrings": strslice,
+	// splitToMap returns map[string]string
+	"splitToMap": splitToMap,
 
 	"until":     until,
 	"untilStep": untilStep,
