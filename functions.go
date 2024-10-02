@@ -323,6 +323,7 @@ var genericMap = map[string]interface{}{
 	"mustLast":    mustLast,
 	"initial":     initial,
 	"mustInitial": mustInitial,
+	"sortNumeric": sortNumeric,
 	"reverse":     reverse,
 	"mustReverse": mustReverse,
 	"uniq":        uniq,
