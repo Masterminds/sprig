@@ -272,6 +272,7 @@ var genericMap = map[string]interface{}{
 
 	// Network:
 	"getHostByName": getHostByName,
+	"cidrNetmask":   cidrNetmask,
 
 	// Paths:
 	"base":  path.Base,
