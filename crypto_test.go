@@ -311,6 +311,8 @@ func testGenSelfSignedCert(t *testing.T, keyAlgo *string) {
 		ip2  = "10.0.0.2"
 		dns1 = "bar.com"
 		dns2 = "bat.com"
+		uri1 = "https://www.example.com"
+		uri2 = "spiffe://example.com/workload"
 	)
 
 	var genSelfSignedCertExpr string
@@ -321,7 +323,7 @@ func testGenSelfSignedCert(t *testing.T, keyAlgo *string) {
 	}
 
 	tpl := fmt.Sprintf(
-		`{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") 365 }}
+		`{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") (list "%s" "%s") 365 }}
 {{ $cert.Cert }}`,
 		genSelfSignedCertExpr,
 		cn,
@@ -329,6 +331,8 @@ func testGenSelfSignedCert(t *testing.T, keyAlgo *string) {
 		ip2,
 		dns1,
 		dns2,
+		uri1,
+		uri2,
 	)
 
 	out, err := runRaw(tpl, nil)
@@ -350,6 +354,8 @@ func testGenSelfSignedCert(t *testing.T, keyAlgo *string) {
 	assert.Equal(t, ip2, cert.IPAddresses[1].String())
 	assert.Contains(t, cert.DNSNames, dns1)
 	assert.Contains(t, cert.DNSNames, dns2)
+	assert.Equal(t, uri1, cert.URIs[0].String())
+	assert.Equal(t, uri2, cert.URIs[1].String())
 	assert.False(t, cert.IsCA)
 }
 
@@ -374,6 +380,8 @@ func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 		ip2  = "10.0.0.2"
 		dns1 = "bar.com"
 		dns2 = "bat.com"
+		uri1 = "https://www.example.com"
+		uri2 = "spiffe://example.com/workload"
 	)
 
 	var genCAExpr, genSignedCertExpr string
@@ -390,7 +398,7 @@ func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 
 	tpl := fmt.Sprintf(
 		`{{- $ca := %s "foo" 365 }}
-{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") 365 $ca }}
+{{- $cert := %s "%s" (list "%s" "%s") (list "%s" "%s") (list "%s" "%s") 365 $ca }}
 {{ $cert.Cert }}
 `,
 		genCAExpr,
@@ -400,6 +408,8 @@ func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 		ip2,
 		dns1,
 		dns2,
+		uri1,
+		uri2,
 	)
 	out, err := runRaw(tpl, nil)
 	if err != nil {
@@ -421,6 +431,8 @@ func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 	assert.Equal(t, ip2, cert.IPAddresses[1].String())
 	assert.Contains(t, cert.DNSNames, dns1)
 	assert.Contains(t, cert.DNSNames, dns2)
+	assert.Equal(t, uri1, cert.URIs[0].String())
+	assert.Equal(t, uri2, cert.URIs[1].String())
 	assert.False(t, cert.IsCA)
 }
 
