@@ -187,11 +187,14 @@ func strval(v interface{}) string {
 }
 
 func trunc(c int, s string) string {
-	if c < 0 && len(s)+c > 0 {
-		return s[len(s)+c:]
+	rlen := len([]rune(s))
+	if c < 0 && rlen+c > 0 {
+		r := []rune(s)
+		return string(r[len(r)+c:])
 	}
-	if c >= 0 && len(s) > c {
-		return s[:c]
+	if c >= 0 && rlen > c {
+		r := []rune(s)
+		return string(r[:c])
 	}
 	return s
 }
