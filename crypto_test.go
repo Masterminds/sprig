@@ -65,20 +65,23 @@ func TestBcrypt(t *testing.T) {
 }
 
 type HtpasswdCred struct {
-	Username string
-	Password string
-	Valid    bool
+	Username      string
+	Password      string
+	HashAlgorithm HashAlgorithm
+	Valid         bool
 }
 
 func TestHtpasswd(t *testing.T) {
 	expectations := []HtpasswdCred{
-		{Username: "myUser", Password: "myPassword", Valid: true},
-		{Username: "special'o79Cv_*qFe,)<user", Password: "special<j7+3p#6-.Jx2U:m8G;kGypassword", Valid: true},
-		{Username: "wrongus:er", Password: "doesn'tmatter", Valid: false}, // ':' isn't allowed in the username - https://tools.ietf.org/html/rfc2617#page-6
+		{Username: "myUser", Password: "myPassword", HashAlgorithm: HashBCrypt, Valid: true},
+		{Username: "special'o79Cv_*qFe,)<user", Password: "special<j7+3p#6-.Jx2U:m8G;kGypassword", HashAlgorithm: HashBCrypt, Valid: true},
+		{Username: "wrongus:er", Password: "doesn'tmatter", HashAlgorithm: HashBCrypt, Valid: false}, // ':' isn't allowed in the username - https://tools.ietf.org/html/rfc2617#page-6
+		{Username: "mySahUser", Password: "myShaPassword", HashAlgorithm: HashSHA, Valid: true},
+		{Username: "myDefaultUser", Password: "defaulthashpass", Valid: true},
 	}
 
 	for _, credential := range expectations {
-		out, err := runRaw(`{{htpasswd .Username .Password}}`, credential)
+		out, err := runRaw(`{{htpasswd .Username .Password .HashAlgorithm}}`, credential)
 		if err != nil {
 			t.Error(err)
 		}
@@ -86,8 +89,15 @@ func TestHtpasswd(t *testing.T) {
 		if 0 != strings.Compare(credential.Username, result[0]) && credential.Valid {
 			t.Error("Generated username did not match for:", credential.Username)
 		}
-		if bcrypt_lib.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
-			t.Error("Generated hash is not the equivalent for password:", credential.Password)
+		switch credential.HashAlgorithm {
+		case HashSHA:
+			if strings.TrimPrefix(result[1], "{SHA}") != hashSha(credential.Password) {
+				t.Error("Generated hash is not the equivalent for password:", credential.Password)
+			}
+		default:
+			if bcrypt_lib.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
+				t.Error("Generated hash is not the equivalent for password:", credential.Password)
+			}
 		}
 	}
 }

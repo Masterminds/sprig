@@ -49,10 +49,10 @@ bcrypt "myPassword"
 
 ## htpasswd
 
-The `htpasswd` function takes a `username` and `password` and generates a `bcrypt` hash of the password. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
+The `htpasswd` function takes a `username`, a `password`, and a `hashAlgorithm` and generates a `bcrypt` (recommended) or a base64 encoded and prefixed `sha` hash of the password. `hashAlgorithm` is optional and defaults to `bcrypt`. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
 
 ```
-htpasswd "myUser" "myPassword"
+htpasswd "myUser" "myPassword" ["bcrypt"|"sha"]
 ```
 
 Note that it is insecure to store the password directly in the template.
