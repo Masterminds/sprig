@@ -275,7 +275,7 @@ The 2.17.0 release did not have a version pinned for xstrings, which caused comp
 ### Fixed
 
 - #60: Fix typo in function name documentation (thanks @neil-ca-moore)
-- #61: Removing line with {{ due to blocking github pages genertion
+- #61: Removing line with {{ due to blocking github pages generation
 - #64: Update the list functions to handle int, string, and other slices for compatibility
 
 ## Release 2.14.0 (2017-10-06)
