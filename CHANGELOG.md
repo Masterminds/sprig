@@ -11,7 +11,7 @@
 - #407: Removed duplicate documentation (functions were documentated in 2 places)
 - #290: Corrected copy/paster oops in math documentation (thanks @zzhu41)
 - #369: Corrected template reference in docs (thanks @chey)
-- #375: Added link to URL documenation (thanks @carlpett)
+- #375: Added link to URL documentation (thanks @carlpett)
 - #406: Updated the mergo dependency which had a breaking change (which was accounted for)
 - #376: Fixed documentation error (thanks @jheyduk)
 - #404: Updated dependency tree
