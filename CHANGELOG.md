@@ -196,7 +196,7 @@ We debated whether this classifies as a change worthy of major revision, but giv
 - doc: adds missing documentation. 4b871e6 (Fernandez Ludovic)
 - Replace outdated goutils imports 01893d2 (Matthew Lorimor)
 - Surface crypto secure random strings from goutils fe1de12 (Matthew Lorimor)
-- Handle untyped nil values as paramters to string functions 2b2ec8f (Morten Torkildsen)
+- Handle untyped nil values as parameters to string functions 2b2ec8f (Morten Torkildsen)
 
 ### Fixed
 
