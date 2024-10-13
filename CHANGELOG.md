@@ -8,7 +8,7 @@
 
 ### Changed
 
-- #407: Removed duplicate documentation (functions were documentated in 2 places)
+- #407: Removed duplicate documentation (functions were documented in 2 places)
 - #290: Corrected copy/paster oops in math documentation (thanks @zzhu41)
 - #369: Corrected template reference in docs (thanks @chey)
 - #375: Added link to URL documentation (thanks @carlpett)
