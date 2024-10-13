@@ -137,7 +137,7 @@ that impacts sprig functionality. Do not use sprig with a version newer than 0.3
 
 - #122: Added encryptAES/decryptAES functions (thanks @n0madic)
 - #128: Added toDecimal support (thanks @Dean-Coakley)
-- #169: Added list contcat (thanks @astorath)
+- #169: Added list concat (thanks @astorath)
 - #174: Added deepEqual function (thanks @bonifaido)
 - #170: Added url parse and join functions (thanks @astorath)
 
