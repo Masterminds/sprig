@@ -174,7 +174,7 @@ func intArrayToString(slice []int, delimiter string) string {
 }
 
 // performs a float and subsequent decimal.Decimal conversion on inputs,
-// and iterates through a and b executing the mathmetical operation f
+// and iterates through a and b executing the mathematical operation f
 func execDecimalOp(a interface{}, b []interface{}, f func(d1, d2 decimal.Decimal) decimal.Decimal) float64 {
 	prt := decimal.NewFromFloat(toFloat64(a))
 	for _, x := range b {
