@@ -201,7 +201,7 @@ func TestRandBytes(t *testing.T) {
 	}
 }
 
-func TestUUIDGeneration(t *testing.T) {
+func TestUUIDv4Generation(t *testing.T) {
 	tpl := `{{uuidv4}}`
 	out, err := runRaw(tpl, nil)
 	if err != nil {
@@ -219,6 +219,32 @@ func TestUUIDGeneration(t *testing.T) {
 
 	if out == out2 {
 		t.Error("Expected subsequent UUID generations to be different")
+	}
+}
+
+func TestUUIDv5Generation(t *testing.T) {
+	tpl := `{{uuidv5 "2be4f575-0625-4376-bfca-fc237ac4fd8a" "Hello World"}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(out) != 36 {
+		t.Error("Expected UUID of length 36")
+	}
+
+	out2, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if out != out2 {
+		t.Error("Expected subsequent UUID generations to be identical")
+	}
+
+	tpl = `{{uuidv5 "2be4f575-0625-4376-bfca-fc237ac4fd8a" "Hello World"}}`
+	if err := runt(tpl, "c493a152-08ba-5679-a958-de98ebcc8160"); err != nil {
+		t.Error(err)
 	}
 }
 
