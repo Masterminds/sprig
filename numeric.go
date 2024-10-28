@@ -169,12 +169,12 @@ func seq(params ...int) string {
 	}
 }
 
-func intArrayToString(slice []int, delimeter string) string {
-	return strings.Trim(strings.Join(strings.Fields(fmt.Sprint(slice)), delimeter), "[]")
+func intArrayToString(slice []int, delimiter string) string {
+	return strings.Trim(strings.Join(strings.Fields(fmt.Sprint(slice)), delimiter), "[]")
 }
 
 // performs a float and subsequent decimal.Decimal conversion on inputs,
-// and iterates through a and b executing the mathmetical operation f
+// and iterates through a and b executing the mathematical operation f
 func execDecimalOp(a interface{}, b []interface{}, f func(d1, d2 decimal.Decimal) decimal.Decimal) float64 {
 	prt := decimal.NewFromFloat(toFloat64(a))
 	for _, x := range b {

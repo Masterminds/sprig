@@ -79,7 +79,7 @@ func TestSquote(t *testing.T) {
 }
 
 func TestContains(t *testing.T) {
-	// Mainly, we're just verifying the paramater order swap.
+	// Mainly, we're just verifying the parameter order swap.
 	tests := []string{
 		`{{if contains "cat" "fair catch"}}1{{end}}`,
 		`{{if hasPrefix "cat" "catch"}}1{{end}}`,
