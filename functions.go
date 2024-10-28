@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"errors"
+	"github.com/spf13/cast"
 	"html/template"
 	"math/rand"
 	"os"
@@ -167,6 +168,7 @@ var genericMap = map[string]interface{}{
 
 	// Wrap Atoi to stop errors.
 	"atoi":      func(a string) int { i, _ := strconv.Atoi(a); return i },
+	"toBool":    func(a string) bool { return cast.ToBool(a) },
 	"int64":     toInt64,
 	"int":       toInt,
 	"float64":   toFloat64,
