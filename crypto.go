@@ -107,6 +107,17 @@ func uuidv4() string {
 	return uuid.New().String()
 }
 
+// uuidv5 provides a safe and secure UUID v5 implementation
+func uuidv5(namespace, name string) string {
+	// The namespace is always a UUID
+	ns, err := uuid.Parse(namespace)
+	if err != nil {
+		return fmt.Sprintf("namespace must be a valid UUID")
+	}
+
+	return uuid.NewSHA1(ns, []byte(name)).String()
+}
+
 var masterPasswordSeed = "com.lyndir.masterpassword"
 
 var passwordTypeTemplates = map[string][][]byte{
