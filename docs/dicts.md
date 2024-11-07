@@ -181,6 +181,52 @@ deepCopy $source | mergeOverwrite $dest
 
 `mustMergeOverwrite` will return an error in case of unsuccessful merge.
 
+## mergeAppendSlice, mustMergeAppendSlice
+
+Merge two or more dictionaries into one, giving precedence to the dest dictionary, merging slices by appending them
+rather than overwriting them.
+
+Given:
+
+```
+dst:
+  overwrite: me
+  groceries: 
+  - apples
+  key: true
+
+src:
+  overwrite: overwritten
+  groceries:
+  - bananas
+  key: false
+```
+
+will result in:
+
+```
+newdict:
+  overwrite: overwritten
+  groceries:
+  - bananas
+  - apples
+  key: false
+```
+
+```
+$newdict := mergeAppendSlice $dest $source1 $source2
+```
+
+This is a deep merge operation but not a deep copy operation. Nested objects that
+are merged are the same instance on both dicts. If you want a deep copy along
+with the merge than use the `deepCopy` function along with merging. For example,
+
+```
+deepCopy $source | mergeAppendSlice $dest
+```
+
+`mustMergeAppendSlice` will return an error in case of unsuccessful merge.
+
 ## keys
 
 The `keys` function will return a `list` of all of the keys in one or more `dict`
