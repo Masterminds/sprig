@@ -154,6 +154,7 @@ func TestSortAlpha(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
 func TestBase64EncodeDecode(t *testing.T) {
 	magicWord := "coffee"
 	expect := base64.StdEncoding.EncodeToString([]byte(magicWord))
@@ -171,6 +172,32 @@ func TestBase64EncodeDecode(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestBase64DecodeErr(t *testing.T) {
+	expect := "illegal base64 data at input byte 4"
+
+	tpl := `{{b64dec "coffee"}}`
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMustBase64Decode(t *testing.T) {
+	expect := "coffee"
+	b64data := base64.StdEncoding.EncodeToString([]byte(expect))
+
+	tpl := fmt.Sprintf("{{mustB64dec %q}}", b64data)
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMustBase64DecodeErr(t *testing.T) {
+	tpl := `{{mustB64dec "coffee"}}`
+	_, err := runRaw(tpl, nil)
+	assert.EqualError(t, err, `template: test:1:2: executing "test" at <mustB64dec "coffee">: error calling mustB64dec: illegal base64 data at input byte 4`)
+}
+
 func TestBase32EncodeDecode(t *testing.T) {
 	magicWord := "coffee"
 	expect := base32.StdEncoding.EncodeToString([]byte(magicWord))
@@ -187,6 +214,31 @@ func TestBase32EncodeDecode(t *testing.T) {
 	if err := runt(tpl, magicWord); err != nil {
 		t.Error(err)
 	}
+}
+
+func TestBase32DecodeErr(t *testing.T) {
+	expect := "illegal base32 data at input byte 0"
+
+	tpl := `{{b32dec "coffee"}}`
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMustBase32Decode(t *testing.T) {
+	expect := "coffee"
+	b32data := base32.StdEncoding.EncodeToString([]byte(expect))
+
+	tpl := fmt.Sprintf("{{mustB32dec %q}}", b32data)
+	if err := runt(tpl, expect); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMustBase32DecodeErr(t *testing.T) {
+	tpl := `{{mustB32dec "coffee"}}`
+	_, err := runRaw(tpl, nil)
+	assert.EqualError(t, err, `template: test:1:2: executing "test" at <mustB32dec "coffee">: error calling mustB32dec: illegal base32 data at input byte 0`)
 }
 
 func TestGoutils(t *testing.T) {
