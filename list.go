@@ -243,6 +243,28 @@ func sortAlpha(list interface{}) []string {
 	return []string{strval(list)}
 }
 
+func sortNumeric(list interface{}) []string {
+	k := reflect.Indirect(reflect.ValueOf(list)).Kind()
+	switch k {
+	case reflect.Slice, reflect.Array:
+		switch v := list.(type) {
+		case []interface{}:
+			b := make([]int, 0, len(v))
+			for _, s := range v {
+				if s != nil {
+					b = append(b, toInt(s))
+				}
+			}
+			sort.IntSlice(b).Sort()
+			return strslice(b)
+		default:
+			return strslice(list)
+		}
+
+	}
+	return strslice(list)
+}
+
 func reverse(v interface{}) []interface{} {
 	l, err := mustReverse(v)
 	if err != nil {

@@ -188,6 +188,17 @@ func TestMustRest(t *testing.T) {
 	}
 }
 
+func TestSortNumeric(t *testing.T) {
+	// Named `append` in the function map
+	tests := map[string]string{
+		`{{ list 2 1 4 3 | sortNumeric }}`:       "[1 2 3 4]",
+		`{{ list 0 10 2 4 1 11 | sortNumeric }}`: "[0 1 2 4 10 11]",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
 func TestReverse(t *testing.T) {
 	tests := map[string]string{
 		`{{ list 1 2 3 | reverse | first }}`:              "3",
