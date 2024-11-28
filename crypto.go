@@ -569,7 +569,7 @@ func getBaseCertTemplate(
 		IPAddresses: ipAddresses,
 		DNSNames:    dnsNames,
 		NotBefore:   time.Now(),
-		NotAfter:    time.Now().Add(time.Hour * 24 * time.Duration(daysValid)),
+		NotAfter:    time.Now().Add(time.Duration(daysValid) * 24 * time.Hour),
 		KeyUsage:    x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
 		ExtKeyUsage: []x509.ExtKeyUsage{
 			x509.ExtKeyUsageServerAuth,
