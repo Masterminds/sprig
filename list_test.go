@@ -331,6 +331,7 @@ func TestSlice(t *testing.T) {
 		`{{ slice (list 1 2 3) 1 3 }}`:                      "[2 3]",
 		`{{ slice (list 1 2 3) 1 }}`:                        "[2 3]",
 		`{{ slice (regexSplit "/" "foo/bar/baz" -1) 1 2 }}`: "[bar]",
+		`{{ slice "test" 1 3 }}`:                            "es",
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))
@@ -344,6 +345,7 @@ func TestMustSlice(t *testing.T) {
 		`{{ mustSlice (list 1 2 3) 1 3 }}`:                      "[2 3]",
 		`{{ mustSlice (list 1 2 3) 1 }}`:                        "[2 3]",
 		`{{ mustSlice (regexSplit "/" "foo/bar/baz" -1) 1 2 }}`: "[bar]",
+		`{{ mustSlice "test" 1 3 }}`:                            "es",
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))
