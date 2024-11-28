@@ -341,7 +341,7 @@ func generateCertificateAuthority(
 	cn string,
 	daysValid int,
 ) (certificate, error) {
-	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	priv, err := rsa.GenerateKey(rand.Reader, 4096)
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
