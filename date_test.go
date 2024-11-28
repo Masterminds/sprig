@@ -104,6 +104,9 @@ func TestDuration(t *testing.T) {
 	if err := runtv(tpl, "26h3m4s", map[string]interface{}{"Secs": "93784"}); err != nil {
 		t.Error(err)
 	}
+	if err := runtv(tpl, "0s", map[string]interface{}{"Secs": 90 * time.Second}); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestDurationRound(t *testing.T) {
@@ -115,6 +118,27 @@ func TestDurationRound(t *testing.T) {
 		t.Error(err)
 	}
 	if err := runtv(tpl, "3mo", map[string]interface{}{"Time": "2400h5s"}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "0s", map[string]interface{}{"Time": "unparseable"}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "1m", map[string]interface{}{"Time": 90 * time.Second}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "3y", map[string]interface{}{"Time": time.Date(2020, time.March, 5, 11, 11, 11, 0, time.UTC)}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "25s", map[string]interface{}{"Time": 25.5}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "0s", map[string]interface{}{"Time": byte(25)}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "2m", map[string]interface{}{"Time": 150}); err != nil {
+		t.Error(err)
+	}
+	if err := runtv(tpl, "5s", map[string]interface{}{"Time": -5 * time.Second}); err != nil {
 		t.Error(err)
 	}
 }
