@@ -117,4 +117,7 @@ func TestDurationRound(t *testing.T) {
 	if err := runtv(tpl, "3mo", map[string]interface{}{"Time": "2400h5s"}); err != nil {
 		t.Error(err)
 	}
+	if err := runtv(tpl, "1m", map[string]interface{}{"Time": time.Duration(time.Second * 60)}); err != nil {
+		t.Error(err)
+	}
 }
