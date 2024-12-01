@@ -86,6 +86,8 @@ func duration(sec interface{}) string {
 	switch value := sec.(type) {
 	default:
 		n = 0
+	case time.Duration:
+		n = int64(value / time.Second)
 	case string:
 		n, _ = strconv.ParseInt(value, 10, 64)
 	case int64:
@@ -99,6 +101,8 @@ func durationRound(duration interface{}) string {
 	switch duration := duration.(type) {
 	default:
 		d = 0
+	case time.Duration:
+		d = duration
 	case string:
 		d, _ = time.ParseDuration(duration)
 	case int64:
