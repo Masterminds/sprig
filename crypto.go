@@ -10,6 +10,7 @@ import (
 	"crypto/ed25519"
 	"crypto/elliptic"
 	"crypto/hmac"
+	"crypto/md5"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/sha1"
@@ -71,6 +72,11 @@ func hashSha(password string) string {
 	s.Write([]byte(password))
 	passwordSum := []byte(s.Sum(nil))
 	return base64.StdEncoding.EncodeToString(passwordSum)
+}
+
+func md5sum(input string) string {
+	hash := md5.Sum([]byte(input))
+	return hex.EncodeToString(hash[:])
 }
 
 // HashAlgorithm enum for hashing algorithms

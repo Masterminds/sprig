@@ -267,3 +267,11 @@ algorithm and returns the decoded text.
 ```
 "30tEfhuJSVRhpG97XCuWgz2okj7L8vQ1s6V9zVUPeDQ=" | decryptAES "secretkey"
 ```
+
+## md5sum
+
+The `md5sum` function receives a string, and computes it's MD5 digest.
+
+```
+md5sum "Hello world!"
+```
