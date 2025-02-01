@@ -59,11 +59,19 @@ func TestSnakeCase(t *testing.T) {
 }
 
 func TestCamelCase(t *testing.T) {
-	assert.NoError(t, runt(`{{ camelcase "http_server" }}`, "HttpServer"))
-	assert.NoError(t, runt(`{{ camelcase "_camel_case" }}`, "_CamelCase"))
-	assert.NoError(t, runt(`{{ camelcase "no_https" }}`, "NoHttps"))
-	assert.NoError(t, runt(`{{ camelcase "_complex__case_" }}`, "_Complex_Case_"))
-	assert.NoError(t, runt(`{{ camelcase "all" }}`, "All"))
+	assert.NoError(t, runt(`{{ camelcase "http_server" }}`, "httpServer"))
+	assert.NoError(t, runt(`{{ camelcase "_camel_case" }}`, "_camelCase"))
+	assert.NoError(t, runt(`{{ camelcase "no_https" }}`, "noHttps"))
+	assert.NoError(t, runt(`{{ camelcase "_complex__case_" }}`, "_complex_Case_"))
+	assert.NoError(t, runt(`{{ camelcase "all" }}`, "all"))
+}
+
+func TestPascalCase(t *testing.T) {
+	assert.NoError(t, runt(`{{ pascalcase "http_server" }}`, "HttpServer"))
+	assert.NoError(t, runt(`{{ pascalcase "_camel_case" }}`, "_CamelCase"))
+	assert.NoError(t, runt(`{{ pascalcase "no_https" }}`, "NoHttps"))
+	assert.NoError(t, runt(`{{ pascalcase "_complex__case_" }}`, "_Complex_Case_"))
+	assert.NoError(t, runt(`{{ pascalcase "all" }}`, "All"))
 }
 
 func TestKebabCase(t *testing.T) {

@@ -141,10 +141,14 @@ var genericMap = map[string]interface{}{
 	"swapcase":     util.SwapCase,
 	"shuffle":      xstrings.Shuffle,
 	"snakecase":    xstrings.ToSnakeCase,
-	// camelcase used to call xstrings.ToCamelCase, but that function had a breaking change in version
-	// 1.5 that moved it from upper camel case to lower camel case. This is a breaking change for sprig.
-	// A new xstrings.ToPascalCase function was added that provided upper camel case.
-	"camelcase": xstrings.ToPascalCase,
+	// camelcase used to call xstrings.ToCamelCase, which now provides lower camel case.
+	// This preserves backward compatibility for users who expect lower camel case.
+	"camelcase": xstrings.ToCamelCase,
+
+	// pascalcase uses xstrings.ToPascalCase to provide upper camel case functionality.
+	// This was added to address the breaking change in xstrings v1.5.
+	"pascalcase": xstrings.ToPascalCase,
+
 	"kebabcase": xstrings.ToKebabCase,
 	"wrap":      func(l int, s string) string { return util.Wrap(s, l) },
 	"wrapWith":  func(l int, sep, str string) string { return util.WrapCustom(str, l, sep, true) },
