@@ -171,6 +171,16 @@ func TestBase64EncodeDecode(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestHexEncodeDecode(t *testing.T) {
+	magicWord := "\x00coffee\xfb"
+
+	tpl := `{{printf "%x" "\x00coffee\xfb" | hexdec }}`
+	if err := runt(tpl, magicWord); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestBase32EncodeDecode(t *testing.T) {
 	magicWord := "coffee"
 	expect := base32.StdEncoding.EncodeToString([]byte(magicWord))
