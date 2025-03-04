@@ -252,6 +252,21 @@ func TestIndent(t *testing.T) {
 	}
 }
 
+func TestIndentNonEmpty(t *testing.T) {
+	tpl := `{{indentnonempty 4 "a\nb\nc"}}`
+	if err := runt(tpl, "    a\n    b\n    c"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{indentnonempty 4 "a\n  \nb\nc"}}`
+	if err := runt(tpl, "    a\n  \n    b\n    c"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{indentnonempty 4 "a\n  \nb\nc\n"}}`
+	if err := runt(tpl, "    a\n  \n    b\n    c\n"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestNindent(t *testing.T) {
 	tpl := `{{nindent 4 "a\nb\nc"}}`
 	if err := runt(tpl, "\n    a\n    b\n    c"); err != nil {
