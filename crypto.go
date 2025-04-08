@@ -683,6 +683,7 @@ func decryptAES(password string, crypt64 string) (string, error) {
 func gzipCompress(input string) (string, error) {
 	var buffer bytes.Buffer
 	gzipWriter := gzip.NewWriter(&buffer)
+	defer gzipWriter.Close()
 	_, err := gzipWriter.Write([]byte(input))
 	if err != nil {
 		return "", err
@@ -696,7 +697,8 @@ func gzipCompress(input string) (string, error) {
 }
 
 func gzipDecompress(input string) (string, error) {
-	gzipReader, err := gzip.NewReader(bytes.NewReader([]byte(input)))
+	gzipReader, err := gzip.NewReader(strings.NewReader(input))
+	defer gzipReader.Close()
 	if err != nil {
 		return "", err
 	}
