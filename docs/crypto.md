@@ -21,6 +21,17 @@ sha256sum "Hello world!"
 The above will compute the SHA 256 sum in an "ASCII armored" format that is
 safe to print.
 
+## sha512sum
+
+The `sha512sum` function receives a string, and computes it's SHA512 digest.
+
+```
+sha512sum "Hello world!"
+```
+
+The above will compute the SHA 512 sum in an "ASCII armored" format that is
+safe to print.
+
 ## adler32sum
 
 The `adler32sum` function receives a string, and computes its Adler-32 checksum.
@@ -38,10 +49,10 @@ bcrypt "myPassword"
 
 ## htpasswd
 
-The `htpasswd` function takes a `username` and `password` and generates a `bcrypt` hash of the password. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
+The `htpasswd` function takes a `username`, a `password`, and a `hashAlgorithm` and generates a `bcrypt` (recommended) or a base64 encoded and prefixed `sha` hash of the password. `hashAlgorithm` is optional and defaults to `bcrypt`. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
 
 ```
-htpasswd "myUser" "myPassword"
+htpasswd "myUser" "myPassword" ["bcrypt"|"sha"]
 ```
 
 Note that it is insecure to store the password directly in the template.
@@ -60,7 +71,7 @@ randBytes 24
 
 The `derivePassword` function can be used to derive a specific password based on
 some shared "master password" constraints. The algorithm for this is
-[well specified](https://masterpassword.app/masterpassword-algorithm.pdf).
+[well specified](https://spectre.app/spectre-algorithm.pdf).
 
 ```
 derivePassword 1 "long" "password" "user" "example.com"
