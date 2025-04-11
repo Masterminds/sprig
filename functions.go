@@ -353,6 +353,7 @@ var genericMap = map[string]interface{}{
 	"encryptAES":               encryptAES,
 	"decryptAES":               decryptAES,
 	"randBytes":                randBytes,
+	"pbkdf2hash":               pbkdf2hash,
 
 	// UUIDs:
 	"uuidv4": uuidv4,

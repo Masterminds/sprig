@@ -24,6 +24,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"hash"
 	"hash/adler32"
 	"io"
 	"math/big"
@@ -34,6 +35,7 @@ import (
 
 	"github.com/google/uuid"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/pbkdf2"
 	"golang.org/x/crypto/scrypt"
 )
 
@@ -677,4 +679,21 @@ func decryptAES(password string, crypt64 string) (string, error) {
 	mode.CryptBlocks(decrypted, crypt)
 
 	return string(decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]), nil
+}
+
+func pbkdf2hash(password string, salt string, iterations int, keyLen int, hashFunc string) string {
+	var h func() hash.Hash
+	switch hashFunc {
+	case "sha1":
+		h = sha1.New
+	case "sha224":
+		h = crypto.SHA224.New
+	case "sha256":
+		h = sha256.New
+	case "sha384":
+		h = crypto.SHA384.New
+	case "sha512":
+		h = sha512.New
+	}
+	return string(pbkdf2.Key([]byte(password), []byte(salt), iterations, keyLen, h))
 }
