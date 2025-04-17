@@ -29,6 +29,10 @@ func TestTrunc(t *testing.T) {
 	if err := runt(tpl, "foo"); err != nil {
 		t.Error(err)
 	}
+	tpl = `{{ "аї😊бс" | trunc 3 }}`
+	if err := runt(tpl, "аї😊"); err != nil {
+		t.Error(err)
+	}
 	tpl = `{{ "baaaaaar" | trunc -3 }}`
 	if err := runt(tpl, "aar"); err != nil {
 		t.Error(err)
