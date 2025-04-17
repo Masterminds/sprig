@@ -12,7 +12,7 @@ require (
 	github.com/shopspring/decimal v1.4.0
 	github.com/spf13/cast v1.7.0
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/crypto v0.26.0
+	golang.org/x/crypto v0.37.0
 )
 
 require (
