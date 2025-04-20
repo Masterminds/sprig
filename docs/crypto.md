@@ -91,6 +91,16 @@ It takes one of the values for its first param:
 - `rsa`: Generate an RSA 4096 key
 - `ed25519`: Generate an Ed25519 key
 
+## derivePublicKey
+
+The `derivePublicKey` function takes a PEM-encoded private key and returns the
+corresponding public key in PEM format.
+
+Supported private key types are:
+- ECDSA: elliptic curve DSA key (P256)
+- RSA: RSA 4096 key
+- Ed25519: Ed25519 key
+
 ## buildCustomCert
 
 The `buildCustomCert` function allows customizing the certificate.

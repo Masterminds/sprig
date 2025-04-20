@@ -186,6 +186,113 @@ func TestGenPrivateKey(t *testing.T) {
 	}
 }
 
+func TestDerivePublicKey(t *testing.T) {
+	tpl := `{{genPrivateKey "rsa" | derivePublicKey}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "PUBLIC KEY") {
+		t.Error("Expected PUBLIC KEY", out)
+	}
+	tpl = `{{genPrivateKey "dsa" | derivePublicKey}}`
+	out, err = runRaw(tpl, nil)
+	// x509.MarshalPKIXPublicKey() does not support DSA keys
+	if err == nil || !strings.Contains(err.Error(), "x509: unsupported public key type") {
+		t.Error("Expected error to contain 'x509: unsupported public key type'", err)
+	}
+	tpl = `{{genPrivateKey "ecdsa" | derivePublicKey}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "PUBLIC KEY") {
+		t.Error("Expected PUBLIC KEY", out)
+	}
+	tpl = `{{genPrivateKey "ed25519" | derivePublicKey}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "PUBLIC KEY") {
+		t.Error("Expected PUBLIC KEY", out)
+	}
+	testPrivateKey := `-----BEGIN RSA PRIVATE KEY-----
+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
+-----END RSA PRIVATE KEY-----`
+	expectedPublicKey := `-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAjrVUJpXK13XN7o+B1OdP
+rOWt8xpDld3q9GX5f7HlxF98KDBrLzxLcI4nFE1XriEZSCitG7cSC9jvoiU4yA59
+t+fIcmU5fLAwBmkNmWnTPD2YkH7GauenL2+LaGQ/6oc3/KqhHACQ7Sj+tzOwkMiv
+hw7MMdrP1NEXsYQw1ht/o38EcdRf+G9w4d/YU7aKIxM7XX3evDFpada7RhBsMXoO
+tHA/mE4KuztIFZ6e2McB+4fVNPsYN/k9f5ta/iCBdOkG1WdZvDj7KZfLUWno6emD
+3oE6I1crrXeuz/tabjHuQoWhxCV2OZStDMdxFg1rAjZBsq9325kO3N6PiH+pyHrd
+kRZvbQBiFjlJBa+/YMJzU3dDjpCxVBGlIXuT4/22JhdPBxvGwRx9ZLKup2qbfkCx
+tquWMCQN+7SE3mNXxrGxBfMsFtCgVQvkVuDaGhiYQ98DgmR/sXSZ/0okWWIockoX
+WOrnMrXzvhMkF4zsd1CqhF6ctN4SYADCiR2VmeN2brzB3JZHh97DHWDlkWmDALSy
+Izka65Tg7xaEYvAluaKAkbjMYBP9t9rSE3Z5w4BkwTypAnyJkOd4NwzGon3OhEjD
+zHXuCEHwBPZgEcNFbYS1kezDB7QkuzbyTZvDhY+jOnJZuD6JxDLox20LBEGB1dFH
+cn2WwZpyAtzWCqPvtFqKpA0CAwEAAQ==
+-----END PUBLIC KEY-----
+`
+	tpl = `{{derivePublicKey .}}`
+	out, err = runRaw(tpl, testPrivateKey)
+	if err != nil {
+		t.Error(err)
+	}
+	if out != expectedPublicKey {
+		t.Error("Got incorrect public key", out)
+	}
+}
+
 func TestRandBytes(t *testing.T) {
 	tpl := `{{randBytes 12}}`
 	out, err := runRaw(tpl, nil)

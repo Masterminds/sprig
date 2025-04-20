@@ -28,9 +28,8 @@ import (
 	"io"
 	"math/big"
 	"net"
-	"time"
-
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
@@ -198,17 +197,17 @@ func generatePrivateKey(typ string) string {
 		return fmt.Sprintf("failed to generate private key: %s", err)
 	}
 
-	return string(pem.EncodeToMemory(pemBlockForKey(priv)))
+	return string(pem.EncodeToMemory(pemBlockForPrivKey(priv)))
 }
 
 // DSAKeyFormat stores the format for DSA keys.
-// Used by pemBlockForKey
+// Used by pemBlockForPrivKey
 type DSAKeyFormat struct {
 	Version       int
 	P, Q, G, Y, X *big.Int
 }
 
-func pemBlockForKey(priv interface{}) *pem.Block {
+func pemBlockForPrivKey(priv interface{}) *pem.Block {
 	switch k := priv.(type) {
 	case *rsa.PrivateKey:
 		return &pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(k)}
@@ -230,6 +229,14 @@ func pemBlockForKey(priv interface{}) *pem.Block {
 		}
 		return &pem.Block{Type: "PRIVATE KEY", Bytes: b}
 	}
+}
+
+func pemBlockForPubKey(pub interface{}) (*pem.Block, error) {
+	b, err := x509.MarshalPKIXPublicKey(pub)
+	if err != nil {
+		return nil, err
+	}
+	return &pem.Block{Type: "PUBLIC KEY", Bytes: b}, nil
 }
 
 func parsePrivateKeyPEM(pemBlock string) (crypto.PrivateKey, error) {
@@ -291,6 +298,33 @@ func getPublicKey(priv crypto.PrivateKey) (crypto.PublicKey, error) {
 	default:
 		return nil, fmt.Errorf("unable to get public key for type %T", priv)
 	}
+}
+
+func derivePublicKey(privPEM string) (string, error) {
+	priv, err := parsePrivateKeyPEM(privPEM)
+	if err != nil {
+		return "", fmt.Errorf("error parsing private key: %s", err)
+	}
+
+	pub, err := getPublicKey(priv)
+	if err != nil {
+		return "", fmt.Errorf("error getting public key: %s", err)
+	}
+
+	pubBlock, err := pemBlockForPubKey(pub)
+	if err != nil {
+		return "", fmt.Errorf("error getting public key PEM block: %s", err)
+	}
+
+	pubBuffer := bytes.Buffer{}
+	if err := pem.Encode(
+		&pubBuffer,
+		pubBlock,
+	); err != nil {
+		return "", fmt.Errorf("error pem-encoding public key: %s", err)
+	}
+
+	return pubBuffer.String(), nil
 }
 
 type certificate struct {
@@ -534,7 +568,7 @@ func getCertAndKey(
 	keyBuffer := bytes.Buffer{}
 	if err := pem.Encode(
 		&keyBuffer,
-		pemBlockForKey(signeeKey),
+		pemBlockForPrivKey(signeeKey),
 	); err != nil {
 		return "", "", fmt.Errorf("error pem-encoding key: %s", err)
 	}
