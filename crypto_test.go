@@ -442,7 +442,7 @@ func TestEncryptDecryptAES(t *testing.T) {
 }
 
 func TestCompressDecompressGzip(t *testing.T) {
-	tpl := `{{"plaintext" | gzip | ungzip }}`
+	tpl := `{{"plaintext" | gzip | gunzip }}`
 	if err := runt(tpl, "plaintext"); err != nil {
 		t.Error(err)
 	}
