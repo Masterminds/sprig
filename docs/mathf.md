@@ -65,3 +65,13 @@ This will return `1.5`:
 ```
 minf 1.5 2 3
 ```
+
+## absf
+
+Return the absolute value of a float.
+
+This will return `3.14`:
+
+```
+absf -3.14
+```

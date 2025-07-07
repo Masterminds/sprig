@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/spf13/cast"
 	"github.com/shopspring/decimal"
+	"github.com/spf13/cast"
 )
 
 // toFloat64 converts 64-bit floats
@@ -62,6 +62,19 @@ func minf(a interface{}, i ...interface{}) float64 {
 		aa = math.Min(aa, bb)
 	}
 	return aa
+}
+
+func abs(a interface{}) int64 {
+	aa := toInt64(a)
+	if aa < 0 {
+		return -aa
+	}
+	return aa
+}
+
+func absf(a interface{}) float64 {
+	aa := toFloat64(a)
+	return math.Abs(aa)
 }
 
 func until(count int) []int {
