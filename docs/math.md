@@ -34,6 +34,16 @@ Multiply with `mul`. Accepts two or more inputs.
 mul 1 2 3
 ```
 
+## abs
+
+Return the absolute value of an integer.
+
+This will return `3`:
+
+```
+abs -3
+```
+
 ## max
 
 Return the largest of a series of integers:
