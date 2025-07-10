@@ -3,6 +3,7 @@ package sprig
 import (
 	"encoding/base32"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"testing"
 	"unicode/utf8"
@@ -121,8 +122,15 @@ func TestSplitn(t *testing.T) {
 }
 
 func TestToString(t *testing.T) {
-	tpl := `{{ toString 1 | kindOf }}`
-	assert.NoError(t, runt(tpl, "string"))
+	tests := []interface{}{
+		"string",
+		[]byte("bytes"),
+		errors.New("error"),
+	}
+	for _, test := range tests {
+		tpl := `{{ toString .Value| kindOf }}`
+		assert.NoError(t, runtv(tpl, "string", map[string]interface{}{"Value": test}))
+	}
 }
 
 func TestToStrings(t *testing.T) {
