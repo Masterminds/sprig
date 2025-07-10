@@ -123,6 +123,7 @@ func TestSplitn(t *testing.T) {
 
 func TestToString(t *testing.T) {
 	tests := []interface{}{
+		1,
 		"string",
 		[]byte("bytes"),
 		errors.New("error"),
