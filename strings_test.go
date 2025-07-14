@@ -11,6 +11,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type stringerImpl struct {
+	Value string
+}
+
+// String satisfies the Stringer interface.
+func (s stringerImpl) String() string {
+	return s.Value
+}
+
 func TestSubstr(t *testing.T) {
 	tpl := `{{"fooo" | substr 0 3 }}`
 	if err := runt(tpl, "foo"); err != nil {
@@ -127,9 +136,12 @@ func TestToString(t *testing.T) {
 		"string",
 		[]byte("bytes"),
 		errors.New("error"),
+		stringerImpl{
+			Value: "stringer",
+		},
 	}
 	for _, test := range tests {
-		tpl := `{{ toString .Value| kindOf }}`
+		tpl := `{{ toString .Value | kindOf }}`
 		assert.NoError(t, runtv(tpl, "string", map[string]interface{}{"Value": test}))
 	}
 }
