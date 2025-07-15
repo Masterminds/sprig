@@ -86,7 +86,9 @@ block.
 
 It takes one of the values for its first param:
 
-- `ecdsa`: Generate an elliptic curve DSA key (P256)
+- `ecdsa`, `ec_p256`: Generate an elliptic curve DSA key (P-256)
+- `ec_p384`: Generate an elliptic curve DSA key (P-384)
+- `ec_p521`: Generate an elliptic curve DSA key (P-521)
 - `dsa`: Generate a DSA key (L2048N256)
 - `rsa`: Generate an RSA 4096 key
 - `ed25519`: Generate an Ed25519 key
