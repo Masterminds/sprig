@@ -277,6 +277,20 @@ func TestSubf(t *testing.T) {
 	}
 }
 
+func TestAbs(t *testing.T) {
+	tpl := `{{ abs -3 }}`
+	if err := runt(tpl, `3`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestAbsf(t *testing.T) {
+	tpl := `{{ absf -3.4 }}`
+	if err := runt(tpl, `3.4`); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCeil(t *testing.T) {
 	assert.Equal(t, 123.0, ceil(123))
 	assert.Equal(t, 123.0, ceil("123"))
