@@ -1,6 +1,7 @@
 package sprig
 
 import (
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -150,6 +151,15 @@ func TestToJson(t *testing.T) {
 	}
 }
 
+func TestMustToJson(t *testing.T) {
+	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": math.NaN()}}
+
+	tpl := `{{.Top | mustToJson}}`
+	if err := runtv(tpl, "", dict); err == nil {
+		t.Error("expected err, got nil")
+	}
+}
+
 func TestToPrettyJson(t *testing.T) {
 	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": 42}}
 	tpl := `{{.Top | toPrettyJson}}`
@@ -160,6 +170,15 @@ func TestToPrettyJson(t *testing.T) {
 }`
 	if err := runtv(tpl, expected, dict); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestMustToPrettyJson(t *testing.T) {
+	dict := map[string]interface{}{"Top": map[string]interface{}{"bool": true, "string": "test", "number": math.NaN()}}
+
+	tpl := `{{.Top | mustToPrettyJson}}`
+	if err := runtv(tpl, "", dict); err == nil {
+		t.Error("expected err, got nil")
 	}
 }
 
