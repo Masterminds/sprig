@@ -161,6 +161,30 @@ func TestGenPrivateKey(t *testing.T) {
 	if !strings.Contains(out, "EC PRIVATE KEY") {
 		t.Error("Expected EC PRIVATE KEY")
 	}
+	tpl = `{{genPrivateKey "ec_p256"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "EC PRIVATE KEY") {
+		t.Error("Expected EC PRIVATE KEY")
+	}
+	tpl = `{{genPrivateKey "ec_p384"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "EC PRIVATE KEY") {
+		t.Error("Expected EC PRIVATE KEY")
+	}
+	tpl = `{{genPrivateKey "ec_p521"}}`
+	out, err = runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.Contains(out, "EC PRIVATE KEY") {
+		t.Error("Expected EC PRIVATE KEY")
+	}
 	tpl = `{{genPrivateKey "ed25519"}}`
 	out, err = runRaw(tpl, nil)
 	if err != nil {

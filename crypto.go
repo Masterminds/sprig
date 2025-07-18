@@ -186,9 +186,13 @@ func generatePrivateKey(typ string) string {
 		}
 		err = dsa.GenerateKey(key, rand.Reader)
 		priv = key
-	case "ecdsa":
+	case "ecdsa", "ec_p256":
 		// again, good enough for government work
 		priv, err = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	case "ec_p384":
+		priv, err = ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+	case "ec_p521":
+		priv, err = ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
 	case "ed25519":
 		_, priv, err = ed25519.GenerateKey(rand.Reader)
 	default:
