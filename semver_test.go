@@ -17,6 +17,16 @@ func TestSemverCompare(t *testing.T) {
 	}
 }
 
+func TestSemverCompareErr(t *testing.T) {
+	tests := map[string]string{
+		`{{ semverCompare "badConstraint" "1.2.3" }}`: `false`,
+		`{{ semverCompare "1.2.0" "badVersion" }}`:    `false`,
+	}
+	for tpl, expect := range tests {
+		assert.Error(t, runt(tpl, expect))
+	}
+}
+
 func TestSemver(t *testing.T) {
 	tests := map[string]string{
 		`{{ $s := semver "1.2.3-beta.1+c0ff33" }}{{ $s.Prerelease }}`: "beta.1",
