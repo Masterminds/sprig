@@ -229,6 +229,8 @@ var genericMap = map[string]interface{}{
 	"min":     min,
 	"maxf":    maxf,
 	"minf":    minf,
+	"abs":     abs,
+	"absf":    absf,
 	"ceil":    ceil,
 	"floor":   floor,
 	"round":   round,
