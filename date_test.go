@@ -16,8 +16,25 @@ func TestHtmlDate(t *testing.T) {
 	}
 }
 
+func TestHtmlDateInZone(t *testing.T) {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{ htmlDateInZone .Time "UTC" }}`
+	if err := runtv(tpl, "2019-06-13", map[string]interface{}{"Time": tm}); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestAgo(t *testing.T) {
 	tpl := "{{ ago .Time }}"
+	// default test case
+	if err := runt(tpl, "0s"); err != nil {
+		t.Error(err)
+	}
+
+	// time.Time test cases
 	if err := runtv(tpl, "2m5s", map[string]interface{}{"Time": time.Now().Add(-125 * time.Second)}); err != nil {
 		t.Error(err)
 	}
@@ -35,6 +52,13 @@ func TestToDate(t *testing.T) {
 	tpl := `{{toDate "2006-01-02" "2017-12-31" | date "02/01/2006"}}`
 	if err := runt(tpl, "31/12/2017"); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestMustToDateReturnsErr(t *testing.T) {
+	tpl := `{{ mustToDate "2006-01-02" "2017-12-31" }}`
+	if err := runt(tpl, "31/12/201"); err == nil {
+		t.Error("expected err, got nil")
 	}
 }
 
@@ -97,6 +121,11 @@ func TestDateInZone(t *testing.T) {
 
 func TestDuration(t *testing.T) {
 	tpl := "{{ duration .Secs }}"
+	// default test case:
+	if err := runt(tpl, "0s"); err != nil {
+		t.Error(err)
+	}
+	// string test cases:
 	if err := runtv(tpl, "1m1s", map[string]interface{}{"Secs": "61"}); err != nil {
 		t.Error(err)
 	}
@@ -107,10 +136,20 @@ func TestDuration(t *testing.T) {
 	if err := runtv(tpl, "26h3m4s", map[string]interface{}{"Secs": "93784"}); err != nil {
 		t.Error(err)
 	}
+	// int64 test case:
+	if err := runtv(tpl, "1h0m0s", map[string]interface{}{"Secs": int64(3600)}); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestDurationRound(t *testing.T) {
 	tpl := "{{ durationRound .Time }}"
+	// default test case
+	if err := runt(tpl, "0s"); err != nil {
+		t.Error(err)
+	}
+
+	// string test cases
 	if err := runtv(tpl, "2h", map[string]interface{}{"Time": "2h5s"}); err != nil {
 		t.Error(err)
 	}
