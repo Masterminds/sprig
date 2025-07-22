@@ -342,6 +342,7 @@ var genericMap = map[string]interface{}{
 	"bcrypt":                   bcrypt,
 	"htpasswd":                 htpasswd,
 	"genPrivateKey":            generatePrivateKey,
+	"derivePublicKey":          derivePublicKey,
 	"derivePassword":           derivePassword,
 	"buildCustomCert":          buildCustomCertificate,
 	"genCA":                    generateCertificateAuthority,
