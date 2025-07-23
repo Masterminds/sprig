@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"bytes"
+	"compress/gzip"
 	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
@@ -677,4 +678,40 @@ func decryptAES(password string, crypt64 string) (string, error) {
 	mode.CryptBlocks(decrypted, crypt)
 
 	return string(decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]), nil
+}
+
+func gzipCompress(input string) (string, error) {
+	var buffer bytes.Buffer
+	gzipWriter := gzip.NewWriter(&buffer)
+	defer gzipWriter.Close()
+	_, err := gzipWriter.Write([]byte(input))
+	if err != nil {
+		return "", err
+	}
+
+	if err := gzipWriter.Close(); err != nil {
+		return "", err
+	}
+
+	return buffer.String(), nil
+}
+
+func gzipDecompress(input string) (string, error) {
+	gzipReader, err := gzip.NewReader(strings.NewReader(input))
+	defer gzipReader.Close()
+	if err != nil {
+		return "", err
+	}
+
+	var buffer bytes.Buffer
+	_, err = buffer.ReadFrom(gzipReader)
+	if err != nil {
+		return "", err
+	}
+
+	if err := gzipReader.Close(); err != nil {
+		return "", err
+	}
+
+	return buffer.String(), nil
 }
