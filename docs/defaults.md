@@ -126,7 +126,8 @@ The above returns indented JSON string representation of `.Item`.
 
 ## toRawJson, mustToRawJson
 
-The `toRawJson` function encodes an item into JSON string with HTML characters unescaped.
+The `toRawJson` function encodes an item into JSON string with HTML characters unescaped. If the item cannot be converted to JSON the function will return an empty string.
+`mustToRawJson` will return an error in case the item cannot be encoded in JSON.
 
 ```
 toRawJson .Item

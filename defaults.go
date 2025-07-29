@@ -134,10 +134,7 @@ func mustToPrettyJson(v interface{}) (string, error) {
 
 // toRawJson encodes an item into a JSON string with no escaping of HTML characters.
 func toRawJson(v interface{}) string {
-	output, err := mustToRawJson(v)
-	if err != nil {
-		panic(err)
-	}
+	output, _ := mustToRawJson(v)
 	return string(output)
 }
 
