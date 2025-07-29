@@ -90,6 +90,8 @@ func duration(sec interface{}) string {
 		n, _ = strconv.ParseInt(value, 10, 64)
 	case int64:
 		n = value
+	case int:
+		n = int64(value)
 	}
 	return (time.Duration(n) * time.Second).String()
 }
