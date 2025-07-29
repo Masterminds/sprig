@@ -51,27 +51,32 @@ dateInZone "2006-01-02" (now) "UTC"
 
 Formats a given amount of seconds as a `time.Duration`.
 
-This returns 1m35s
-
 ```
 duration "95"
+
+# Yields 1m35s
 ```
 
 ## durationRound
 
-Rounds a given duration to the most significant unit. Strings and `time.Duration`
-gets parsed as a duration, while a `time.Time` is calculated as the duration since.
+Rounds a given duration to the most significant unit.
+It always round down, e.g. `durationRound "2h10m5s"` yields `2h` - making it more a `floor` than a `round`.
 
-This return 2h
+`durationRound` accepts `time.Duration` as input; `string` gets parsed into `time.Duration`, `int`, `int64` and 
+`float64` are read as durations in seconds.
+When `time.Time` is given the difference between `time.Now()` and the given time is used as duration.
+ 
 
 ```
 durationRound "2h10m5s"
-```
 
-This returns 3mo
+# Yields 2h
+```
 
 ```
 durationRound "2400h10m5s"
+
+# Yields 3mo
 ```
 
 ## unixEpoch
