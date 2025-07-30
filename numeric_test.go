@@ -2,9 +2,10 @@ package sprig
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"strconv"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUntil(t *testing.T) {
@@ -245,6 +246,13 @@ func TestDiv(t *testing.T) {
 func TestDivf(t *testing.T) {
 	tpl := `{{ 2 | divf 5 4 }}`
 	if err := runt(tpl, `0.625`); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMod(t *testing.T) {
+	tpl := `{{ mod 7 2 }}`
+	if err := runt(tpl, `1`); err != nil {
 		t.Error(err)
 	}
 }
