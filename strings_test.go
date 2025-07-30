@@ -297,3 +297,17 @@ func TestPlural(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestRepeat(t *testing.T) {
+	tpl := `{{ "foo" | repeat 5 }}`
+	if err := runt(tpl, "foofoofoofoofoo"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSplitList(t *testing.T) {
+	tpl := `{{ splitList "$" "foo$bar$baz" }}`
+	if err := runt(tpl, "[foo bar baz]"); err != nil {
+		t.Error(err)
+	}
+}
