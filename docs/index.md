@@ -16,7 +16,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Path and Filepath Functions](paths.md): `base`, `dir`, `ext`, `clean`, `isAbs`, `osBase`, `osDir`, `osExt`, `osClean`, `osIsAbs`
 - [Flow Control Functions](flow_control.md): `fail`
 - Advanced Functions
-  - [UUID Functions](uuid.md): `uuidv4`
+  - [UUID Functions](uuid.md): `uuidv4`, `uuidv5`
   - [OS Functions](os.md): `env`, `expandenv`
   - [Version Comparison Functions](semver.md): `semver`, `semverCompare`
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
