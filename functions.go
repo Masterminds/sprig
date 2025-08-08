@@ -163,6 +163,7 @@ var genericMap = map[string]interface{}{
 	"sha256sum":  sha256sum,
 	"sha512sum":  sha512sum,
 	"adler32sum": adler32sum,
+	"md5sum":     md5sum,
 	"toString":   strval,
 
 	// Wrap Atoi to stop errors.

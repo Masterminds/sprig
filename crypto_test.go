@@ -47,6 +47,13 @@ func TestSha1Sum(t *testing.T) {
 	}
 }
 
+func TestMd5Sum(t *testing.T) {
+	tpl := `{{"abc" | md5sum}}`
+	if err := runt(tpl, "900150983cd24fb0d6963f7d28e17f72"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestAdler32Sum(t *testing.T) {
 	tpl := `{{"abc" | adler32sum}}`
 	if err := runt(tpl, "38600999"); err != nil {
