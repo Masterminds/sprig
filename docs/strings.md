@@ -256,6 +256,18 @@ indent 4 $lots_of_text
 
 The above will indent every line of text by 4 space characters.
 
+## indentnonempty
+
+The `indentnonempty` behaves the same as `indent`, but only indents non-empty
+lines (i.e., lines containing non-space characters). Empty lines are kept as-is.
+
+```
+indentnonempty 4 $lots_of_text
+```
+
+This is useful when indenting generated code as it avoids adding spaces to empty
+lines.
+
 ## nindent
 
 The `nindent` function is the same as the indent function, but prepends a new

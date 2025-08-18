@@ -111,6 +111,18 @@ func indent(spaces int, v string) string {
 	return pad + strings.Replace(v, "\n", "\n"+pad, -1)
 }
 
+func indentnonempty(spaces int, v string) string {
+	pad := strings.Repeat(" ", spaces)
+	lines := strings.Split(v, "\n")
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		lines[i] = pad + line
+	}
+	return strings.Join(lines, "\n")
+}
+
 func nindent(spaces int, v string) string {
 	return "\n" + indent(spaces, v)
 }
