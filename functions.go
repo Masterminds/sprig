@@ -288,10 +288,12 @@ var genericMap = map[string]interface{}{
 	"osIsAbs": filepath.IsAbs,
 
 	// Encoding:
-	"b64enc": base64encode,
-	"b64dec": base64decode,
-	"b32enc": base32encode,
-	"b32dec": base32decode,
+	"b64enc":     base64encode,
+	"b64dec":     base64decode,
+	"mustB64dec": mustBase64decode,
+	"b32enc":     base32encode,
+	"b32dec":     base32decode,
+	"mustB32dec": mustBase32decode,
 
 	// Data Structures:
 	"tuple":              list, // FIXME: with the addition of append/prepend these are no longer immutable.

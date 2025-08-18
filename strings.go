@@ -16,11 +16,19 @@ func base64encode(v string) string {
 }
 
 func base64decode(v string) string {
-	data, err := base64.StdEncoding.DecodeString(v)
+	data, err := mustBase64decode(v)
 	if err != nil {
 		return err.Error()
 	}
-	return string(data)
+	return data
+}
+
+func mustBase64decode(v string) (string, error) {
+	data, err := base64.StdEncoding.DecodeString(v)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func base32encode(v string) string {
@@ -28,11 +36,19 @@ func base32encode(v string) string {
 }
 
 func base32decode(v string) string {
-	data, err := base32.StdEncoding.DecodeString(v)
+	data, err := mustBase32decode(v)
 	if err != nil {
 		return err.Error()
 	}
-	return string(data)
+	return data
+}
+
+func mustBase32decode(v string) (string, error) {
+	data, err := base32.StdEncoding.DecodeString(v)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
 }
 
 func abbrev(width int, s string) string {
