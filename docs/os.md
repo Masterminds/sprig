@@ -22,3 +22,15 @@ To substitute environment variables in a string, use `expandenv`:
 ```
 expandenv "Your path is set to $PATH"
 ```
+
+## mustEnv
+
+`mustEnv` function reads an environment variable, and returns an error if that env var does not exist.
+
+```
+# works
+mustEnv "HOME"
+
+# errors
+mustEnv "INVALID"
+```

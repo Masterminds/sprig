@@ -17,7 +17,7 @@ The Sprig library provides over 70 template functions for Go's template language
 - [Flow Control Functions](flow_control.md): `fail`
 - Advanced Functions
   - [UUID Functions](uuid.md): `uuidv4`
-  - [OS Functions](os.md): `env`, `expandenv`
+  - [OS Functions](os.md): `env`, `expandenv`, `mustEnv`
   - [Version Comparison Functions](semver.md): `semver`, `semverCompare`
   - [Reflection](reflection.md): `typeOf`, `kindIs`, `typeIsLike`, etc.
   - [Cryptographic and Security Functions](crypto.md): `derivePassword`, `sha256sum`, `genPrivateKey`, etc.

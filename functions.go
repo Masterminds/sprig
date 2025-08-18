@@ -88,7 +88,7 @@ var nonhermeticFunctions = []string{
 	// OS
 	"env",
 	"expandenv",
-
+	"mustEnv",
 	// Network
 	"getHostByName",
 }
@@ -269,7 +269,7 @@ var genericMap = map[string]interface{}{
 	// OS:
 	"env":       os.Getenv,
 	"expandenv": os.ExpandEnv,
-
+	"mustEnv": mustEnv,
 	// Network:
 	"getHostByName": getHostByName,
 
