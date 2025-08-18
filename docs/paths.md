@@ -10,7 +10,7 @@ Paths separated by the slash character (`/`), processed by the `path` package.
 Examples:
 
 - The [Linux](https://en.wikipedia.org/wiki/Linux) and
-  [MacOS](https://en.wikipedia.org/wiki/MacOS)
+  [macOS](https://en.wikipedia.org/wiki/macOS)
   [filesystems](https://en.wikipedia.org/wiki/File_system):
   `/home/user/file`, `/etc/config`;
 - The path component of
@@ -64,7 +64,7 @@ These are the recommended functions to use when parsing paths of local filesyste
 
 Examples:
 
-- Running on Linux or MacOS the filesystem path is separated by the slash character (`/`):
+- Running on Linux or macOS the filesystem path is separated by the slash character (`/`):
   `/home/user/file`, `/etc/config`;
 - Running on [Windows](https://en.wikipedia.org/wiki/Microsoft_Windows)
   the filesystem path is separated by the backslash character (`\`):

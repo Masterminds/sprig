@@ -4,14 +4,14 @@
 
 ### Added
 
-- #400: added sha512sum function (thanks @itzik-elayev)
+- #400: added `sha512sum` function (thanks @itzik-elayev)
 
 ### Changed
 
-- #407: Removed duplicate documentation (functions were documentated in 2 places)
+- #407: Removed duplicate documentation (functions were documented in 2 places)
 - #290: Corrected copy/paster oops in math documentation (thanks @zzhu41)
 - #369: Corrected template reference in docs (thanks @chey)
-- #375: Added link to URL documenation (thanks @carlpett)
+- #375: Added link to URL documentation (thanks @carlpett)
 - #406: Updated the mergo dependency which had a breaking change (which was accounted for)
 - #376: Fixed documentation error (thanks @jheyduk)
 - #404: Updated dependency tree
@@ -41,17 +41,17 @@ This is a re-release of 3.2.1 to satisfy something with the Go module system.
 
 ### Added
 
-- #211: Added randInt function (thanks @kochurovro)
-- #223: Added fromJson and mustFromJson functions (thanks @mholt)
-- #242: Added a bcrypt function (thanks @robbiet480)
-- #253: Added randBytes function (thanks @MikaelSmith)
-- #254: Added dig function for dicts (thanks @nyarly)
-- #257: Added regexQuoteMeta for quoting regex metadata (thanks @rheaton)
-- #261: Added filepath functions osBase, osDir, osExt, osClean, osIsAbs (thanks @zugl)
-- #268: Added and and all functions for testing conditions (thanks @phuslu)
-- #181: Added float64 arithmetic addf, add1f, subf, divf, mulf, maxf, and minf
+- #211: Added `randInt` function (thanks @kochurovro)
+- #223: Added `fromJson` and `mustFromJson` functions (thanks @mholt)
+- #242: Added `bcrypt` function (thanks @robbiet480)
+- #253: Added `randBytes` function (thanks @MikaelSmith)
+- #254: Added `dig` function for dicts (thanks @nyarly)
+- #257: Added `regexQuoteMeta` for quoting regex metadata (thanks @rheaton)
+- #261: Added filepath functions `osBase`, `osDir`, `osExt`, `osClean`, `osIsAbs` (thanks @zugl)
+- #268: Added `and` and `all` functions for testing conditions (thanks @phuslu)
+- #181: Added float64 arithmetic `addf`, `add1f`, `subf`, `divf`, `mulf`, `maxf`, and `minf`
   (thanks @andrewmostello)
-- #265: Added chunk function to split array into smaller arrays (thanks @karelbilek)
+- #265: Added `chunk` function to split array into smaller arrays (thanks @karelbilek)
 - #270: Extend certificate functions to handle non-RSA keys + add support for
   ed25519 keys (thanks @misberner)
 
@@ -107,9 +107,9 @@ that impacts sprig functionality. Do not use sprig with a version newer than 0.3
 
 ### Added
 
-- #187: Added durationRound function (thanks @yjp20)
+- #187: Added `durationRound` function (thanks @yjp20)
 - #189: Added numerous template functions that return errors rather than panic (thanks @nrvnrvn)
-- #193: Added toRawJson support (thanks @Dean-Coakley)
+- #193: Added `toRawJson` support (thanks @Dean-Coakley)
 - #197: Added get support to dicts (thanks @Dean-Coakley)
 
 ### Changed
@@ -123,22 +123,22 @@ that impacts sprig functionality. Do not use sprig with a version newer than 0.3
 
 ### Added
 
-- #173: Added getHostByName function to resolve dns names to ips (thanks @fcgravalos)
-- #195: Added deepCopy function for use with dicts
+- #173: Added `getHostByName` function to resolve dns names to ips (thanks @fcgravalos)
+- #195: Added `deepCopy` function for use with dicts
 
 ### Changed
 
-- Updated merge and mergeOverwrite documentation to explain copying and how to
-  use deepCopy with it
+- Updated `merge` and `mergeOverwrite` documentation to explain copying and how to
+  use `deepCopy` with it
 
 ## Release 2.21.0 (2019-09-18)
 
 ### Added
 
-- #122: Added encryptAES/decryptAES functions (thanks @n0madic)
-- #128: Added toDecimal support (thanks @Dean-Coakley)
-- #169: Added list contcat (thanks @astorath)
-- #174: Added deepEqual function (thanks @bonifaido)
+- #122: Added `encryptAES`/`decryptAES` functions (thanks @n0madic)
+- #128: Added `toDecimal` support (thanks @Dean-Coakley)
+- #169: Added list `concat` (thanks @astorath)
+- #174: Added `deepEqual` function (thanks @bonifaido)
 - #170: Added url parse and join functions (thanks @astorath)
 
 ### Changed
@@ -148,7 +148,7 @@ that impacts sprig functionality. Do not use sprig with a version newer than 0.3
 ### Fixed
 
 - #172: Fix semver wildcard example (thanks @piepmatz)
-- #175: Fix dateInZone doc example (thanks @s3than)
+- #175: Fix `dateInZone` doc example (thanks @s3than)
 
 ## Release 2.20.0 (2019-06-18)
 
@@ -160,7 +160,7 @@ that impacts sprig functionality. Do not use sprig with a version newer than 0.3
 ### Changed
 
 - #144: Fix function comments based on best practices from Effective Go (@CodeLingoTeam)
-- #150: Handles pointer type for time.Time in "htmlDate" (@mapreal19)
+- #150: Handles pointer type for time.Time in `htmlDate` (@mapreal19)
 - #161, #157, #160,  #153, #158, #156,  #155,  #159, #152 documentation updates (@badeadan)
 
 ### Fixed
@@ -175,7 +175,7 @@ We debated whether this classifies as a change worthy of major revision, but giv
 
 ### Changed
 
-- Fix substr panic 35fb796 (Alexey igrychev)
+- Fix `substr` panic 35fb796 (Alexey igrychev)
 - Remove extra period 1eb7729 (Matthew Lorimor)
 - Make random string functions use crypto by default 6ceff26 (Matthew Lorimor)
 - README edits/fixes/suggestions 08fe136 (Lauri Apple)
@@ -185,24 +185,24 @@ We debated whether this classifies as a change worthy of major revision, but giv
 
 ### Added
 
-- Added mergeOverwrite function
+- Added `mergeOverwrite` function
 - cryptographic functions that use secure random (see fe1de12)
 
 ### Changed
 
 - Improve documentation of regexMatch function, resolves #139 90b89ce (Jan Tagscherer)
 - Handle has for nil list 9c10885 (Daniel Cohen)
-- Document behaviour of mergeOverwrite fe0dbe9 (Lukas Rieder)
+- Document behaviour of `mergeOverwrite` fe0dbe9 (Lukas Rieder)
 - doc: adds missing documentation. 4b871e6 (Fernandez Ludovic)
 - Replace outdated goutils imports 01893d2 (Matthew Lorimor)
 - Surface crypto secure random strings from goutils fe1de12 (Matthew Lorimor)
-- Handle untyped nil values as paramters to string functions 2b2ec8f (Morten Torkildsen)
+- Handle untyped nil values as parameters to string functions 2b2ec8f (Morten Torkildsen)
 
 ### Fixed
 
-- Fix dict merge issue and provide mergeOverwrite .dst .src1 to overwrite from src -> dst 4c59c12 (Lukas Rieder)
-- Fix substr var names and comments d581f80 (Dean Coakley)
-- Fix substr documentation 2737203 (Dean Coakley)
+- Fix dict merge issue and provide `mergeOverwrite` .dst .src1 to overwrite from src -> dst 4c59c12 (Lukas Rieder)
+- Fix `substr` var names and comments d581f80 (Dean Coakley)
+- Fix `substr` documentation 2737203 (Dean Coakley)
 
 ## Release 2.17.1 (2019-01-03)
 
@@ -214,8 +214,8 @@ The 2.17.0 release did not have a version pinned for xstrings, which caused comp
 
 ### Added
 
-- adds alder32sum function and test 6908fc2 (marshallford)
-- Added kebabcase function ca331a1 (Ilyes512)
+- Added `alder32sum` function and test 6908fc2 (marshallford)
+- Added `kebabcase` function ca331a1 (Ilyes512)
 
 ### Changed
 
@@ -231,14 +231,14 @@ The 2.17.0 release did not have a version pinned for xstrings, which caused comp
 
 ### Added
 
-- add splitn function fccb0b0 (Helgi Þorbjörnsson)
-- Add slice func df28ca7 (gongdo)
+- Added `splitn` function fccb0b0 (Helgi Þorbjörnsson)
+- Added `slice` func df28ca7 (gongdo)
 - Generate serial number a3bdffd (Cody Coons)
 - Extract values of dict with values function df39312 (Lawrence Jones)
 
 ### Changed
 
-- Modify panic message for list.slice ae38335 (gongdo)
+- Modify panic message for `list.slice` ae38335 (gongdo)
 - Minor improvement in code quality - Removed an unreachable piece of code at defaults.go#L26:6 - Resolve formatting issues. 5834241 (Abhishek Kashyap)
 - Remove duplicated documentation 1d97af1 (Matthew Fisher)
 - Test on go 1.11 49df809 (Helgi Þormar Þorbjörnsson)
@@ -246,7 +246,7 @@ The 2.17.0 release did not have a version pinned for xstrings, which caused comp
 ### Fixed
 
 - Fix file permissions c5f40b5 (gongdo)
-- Fix example for buildCustomCert 7779e0d (Tin Lam)
+- Fix example for `buildCustomCert` 7779e0d (Tin Lam)
 
 ## Release 2.15.0 (2018-04-02)
 
@@ -275,7 +275,7 @@ The 2.17.0 release did not have a version pinned for xstrings, which caused comp
 ### Fixed
 
 - #60: Fix typo in function name documentation (thanks @neil-ca-moore)
-- #61: Removing line with {{ due to blocking github pages genertion
+- #61: Removing line with {{ due to blocking github pages generation
 - #64: Update the list functions to handle int, string, and other slices for compatibility
 
 ## Release 2.14.0 (2017-10-06)
@@ -299,10 +299,10 @@ This release adds new functions, including:
 ### Added
 
 - #40: Added basic regex functionality (thanks @alanquillin)
-- #41: Added ceil floor and round functions (thanks @alanquillin)
-- #48: Added toDate function (thanks @andreynering)
-- #50: Added nindent function (thanks @binoculars)
-- #46: Added ago function (thanks @slayer)
+- #41: Added `ceil`, `floor`, and `round` functions (thanks @alanquillin)
+- #48: Added `toDate` function (thanks @andreynering)
+- #50: Added `nindent` function (thanks @binoculars)
+- #46: Added `ago` function (thanks @slayer)
 
 ### Changed
 
@@ -385,10 +385,10 @@ Because we switched from `int` to `int64` as the return value for all integer ma
 
 ## Release 1.2.0 (2016-02-01)
 
-- Added quote and squote
-- Added b32enc and b32dec
-- add now takes varargs
-- biggest now takes varargs
+- Added `quote` and `squote`
+- Added `b32enc` and `b32dec`
+- `add` now takes varargs
+- `biggest` now takes varargs
 
 ## Release 1.1.0 (2015-12-29)
 
