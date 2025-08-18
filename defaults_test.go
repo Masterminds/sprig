@@ -30,6 +30,55 @@ func TestDefault(t *testing.T) {
 	}
 }
 
+func TestSafeDefault(t *testing.T) {
+	tpl := `{{"" | safeDefault "foo"}}`
+	if err := runt(tpl, ""); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{safeDefault "foo" 234}}`
+	if err := runt(tpl, "234"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{safeDefault "foo" 2.34}}`
+	if err := runt(tpl, "2.34"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ .Nothing | safeDefault "123" }}`
+	if err := runt(tpl, "123"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ safeDefault "123" }}`
+	if err := runt(tpl, "123"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ .Nothing | safeDefault true }}`
+	if err := runt(tpl, "true"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ false | safeDefault true }}`
+	if err := runt(tpl, "false"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ true | safeDefault false }}`
+	if err := runt(tpl, "true"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ .Nothing | safeDefault 100 }}`
+	if err := runt(tpl, "100"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ 0 | safeDefault 100 }}`
+	if err := runt(tpl, "0"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{ 55 | safeDefault 0 }}`
+	if err := runt(tpl, "55"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestEmpty(t *testing.T) {
 	tpl := `{{if empty 1}}1{{else}}0{{end}}`
 	if err := runt(tpl, "0"); err != nil {
@@ -64,6 +113,40 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
+func TestNonNil(t *testing.T) {
+	tpl := `{{if nonNil 1}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{if nonNil 0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil ""}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil 0.0}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil false}}1{{else}}0{{end}}`
+	if err := runt(tpl, "1"); err != nil {
+		t.Error(err)
+	}
+
+	dict := map[string]interface{}{"top": map[string]interface{}{}}
+	tpl = `{{if nonNil .top.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "0", dict); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{if nonNil .bottom.NoSuchThing}}1{{else}}0{{end}}`
+	if err := runtv(tpl, "0", dict); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestCoalesce(t *testing.T) {
 	tests := map[string]string{
 		`{{ coalesce 1 }}`:                            "1",
@@ -72,6 +155,27 @@ func TestCoalesce(t *testing.T) {
 		`{{ $two := 2 }}{{ coalesce "" $two 0 0 0 }}`: "2",
 		`{{ $two := 2 }}{{ coalesce "" $two 3 4 5 }}`: "2",
 		`{{ coalesce }}`:                              "<no value>",
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+
+	dict := map[string]interface{}{"top": map[string]interface{}{}}
+	tpl := `{{ coalesce .top.NoSuchThing .bottom .bottom.dollar "airplane"}}`
+	if err := runtv(tpl, "airplane", dict); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSafeCoalesce(t *testing.T) {
+	tests := map[string]string{
+		`{{ safeCoalesce 1 }}`:                            "1",
+		`{{ safeCoalesce "" 0 nil 2 }}`:                   "",
+		`{{ safeCoalesce nil 0 "" 2 }}`:                   "0",
+		`{{ $two := 2 }}{{ safeCoalesce nil $two "" 0 }}`: "2",
+		`{{ $two := 2 }}{{ safeCoalesce "" $two 0 0 0 }}`: "",
+		`{{ $two := 2 }}{{ safeCoalesce "" $two 3 4 5 }}`: "",
+		`{{ safeCoalesce }}`:                              "<no value>",
 	}
 	for tpl, expect := range tests {
 		assert.NoError(t, runt(tpl, expect))
