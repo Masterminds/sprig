@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -154,8 +155,8 @@ func mustToRawJson(v interface{}) (string, error) {
 }
 
 // ternary returns the first value if the last value is true, otherwise returns the second value.
-func ternary(vt interface{}, vf interface{}, v bool) interface{} {
-	if v {
+func ternary(vt interface{}, vf interface{}, v interface{}) interface{} {
+	if truth, ok := template.IsTrue(v); ok && truth {
 		return vt
 	}
 
