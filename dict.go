@@ -2,7 +2,6 @@ package sprig
 
 import (
 	"dario.cat/mergo"
-	"github.com/mitchellh/copystructure"
 )
 
 func get(d map[string]interface{}, key string) interface{} {
@@ -144,7 +143,7 @@ func deepCopy(i interface{}) interface{} {
 }
 
 func mustDeepCopy(i interface{}) (interface{}, error) {
-	return copystructure.Copy(i)
+	return deepcopy(i)
 }
 
 func dig(ps ...interface{}) (interface{}, error) {
