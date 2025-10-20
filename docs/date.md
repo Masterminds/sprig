@@ -124,3 +124,18 @@ This is useful when you want to convert a string date to another format
 ```
 toDate "2006-01-02" "2017-12-31" | date "02/01/2006"
 ```
+
+## toDateInZone, mustToDateInZone
+
+`toDateInZone` converts a string to a date in the given timezone. The first
+argument is the date layout, the second the date string and the third the timezone.
+If the string can't be converted it returns the zero value, if the timezone can't be
+converted it returns the date in UTC.
+`mustToDateInZone` will return an error in case the string or timezone cannot be converted.
+
+The example below converts "2025-10-20 19:30" in "CET" to "20 Oct 25 17:30 UTC".
+
+```
+dateInZone "02 Jan 06 15:04 MST" (toDateInZone "2006-01-02 15:04" "2025-10-20 19:30" "Europe/Paris") "UTC" }}
+```
+

@@ -110,8 +110,10 @@ var genericMap = map[string]interface{}{
 	"must_date_modify": mustDateModify,
 	"mustDateModify":   mustDateModify,
 	"mustToDate":       mustToDate,
+	"mustToDateInZone": mustToDateInZone,
 	"now":              time.Now,
 	"toDate":           toDate,
+	"toDateInZone":     toDateInZone,
 	"unixEpoch":        unixEpoch,
 
 	// Strings

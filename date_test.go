@@ -95,6 +95,41 @@ func TestDateInZone(t *testing.T) {
 	}
 }
 
+func TestToDateInZone(t *testing.T) {
+	tpl := `{{ date_in_zone "02 Jan 06 15:04 MST" (toDateInZone "2006-01-02 15:04" "2025-10-20 19:30" "Europe/Paris") "UTC" }}`
+	if err := runt(tpl, "20 Oct 25 17:30 UTC"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ date_in_zone "02 Jan 06 15:04 MST" (toDateInZone "2006-01-02 15:04" "2025-11-20 19:30" "Europe/Paris") "UTC" }}`
+	if err := runt(tpl, "20 Nov 25 18:30 UTC"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ date_in_zone "02 Jan 06 15:04 MST" (toDateInZone "2006-01-02 15:04" "2025-10-20 19:30" "Europe/Paris") "Europe/London" }}`
+	if err := runt(tpl, "20 Oct 25 18:30 BST"); err != nil {
+		t.Error(err)
+	}
+
+	// Test case of invalid timezone
+	tpl = `{{ date_in_zone "02 Jan 06 15:04 MST" (toDateInZone "2006-01-02 15:04" "2025-11-20 19:30" "Europe/Paris") "foobar" }}`
+	if err := runt(tpl, "20 Nov 25 18:30 UTC"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestMustToDateInZone(t *testing.T) {
+	tpl := `{{ date_in_zone "02 Jan 06 15:04 MST" (mustToDateInZone "2006-01-02 15:04" "2025-10-20 19:30" "Europe/Paris") "UTC" }}`
+	if err := runt(tpl, "20 Oct 25 17:30 UTC"); err != nil {
+		t.Error(err)
+	}
+
+	tpl = `{{ date_in_zone "02 Jan 06 15:04 MST" (mustToDateInZone "2006-01-02 15:04" "2025-11-20 19:30" "Europe/Paris") "UTC" }}`
+	if err := runt(tpl, "20 Nov 25 18:30 UTC"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestDuration(t *testing.T) {
 	tpl := "{{ duration .Secs }}"
 	if err := runtv(tpl, "1m1s", map[string]interface{}{"Secs": "61"}); err != nil {

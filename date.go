@@ -143,8 +143,25 @@ func toDate(fmt, str string) time.Time {
 	return t
 }
 
+func toDateInZone(fmt, str string, timezone string) time.Time {
+	z, err := time.LoadLocation(timezone)
+	if err != nil {
+		z, _ = time.LoadLocation("UTC")
+	}
+	t, _ := time.ParseInLocation(fmt, str, z)
+	return t
+}
+
 func mustToDate(fmt, str string) (time.Time, error) {
 	return time.ParseInLocation(fmt, str, time.Local)
+}
+
+func mustToDateInZone(fmt, str string, timezone string) (time.Time, error) {
+	z, err := time.LoadLocation(timezone)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return time.ParseInLocation(fmt, str, z)
 }
 
 func unixEpoch(date time.Time) string {
