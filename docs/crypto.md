@@ -41,7 +41,7 @@ adler32sum "Hello world!"
 ```
 ## bcrypt
 
-The `bcrypt` function receives a string, and generates its `bcrypt` hash.
+The `bcrypt` function takes a `input`, and a `cost` and generates a `bcrypt` hash. `cost` is optional and defaults to `bcrypt_lib.DefaultCost` (10).
 
 ```
 bcrypt "myPassword"
