@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -54,13 +55,77 @@ func TestAdler32Sum(t *testing.T) {
 	}
 }
 
-func TestBcrypt(t *testing.T) {
+func TestBcryptDefaultCost(t *testing.T) {
 	out, err := runRaw(`{{"abc" | bcrypt}}`, nil)
 	if err != nil {
 		t.Error(err)
 	}
+	result := strings.Split(out, "$")
+	passwordCost, err := strconv.Atoi(result[2])
+	if err != nil {
+		t.Error(err)
+	}
+	if passwordCost != bcrypt_lib.DefaultCost {
+		t.Error("Generated hash has not the expected cost. Got:", passwordCost, " Expected:", bcrypt_lib.DefaultCost)
+	}
 	if bcrypt_lib.CompareHashAndPassword([]byte(out), []byte("abc")) != nil {
 		t.Error("Generated hash is not the equivalent for password:", "abc")
+	}
+}
+
+func TestBcryptCustomCost(t *testing.T) { // 4 >= validCost <= 31
+	out, err := runRaw(`{{bcrypt "abc" 12 }}`, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	result := strings.Split(out, "$")
+	passwordCost, err := strconv.Atoi(result[2])
+	if err != nil {
+		t.Error(err)
+	}
+	if passwordCost != 12 {
+		t.Error("Generated hash has not the expected cost. got:", passwordCost, "expected:", 12)
+	}
+	if bcrypt_lib.CompareHashAndPassword([]byte(out), []byte("abc")) != nil {
+		t.Error("Generated hash is not the equivalent for password:", "abc")
+	}
+}
+
+func TestBcryptMinCost(t *testing.T) {
+	out, err := runRaw(`{{bcrypt "abc" 3 }}`, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	result := strings.Split(out, "$")
+	passwordCost, err := strconv.Atoi(result[2])
+	if err != nil {
+		t.Error(err)
+	}
+	if passwordCost != bcrypt_lib.DefaultCost {
+		t.Error("Generated hash has not the expected cost. got:", passwordCost, "expected:", bcrypt_lib.DefaultCost)
+	}
+	if bcrypt_lib.CompareHashAndPassword([]byte(out), []byte("abc")) != nil {
+		t.Error("Generated hash is not the equivalent for password:", "abc")
+	}
+}
+
+func TestBcryptMaxCost(t *testing.T) {
+	out, err := runRaw(`{{bcrypt "abc" 32 }}`, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.HasPrefix(out, "failed to encrypt string with bcrypt") {
+		t.Error("Generated string should be a failure message, got:", out, "expected: failed to encrypt string with bcrypt")
+	}
+}
+
+func TestBcryptMultipleCostParameter(t *testing.T) {
+	out, err := runRaw(`{{bcrypt "abc" 10 10 }}`, nil)
+	if err != nil {
+		t.Error(err)
+	}
+	if !strings.HasPrefix(out, "multiple cost parameter set") {
+		t.Error("Generated string should be a failure message, got:", out, "expected: multiple cost parameter set")
 	}
 }
 

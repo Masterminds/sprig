@@ -57,8 +57,15 @@ func adler32sum(input string) string {
 	return fmt.Sprintf("%d", hash)
 }
 
-func bcrypt(input string) string {
-	hash, err := bcrypt_lib.GenerateFromPassword([]byte(input), bcrypt_lib.DefaultCost)
+func bcrypt(input string, cost ...int) string {
+	c := bcrypt_lib.DefaultCost
+	if len(cost) > 0 {
+		c = cost[0]
+	}
+	if len(cost) > 1 {
+		return fmt.Sprintf("multiple cost parameter set: %v", cost)
+	}
+	hash, err := bcrypt_lib.GenerateFromPassword([]byte(input), c)
 	if err != nil {
 		return fmt.Sprintf("failed to encrypt string with bcrypt: %s", err)
 	}
