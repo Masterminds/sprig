@@ -33,6 +33,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	argon2_lib "golang.org/x/crypto/argon2"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/scrypt"
 )
@@ -64,6 +65,44 @@ func bcrypt(input string) string {
 	}
 
 	return string(hash)
+}
+
+func argon2id(input string, params ...uint32) string {
+	// RFC 9106
+	// SECOND RECOMMENDED option and is suggested as a default setting for memory-constrained environments.
+	//
+	time := uint32(3)
+	memory := uint32(64 * 1024)
+	parallelism := uint8(1)
+	saltLen := uint32(16)
+	hashLen := uint32(32)
+
+	if len(params) > 0 && params[0] != 0 {
+		time = params[0]
+	}
+	if len(params) > 1 && params[1] != 0 {
+		memory = params[1]
+	}
+	if len(params) > 2 && params[2] != 0 {
+		parallelism = uint8(params[2])
+	}
+	if len(params) > 3 && params[3] != 0 {
+		saltLen = params[3]
+	}
+	if len(params) > 4 && params[4] != 0 {
+		hashLen = params[4]
+	}
+
+	salt := make([]byte, saltLen)
+	if _, err := rand.Read(salt); err != nil {
+		return fmt.Sprintf("failed to generate argon2 salt with len %d: %s", saltLen, err)
+	}
+
+	key := argon2_lib.IDKey([]byte(input), salt, time, memory, parallelism, hashLen)
+	saltKey := base64.RawStdEncoding.EncodeToString([]byte(salt))
+	hashKey := base64.RawStdEncoding.EncodeToString(key)
+	format := "$argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s"
+	return fmt.Sprintf(format, argon2_lib.Version, memory, time, parallelism, saltKey, hashKey)
 }
 
 func hashSha(password string) string {

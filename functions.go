@@ -340,6 +340,7 @@ var genericMap = map[string]interface{}{
 
 	// Crypto:
 	"bcrypt":                   bcrypt,
+	"argon2id":                 argon2id,
 	"htpasswd":                 htpasswd,
 	"genPrivateKey":            generatePrivateKey,
 	"derivePassword":           derivePassword,

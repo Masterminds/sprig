@@ -1,14 +1,17 @@
 package sprig
 
 import (
+	"bytes"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	argon2_lib "golang.org/x/crypto/argon2"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
 )
 
@@ -62,6 +65,190 @@ func TestBcrypt(t *testing.T) {
 	if bcrypt_lib.CompareHashAndPassword([]byte(out), []byte("abc")) != nil {
 		t.Error("Generated hash is not the equivalent for password:", "abc")
 	}
+}
+
+type Argon2idParameters struct {
+	Password    string
+	Time        uint32
+	Memory      uint32
+	Parallelism uint32
+	SaltLen     uint32
+	HashLen     uint32
+}
+
+func TestArgon2idParameters(t *testing.T) {
+	expectations := []Argon2idParameters{
+		{
+			Password:    "abc",
+			Time:        1,
+			Memory:      131072,
+			Parallelism: 1,
+			SaltLen:     16,
+			HashLen:     32,
+		},
+		{
+			Password:    "abcefgh",
+			Time:        1,
+			Memory:      262144,
+			Parallelism: 4,
+			SaltLen:     32,
+			HashLen:     64,
+		},
+		{
+			Password:    "abcd",
+			Time:        0,
+			Memory:      0,
+			Parallelism: 0,
+			SaltLen:     0,
+			HashLen:     0,
+		},
+	}
+
+	for i, param := range expectations {
+		hash, err := runRaw(
+			`{{argon2id .Password .Time .Memory .Parallelism .SaltLen .HashLen}}`,
+			param,
+		)
+		if err != nil {
+			t.Errorf("Test %d: failed to render template: %s", i, err)
+			continue
+		}
+
+		if err := argon2idVerify(hash, param); err != nil {
+			t.Errorf("Test %d: Generated hash %s for password %s is not valid: %s", i, hash, param.Password, err)
+		}
+	}
+
+	hash, err := runRaw(`{{argon2id "testPassword"}}`, nil)
+	if err != nil {
+		t.Errorf("failed to render template: %s", err)
+		return
+	}
+
+	param := Argon2idParameters{
+		Password:    "testPassword",
+		Time:        3,
+		Memory:      64 * 1024,
+		Parallelism: 1,
+		SaltLen:     16,
+		HashLen:     32,
+	}
+
+	if err := argon2idVerify(hash, param); err != nil {
+		t.Errorf("Generated hash %s for password %s is not valid: %s", hash, param.Password, err)
+		return
+	}
+
+	hash2, err := runRaw(`{{argon2id "myPassword" 1 2097152 4}}`, nil)
+	if err != nil {
+		t.Errorf("failed to render template: %s", err)
+		return
+	}
+
+	param2 := Argon2idParameters{
+		Password:    "myPassword",
+		Time:        1,
+		Memory:      2097152,
+		Parallelism: 4,
+		SaltLen:     16,
+		HashLen:     32,
+	}
+
+	if err := argon2idVerify(hash2, param2); err != nil {
+		t.Errorf("Generated hash %s for password %s is not valid: %s", hash2, param2.Password, err)
+	}
+}
+
+func argon2idVerify(encodedHash string, param Argon2idParameters) error {
+	hashParts := strings.Split(encodedHash, "$")
+	if len(hashParts) != 6 {
+		return errors.New("invalid hash format")
+	}
+
+	if hashParts[1] != "argon2id" {
+		return fmt.Errorf("invalid variant: %s", hashParts[1])
+	}
+
+	var version int
+	if _, err := fmt.Sscanf(hashParts[2], "v=%d", &version); err != nil {
+		return fmt.Errorf("invalid version format: %s", err)
+	}
+	if version != argon2_lib.Version {
+		return fmt.Errorf("incompatible version: %d", version)
+	}
+
+	memPart := strings.Split(hashParts[3], ",")
+	if len(memPart) != 3 {
+		return errors.New("invalid memory/time/parallelism format")
+	}
+
+	var memory uint32
+	if _, err := fmt.Sscanf(memPart[0], "m=%d", &memory); err != nil {
+		return fmt.Errorf("invalid memory value: %s", err)
+	}
+
+	var timeVal uint32
+	if _, err := fmt.Sscanf(memPart[1], "t=%d", &timeVal); err != nil {
+		return fmt.Errorf("invalid time value: %s", err)
+	}
+
+	var parallelism uint8
+	if _, err := fmt.Sscanf(memPart[2], "p=%d", &parallelism); err != nil {
+		return fmt.Errorf("invalid parallelism value: %s", err)
+	}
+
+	salt, err := base64.RawStdEncoding.DecodeString(hashParts[4])
+	if err != nil {
+		return fmt.Errorf("failed to decode salt: %s", err)
+	}
+	expectedHash, err := base64.RawStdEncoding.DecodeString(hashParts[5])
+	if err != nil {
+		return fmt.Errorf("failed to decode hash: %s", err)
+	}
+
+	paramTime := param.Time
+	if paramTime == 0 {
+		paramTime = 3
+	}
+	paramMemory := param.Memory
+	if paramMemory == 0 {
+		paramMemory = 64 * 1024
+	}
+	paramParallelism := uint8(param.Parallelism)
+	if paramParallelism == 0 {
+		paramParallelism = 1
+	}
+	paramSaltLen := param.SaltLen
+	if paramSaltLen == 0 {
+		paramSaltLen = uint32(len(salt))
+	}
+	paramHashLen := param.HashLen
+	if paramHashLen == 0 {
+		paramHashLen = uint32(len(expectedHash))
+	}
+
+	if memory != paramMemory {
+		return fmt.Errorf("memory mismatch: hash has %d, expected %d", memory, paramMemory)
+	}
+	if timeVal != paramTime {
+		return fmt.Errorf("time mismatch: hash has %d, expected %d", timeVal, paramTime)
+	}
+	if parallelism != paramParallelism {
+		return fmt.Errorf("parallelism mismatch: hash has %d, expected %d", parallelism, paramParallelism)
+	}
+	if uint32(len(salt)) != paramSaltLen {
+		return fmt.Errorf("salt length mismatch: hash has %d, expected %d", len(salt), paramSaltLen)
+	}
+	if uint32(len(expectedHash)) != paramHashLen {
+		return fmt.Errorf("hash length mismatch: hash has %d, expected %d", len(expectedHash), paramHashLen)
+	}
+
+	computed := argon2_lib.IDKey([]byte(param.Password), salt, paramTime, paramMemory, paramParallelism, paramHashLen)
+	if !bytes.Equal(computed, expectedHash) {
+		return errors.New("password does not match hash")
+	}
+
+	return nil
 }
 
 type HtpasswdCred struct {

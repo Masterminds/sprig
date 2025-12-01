@@ -47,6 +47,21 @@ The `bcrypt` function receives a string, and generates its `bcrypt` hash.
 bcrypt "myPassword"
 ```
 
+## argon2id
+
+The `argon2id` function takes a `password`, a `time`, a `memory`, a `parallelism`, a `saltLen`, and a `hashLen` and generates a `argon2id' hash.
+Default values follows second recommended values by [RFC 9106](https://datatracker.ietf.org/doc/rfc9106/) (t=3 and 64 MiB memory) as a default setting for memory-constrained environments, parallelism is 1 saltLen is 16 and hashLen is 32.
+Argon2 is the winner of [Password Hashing Competition](https://www.password-hashing.net/) 2015 and is current recommended hashing algorithm for passwords.
+
+```
+argon2id "myPassword" [time [memory [parallelism [saltLen [hashLen]]]]]
+```
+
+### RFC 9106 First recommended format (t=1 and 2 GiB memory) using 4 cores
+```
+argon2id "myPassword" 1 2097152 4
+```
+
 ## htpasswd
 
 The `htpasswd` function takes a `username`, a `password`, and a `hashAlgorithm` and generates a `bcrypt` (recommended) or a base64 encoded and prefixed `sha` hash of the password. `hashAlgorithm` is optional and defaults to `bcrypt`. The result can be used for basic authentication on an [Apache HTTP Server](https://httpd.apache.org/docs/2.4/misc/password_encryptions.html#basic).
