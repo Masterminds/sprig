@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"fmt"
+	"net"
 	"net/url"
 	"reflect"
 )
@@ -28,6 +29,7 @@ func urlParse(v string) map[string]interface{} {
 	dict["scheme"] = parsedURL.Scheme
 	dict["host"] = parsedURL.Host
 	dict["hostname"] = parsedURL.Hostname()
+	dict["port"] = parsedURL.Port()
 	dict["path"] = parsedURL.Path
 	dict["query"] = parsedURL.RawQuery
 	dict["opaque"] = parsedURL.Opaque
@@ -43,9 +45,27 @@ func urlParse(v string) map[string]interface{} {
 
 // join given dict to URL string
 func urlJoin(d map[string]interface{}) string {
+	host := dictGetOrEmpty(d, "host")
+	// If host is not provided, try to construct it from hostname and port
+	if host == "" {
+		hostname := dictGetOrEmpty(d, "hostname")
+		port := dictGetOrEmpty(d, "port")
+		if port != "" {
+			// Check if hostname is an IPv6 address
+			ip := net.ParseIP(hostname)
+			if ip != nil && ip.To4() == nil {
+				// IPv6 address needs to be wrapped in square brackets
+				host = "[" + hostname + "]:" + port
+			} else {
+				host = hostname + ":" + port
+			}
+		} else {
+			host = hostname
+		}
+	}
 	resURL := url.URL{
 		Scheme:   dictGetOrEmpty(d, "scheme"),
-		Host:     dictGetOrEmpty(d, "host"),
+		Host:     host,
 		Path:     dictGetOrEmpty(d, "path"),
 		RawQuery: dictGetOrEmpty(d, "query"),
 		Opaque:   dictGetOrEmpty(d, "opaque"),
