@@ -47,33 +47,6 @@ Same as `date`, but with a timezone.
 dateInZone "2006-01-02" (now) "UTC"
 ```
 
-## duration
-
-Formats a given amount of seconds as a `time.Duration`.
-
-This returns 1m35s
-
-```
-duration "95"
-```
-
-## durationRound
-
-Rounds a given duration to the most significant unit. Strings and `time.Duration`
-gets parsed as a duration, while a `time.Time` is calculated as the duration since.
-
-This return 2h
-
-```
-durationRound "2h10m5s"
-```
-
-This returns 3mo
-
-```
-durationRound "2400h10m5s"
-```
-
 ## unixEpoch
 
 Returns the seconds since the unix epoch for a `time.Time`.
@@ -123,4 +96,153 @@ This is useful when you want to convert a string date to another format
 
 ```
 toDate "2006-01-02" "2017-12-31" | date "02/01/2006"
+```
+
+# Duration Functions
+
+## duration
+
+Formats a given amount of seconds as a `time.Duration`.
+
+This returns 1m35s
+
+```
+duration "95"
+```
+
+## durationRound
+
+Rounds a given duration to the most significant unit. Strings and `time.Duration`
+gets parsed as a duration, while a `time.Time` is calculated as the duration since.
+
+This return 2h
+
+```
+durationRound "2h10m5s"
+```
+
+This returns 3mo
+
+```
+durationRound "2400h10m5s"
+```
+
+## mustToDuration
+
+`mustToDuration` parses a duration-like value into a `time.Duration` and panics on error.
+
+**Go equivalent:** `time.ParseDuration`, `time.Duration` construction
+
+Supported inputs include Go duration strings (e.g. `"2h30m"`), numeric strings treated as seconds (e.g. `"1.5"`), and numeric values treated as seconds.
+
+```
+mustToDuration "2h30m"
+```
+
+```
+mustToDuration "1.5"
+```
+
+## durationSeconds
+
+Converts a duration to seconds as a floating-point number.
+
+**Go equivalent:** `time.Duration.Seconds()`
+
+```
+mustToDuration "1m30s" | durationSeconds
+```
+
+## durationMilliseconds
+
+Converts a duration to milliseconds as an integer.
+
+**Go equivalent:** `time.Duration.Milliseconds()`
+
+```
+mustToDuration "1s" | durationMilliseconds
+```
+
+## durationMicroseconds
+
+Converts a duration to microseconds as an integer.
+
+**Go equivalent:** `time.Duration.Microseconds()`
+
+```
+mustToDuration "1s" | durationMicroseconds
+```
+
+## durationNanoseconds
+
+Converts a duration to nanoseconds as an integer.
+
+**Go equivalent:** `time.Duration.Nanoseconds()`
+
+```
+mustToDuration "1ms" | durationNanoseconds
+```
+
+## durationMinutes
+
+Converts a duration to minutes as a floating-point number.
+
+**Go equivalent:** `time.Duration.Minutes()`
+
+```
+mustToDuration "90s" | durationMinutes
+```
+
+## durationHours
+
+Converts a duration to hours as a floating-point number.
+
+**Go equivalent:** `time.Duration.Hours()`
+
+```
+mustToDuration "90m" | durationHours
+```
+
+## durationDays
+
+Converts a duration to days as a floating-point number.
+
+```
+mustToDuration "36h" | durationDays
+```
+
+## durationWeeks
+
+Converts a duration to weeks as a floating-point number.
+
+```
+mustToDuration "336h" | durationWeeks
+```
+
+## durationRoundTo
+
+Rounds a duration to the nearest multiple of another duration.
+
+**Go equivalent:** `time.Duration.Round()`
+
+```
+mustToDuration "1h15m30s" | durationRoundTo "10m"
+```
+
+```
+mustToDuration "2h29m" | durationRoundTo "1h"
+```
+
+## durationTruncateTo
+
+Truncates a duration toward zero to a multiple of another duration.
+
+**Go equivalent:** `time.Duration.Truncate()`
+
+```
+mustToDuration "1h15m30s" | durationTruncateTo "10m"
+```
+
+```
+mustToDuration "2h59m" | durationTruncateTo "1h"
 ```
