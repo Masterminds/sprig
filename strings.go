@@ -115,6 +115,24 @@ func nindent(spaces int, v string) string {
 	return "\n" + indent(spaces, v)
 }
 
+func extIndent(levels int, skipFirst, skipEmpty, skipWhitespace bool, indentStr, v string) string {
+	pad := strings.Repeat(indentStr, int(levels))
+	lines := strings.Split(v, "\n")
+	for idx, line := range lines {
+		if idx == 0 && skipFirst {
+			continue
+		}
+		if skipWhitespace && strings.TrimSpace(line) == "" && line != "" {
+			continue
+		}
+		if skipEmpty && (line == "" || line == "\r") {
+			continue
+		}
+		lines[idx] = pad + line
+	}
+	return strings.Join(lines, "\n")
+}
+
 func replace(old, new, src string) string {
 	return strings.Replace(src, old, new, -1)
 }
