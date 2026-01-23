@@ -280,6 +280,50 @@ func TestNindent(t *testing.T) {
 	}
 }
 
+func TestExtIndent(t *testing.T) {
+
+	cmpstr := "1\nmt\n\nws\n\t\n."
+
+	for _, tCase := range []struct{
+		indt      string
+		lvls      int
+		skipFirst bool
+		skipEmpty bool
+		skipWs    bool
+		tgt       string
+
+	}{
+		{indt: "\t", lvls: 1, skipFirst: true, skipEmpty: true, skipWs: true, tgt: "1\n\tmt\n\n\tws\n\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: true, skipEmpty: true, skipWs: false, tgt: "1\n\tmt\n\n\tws\n\t\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: true, skipEmpty: false, skipWs: true, tgt: "1\n\tmt\n\t\n\tws\n\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: true, skipEmpty: false, skipWs: false, tgt: "1\n\tmt\n\t\n\tws\n\t\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: false, skipEmpty: true, skipWs: true, tgt: "\t1\n\tmt\n\n\tws\n\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: false, skipEmpty: true, skipWs: false, tgt: "\t1\n\tmt\n\n\tws\n\t\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: false, skipEmpty: false, skipWs: true, tgt: "\t1\n\tmt\n\t\n\tws\n\t\n\t."},
+		{indt: "\t", lvls: 1, skipFirst: false, skipEmpty: false, skipWs: false, tgt: "\t1\n\tmt\n\t\n\tws\n\t\t\n\t."},
+	} {
+		tplStr := fmt.Sprintf(
+			"{{- $lvls := %d -}}\n"+
+			"{{- $no1st := %v -}}\n"+
+			"{{- $noMT := %v -}}\n"+
+			"{{- $noWs := %v -}}\n"+
+			"{{- $idtstr := \"%s\" -}}\n"+
+			"{{- $tstr := `%s` -}}\n"+
+			"{{ $tstr | extindent $lvls $no1st $noMT $noWs $idtstr }}",
+			tCase.lvls,
+			tCase.skipFirst,
+			tCase.skipEmpty,
+			tCase.skipWs,
+			tCase.indt,
+			cmpstr,
+		)
+		t.Log(tplStr)
+		if err := runt(tplStr, tCase.tgt); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestReplace(t *testing.T) {
 	tpl := `{{"I Am Henry VIII" | replace " " "-"}}`
 	if err := runt(tpl, "I-Am-Henry-VIII"); err != nil {

@@ -268,6 +268,28 @@ nindent 4 $lots_of_text
 The above will indent every line of text by 4 space characters and add a new
 line to the beginning.
 
+## extindent
+
+The `extindent` function offers a much more flexible extended indenter
+at the cost of complexity.
+
+It allows for a customized indentation and indentation behavor but
+requires 5 arguments in addition to the string to be indented.
+
+```
+$levels := 1
+$skipFirst := false
+$skipEmpty := true
+$skipWs := true
+$indentString := "\t"
+
+extindent $levels $skipFirst $skipEmpty $skipWs $indentString $lots_of_text
+```
+
+The above will indent every line of `$lots_of_text` with a single (`1`) `\t` (horizontal tab),
+*unless* that line is entirely empty (only a newline) or is comprised only entirely of whitespace
+(tabs, spaces, etc.).
+
 ## replace
 
 Perform simple string replacement.
