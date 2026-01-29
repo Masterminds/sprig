@@ -107,6 +107,12 @@ func uuidv4() string {
 	return uuid.New().String()
 }
 
+// uuidv7 provides a safe and secure UUID v7 implementation
+func uuidv7() (string, error) {
+	uuid, err := uuid.NewV7()
+	return uuid.String(), err
+}
+
 var masterPasswordSeed = "com.lyndir.masterpassword"
 
 var passwordTypeTemplates = map[string][][]byte{

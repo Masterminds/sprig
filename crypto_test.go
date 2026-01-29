@@ -232,6 +232,27 @@ func TestUUIDGeneration(t *testing.T) {
 	}
 }
 
+func TestUUIDV7Generation(t *testing.T) {
+	tpl := `{{uuidv7}}`
+	out, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(out) != 36 {
+		t.Error("Expected UUID of length 36")
+	}
+
+	out2, err := runRaw(tpl, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if out == out2 {
+		t.Error("Expected subsequent UUID generations to be different")
+	}
+}
+
 func TestBuildCustomCert(t *testing.T) {
 	ca, _ := generateCertificateAuthority("example.com", 365)
 	tpl := fmt.Sprintf(
