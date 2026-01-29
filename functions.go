@@ -84,6 +84,7 @@ var nonhermeticFunctions = []string{
 	"randNumeric",
 	"randBytes",
 	"uuidv4",
+	"uuidv7",
 
 	// OS
 	"env",
@@ -356,6 +357,7 @@ var genericMap = map[string]interface{}{
 
 	// UUIDs:
 	"uuidv4": uuidv4,
+	"uuidv7": uuidv7,
 
 	// SemVer:
 	"semver":        semver,
