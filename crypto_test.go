@@ -26,12 +26,20 @@ var (
 	}
 )
 
+func TestSha512Sum(t *testing.T) {
+	tpl := `{{"abc" | sha512sum}}`
+	if err := runt(tpl, "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f"); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestSha256Sum(t *testing.T) {
 	tpl := `{{"abc" | sha256sum}}`
 	if err := runt(tpl, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"); err != nil {
 		t.Error(err)
 	}
 }
+
 func TestSha1Sum(t *testing.T) {
 	tpl := `{{"abc" | sha1sum}}`
 	if err := runt(tpl, "a9993e364706816aba3e25717850c26c9cd0d89d"); err != nil {
@@ -57,20 +65,23 @@ func TestBcrypt(t *testing.T) {
 }
 
 type HtpasswdCred struct {
-	Username string
-	Password string
-	Valid    bool
+	Username      string
+	Password      string
+	HashAlgorithm HashAlgorithm
+	Valid         bool
 }
 
 func TestHtpasswd(t *testing.T) {
 	expectations := []HtpasswdCred{
-		{Username: "myUser", Password: "myPassword", Valid: true},
-		{Username: "special'o79Cv_*qFe,)<user", Password: "special<j7+3p#6-.Jx2U:m8G;kGypassword", Valid: true},
-		{Username: "wrongus:er", Password: "doesn'tmatter", Valid: false}, // ':' isn't allowed in the username - https://tools.ietf.org/html/rfc2617#page-6
+		{Username: "myUser", Password: "myPassword", HashAlgorithm: HashBCrypt, Valid: true},
+		{Username: "special'o79Cv_*qFe,)<user", Password: "special<j7+3p#6-.Jx2U:m8G;kGypassword", HashAlgorithm: HashBCrypt, Valid: true},
+		{Username: "wrongus:er", Password: "doesn'tmatter", HashAlgorithm: HashBCrypt, Valid: false}, // ':' isn't allowed in the username - https://tools.ietf.org/html/rfc2617#page-6
+		{Username: "mySahUser", Password: "myShaPassword", HashAlgorithm: HashSHA, Valid: true},
+		{Username: "myDefaultUser", Password: "defaulthashpass", Valid: true},
 	}
 
 	for _, credential := range expectations {
-		out, err := runRaw(`{{htpasswd .Username .Password}}`, credential)
+		out, err := runRaw(`{{htpasswd .Username .Password .HashAlgorithm}}`, credential)
 		if err != nil {
 			t.Error(err)
 		}
@@ -78,8 +89,15 @@ func TestHtpasswd(t *testing.T) {
 		if 0 != strings.Compare(credential.Username, result[0]) && credential.Valid {
 			t.Error("Generated username did not match for:", credential.Username)
 		}
-		if bcrypt_lib.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
-			t.Error("Generated hash is not the equivalent for password:", credential.Password)
+		switch credential.HashAlgorithm {
+		case HashSHA:
+			if strings.TrimPrefix(result[1], "{SHA}") != hashSha(credential.Password) {
+				t.Error("Generated hash is not the equivalent for password:", credential.Password)
+			}
+		default:
+			if bcrypt_lib.CompareHashAndPassword([]byte(result[1]), []byte(credential.Password)) != nil && credential.Valid {
+				t.Error("Generated hash is not the equivalent for password:", credential.Password)
+			}
 		}
 	}
 }

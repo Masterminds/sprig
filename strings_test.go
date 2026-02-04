@@ -3,12 +3,22 @@ package sprig
 import (
 	"encoding/base32"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"testing"
 	"unicode/utf8"
 
 	"github.com/stretchr/testify/assert"
 )
+
+type stringerImpl struct {
+	Value string
+}
+
+// String satisfies the Stringer interface.
+func (s stringerImpl) String() string {
+	return s.Value
+}
 
 func TestSubstr(t *testing.T) {
 	tpl := `{{"fooo" | substr 0 3 }}`
@@ -121,8 +131,19 @@ func TestSplitn(t *testing.T) {
 }
 
 func TestToString(t *testing.T) {
-	tpl := `{{ toString 1 | kindOf }}`
-	assert.NoError(t, runt(tpl, "string"))
+	tests := []interface{}{
+		1,
+		"string",
+		[]byte("bytes"),
+		errors.New("error"),
+		stringerImpl{
+			Value: "stringer",
+		},
+	}
+	for _, test := range tests {
+		tpl := `{{ toString .Value | kindOf }}`
+		assert.NoError(t, runtv(tpl, "string", map[string]interface{}{"Value": test}))
+	}
 }
 
 func TestToStrings(t *testing.T) {

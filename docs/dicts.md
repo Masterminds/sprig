@@ -25,7 +25,7 @@ $myDict := dict "name1" "value1" "name2" "value2" "name3" "value 3"
 Given a map and a key, get the value from the map.
 
 ```
-get $myDict "key1"
+get $myDict "name1"
 ```
 
 The above returns `"value1"`

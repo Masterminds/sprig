@@ -6,9 +6,12 @@ import (
 )
 
 func TestHtmlDate(t *testing.T) {
-	t.Skip()
-	tpl := `{{ htmlDate 0}}`
-	if err := runt(tpl, "1970-01-01"); err != nil {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{ .Time | htmlDate }}`
+	if err := runtv(tpl, "2019-06-13", map[string]interface{}{"Time": tm}); err != nil {
 		t.Error(err)
 	}
 }
@@ -116,5 +119,29 @@ func TestDurationRound(t *testing.T) {
 	}
 	if err := runtv(tpl, "3mo", map[string]interface{}{"Time": "2400h5s"}); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestDateModify(t *testing.T) {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{date_modify "24h" .Time}}`
+
+	if err = runtv(tpl, "2019-06-14 20:39:39 +0000 GMT", map[string]interface{}{"Time": tm}); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestDateMustModifyReturnsErr(t *testing.T) {
+	tm, err := time.Parse("02 Jan 06 15:04:05 MST", "13 Jun 19 20:39:39 GMT")
+	if err != nil {
+		t.Error(err)
+	}
+	tpl := `{{must_date_modify "1f" .Time}}`
+
+	if err = runtv(tpl, "2019-06-13 21:39:39 +0000 GMT", map[string]interface{}{"Time": tm}); err == nil {
+		t.Error("expected err, got nil")
 	}
 }

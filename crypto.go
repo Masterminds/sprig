@@ -14,6 +14,7 @@ import (
 	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/sha256"
+	"crypto/sha512"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
@@ -35,6 +36,11 @@ import (
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/scrypt"
 )
+
+func sha512sum(input string) string {
+	hash := sha512.Sum512([]byte(input))
+	return hex.EncodeToString(hash[:])
+}
 
 func sha256sum(input string) string {
 	hash := sha256.Sum256([]byte(input))
@@ -60,11 +66,32 @@ func bcrypt(input string) string {
 	return string(hash)
 }
 
-func htpasswd(username string, password string) string {
+func hashSha(password string) string {
+	s := sha1.New()
+	s.Write([]byte(password))
+	passwordSum := []byte(s.Sum(nil))
+	return base64.StdEncoding.EncodeToString(passwordSum)
+}
+
+// HashAlgorithm enum for hashing algorithms
+type HashAlgorithm string
+
+const (
+	// HashBCrypt bcrypt - recommended
+	HashBCrypt = "bcrypt"
+	HashSHA    = "sha"
+)
+
+func htpasswd(username string, password string, hashAlgorithm HashAlgorithm) string {
 	if strings.Contains(username, ":") {
 		return fmt.Sprintf("invalid username: %s", username)
 	}
-	return fmt.Sprintf("%s:%s", username, bcrypt(password))
+	switch hashAlgorithm {
+	case HashSHA:
+		return fmt.Sprintf("%s:{SHA}%s", username, hashSha(password))
+	default:
+		return fmt.Sprintf("%s:%s", username, bcrypt(password))
+	}
 }
 
 func randBytes(count int) (string, error) {
