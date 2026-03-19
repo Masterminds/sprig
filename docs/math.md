@@ -24,7 +24,14 @@ Perform integer division with `div`
 
 ## mod
 
-Modulo with `mod`
+Perform modulo with `mod`. The result is the remainder of dividing the first
+argument by the second.
+
+```
+mod 10 3
+```
+
+The above will return `1`, because `10 % 3 = 1`.
 
 ## mul
 
