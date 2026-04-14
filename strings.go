@@ -56,22 +56,26 @@ func initials(s string) string {
 }
 
 func randAlphaNumeric(count int) string {
+	count = clampInt(count, maxAllocSize)
 	// It is not possible, it appears, to actually generate an error here.
 	r, _ := util.CryptoRandomAlphaNumeric(count)
 	return r
 }
 
 func randAlpha(count int) string {
+	count = clampInt(count, maxAllocSize)
 	r, _ := util.CryptoRandomAlphabetic(count)
 	return r
 }
 
 func randAscii(count int) string {
+	count = clampInt(count, maxAllocSize)
 	r, _ := util.CryptoRandomAscii(count)
 	return r
 }
 
 func randNumeric(count int) string {
+	count = clampInt(count, maxAllocSize)
 	r, _ := util.CryptoRandomNumeric(count)
 	return r
 }
@@ -107,6 +111,7 @@ func cat(v ...interface{}) string {
 }
 
 func indent(spaces int, v string) string {
+	spaces = clampInt(spaces, maxAllocSize)
 	pad := strings.Repeat(" ", spaces)
 	return pad + strings.Replace(v, "\n", "\n"+pad, -1)
 }
