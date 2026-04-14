@@ -65,6 +65,11 @@ func minf(a interface{}, i ...interface{}) float64 {
 }
 
 func until(count int) []int {
+	if count > maxAllocSize {
+		count = maxAllocSize
+	} else if count < -maxAllocSize {
+		count = -maxAllocSize
+	}
 	step := 1
 	if count < 0 {
 		step = -1

@@ -95,6 +95,7 @@ func htpasswd(username string, password string, hashAlgorithm HashAlgorithm) str
 }
 
 func randBytes(count int) (string, error) {
+	count = clampInt(count, maxAllocSize)
 	buf := make([]byte, count)
 	if _, err := rand.Read(buf); err != nil {
 		return "", err
