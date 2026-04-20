@@ -1,5 +1,11 @@
 # Changelog
 
+## Release 3.4.0 (unreleased)
+
+### Added
+
+- #472: Added `joinHostPort` and `splitHostPort` network functions
+
 ## Release 3.3.0 (2024-08-29)
 
 ### Added
