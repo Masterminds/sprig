@@ -91,6 +91,8 @@ var nonhermeticFunctions = []string{
 
 	// Network
 	"getHostByName",
+	"joinHostPort",
+	"splitHostPort",
 }
 
 var genericMap = map[string]interface{}{
@@ -272,6 +274,8 @@ var genericMap = map[string]interface{}{
 
 	// Network:
 	"getHostByName": getHostByName,
+	"joinHostPort":  joinHostPort,
+	"splitHostPort": splitHostPort,
 
 	// Paths:
 	"base":  path.Base,
