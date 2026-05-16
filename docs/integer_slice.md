@@ -27,6 +27,12 @@ or greater than 6. This is similar to Python's `range` function.
 ## seq
 
 Works like the bash `seq` command.
+
+Unlike `until` and `untilStep`, `seq` returns a **space-separated string**,
+not an integer slice. It's meant for emitting the numbers directly into
+your output. If you want a slice you can `range` over, use `until` or
+`untilStep`.
+
 * 1 parameter  (end) - will generate all counting integers between 1 and `end` inclusive.
 * 2 parameters (start, end) - will generate all counting integers between `start` and `end` inclusive incrementing or decrementing by 1.
 * 3 parameters (start, step, end) - will generate all counting integers between `start` and `end` inclusive incrementing or decrementing by `step`.
