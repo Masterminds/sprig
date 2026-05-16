@@ -249,6 +249,25 @@ func TestDivf(t *testing.T) {
 	}
 }
 
+func TestMod(t *testing.T) {
+	// {{ y | mod x }} computes x % y, matching the convention used by
+	// the other arithmetic helpers (the piped value is the right-hand
+	// operand). #458 noted that mod was documented but not covered.
+	tests := []struct {
+		tpl  string
+		want string
+	}{
+		{`{{ 3 | mod 10 }}`, `1`},
+		{`{{ 5 | mod 20 }}`, `0`},
+		{`{{ 4 | mod 7 }}`, `3`},
+	}
+	for _, tc := range tests {
+		if err := runt(tc.tpl, tc.want); err != nil {
+			t.Errorf("%s: %v", tc.tpl, err)
+		}
+	}
+}
+
 func TestMul(t *testing.T) {
 	tpl := `{{ 1 | mul "2" 3 "4"}}`
 	if err := runt(tpl, `24`); err != nil {
