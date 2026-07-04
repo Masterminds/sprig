@@ -1,6 +1,9 @@
 package sprig
 
 import (
+	"fmt"
+	"reflect"
+
 	"dario.cat/mergo"
 	"github.com/mitchellh/copystructure"
 )
@@ -37,11 +40,15 @@ func pluck(key string, d ...map[string]interface{}) []interface{} {
 	return res
 }
 
-func keys(dicts ...map[string]interface{}) []string {
+func keys(dicts ...interface{}) []string {
 	k := []string{}
 	for _, dict := range dicts {
-		for key := range dict {
-			k = append(k, key)
+		m := reflect.ValueOf(dict)
+		if m.Kind() != reflect.Map {
+			continue
+		}
+		for _, key := range m.MapKeys() {
+			k = append(k, fmt.Sprint(key.Interface()))
 		}
 	}
 	return k

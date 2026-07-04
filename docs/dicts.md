@@ -184,7 +184,8 @@ deepCopy $source | mergeOverwrite $dest
 ## keys
 
 The `keys` function will return a `list` of all of the keys in one or more `dict`
-types. Since a dictionary is _unordered_, the keys will not be in a predictable order.
+types. Any map type is accepted, not only `dict` (`map[string]interface{}`).
+Since a dictionary is _unordered_, the keys will not be in a predictable order.
 They can be sorted with `sortAlpha`.
 
 ```
