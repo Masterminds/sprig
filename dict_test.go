@@ -82,6 +82,24 @@ func TestKeys(t *testing.T) {
 	}
 }
 
+func TestKeysWithTypedMaps(t *testing.T) {
+	// keys should work with maps whose value type is not interface{} (issue #455).
+	type item struct{ N int }
+	vars := map[string]interface{}{
+		"structMap": map[string]item{"foo": {1}, "bar": {2}},
+		"intMap":    map[string]int{"a": 1, "b": 2},
+	}
+	tests := map[string]string{
+		`{{ keys .structMap | sortAlpha }}`: "[bar foo]",
+		`{{ keys .intMap | sortAlpha }}`:    "[a b]",
+	}
+	for tpl, expect := range tests {
+		if err := runtv(tpl, expect, vars); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
 func TestPick(t *testing.T) {
 	tests := map[string]string{
 		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "two" | len -}}`:               "1",
