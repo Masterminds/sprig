@@ -234,6 +234,29 @@ The above returns `true` because `catch` has the prefix `cat`.
 These functions wrap a string in double quotes (`quote`) or single quotes
 (`squote`).
 
+`quote` also escapes the string contents using Go's `%q` verb
+(`fmt.Sprintf("%q", ...)`), so the result is a double-quoted string that is
+safely escaped with Go syntax (backslashes, quotes, and non-printable runes).
+It is appropriate when generating Go string literals and is commonly used in
+Helm charts for YAML scalar values.
+
+`squote` wraps each value in single quotes. Unlike `quote`, it does **not**
+apply Go `%q` escaping to the contents; only the surrounding single quotes are
+added. Prefer `quote` when the value may contain quotes or special characters
+and you need safe escaping.
+
+```
+quote "Hello, world!"
+```
+
+The above produces `"Hello, world!"`.
+
+```
+squote "Hello, world!"
+```
+
+The above produces `'Hello, world!'`.
+
 ## cat
 
 The `cat` function concatenates multiple strings together into one, separating
