@@ -72,6 +72,38 @@ func TestMustRegexFindAll(t *testing.T) {
 	}
 }
 
+func TestRegexFindAllGlobal(t *testing.T) {
+	regex := "a{2}"
+	assert.Equal(t, 1, len(regexFindAllGlobal(regex, -1, "aa")))
+	assert.Equal(t, 1, len(regexFindAllGlobal(regex, 1, "aaaaaaaa")))
+	assert.Equal(t, 2, len(regexFindAllGlobal(regex, -1, "aaaa")))
+	assert.Equal(t, 0, len(regexFindAllGlobal(regex, -1, "none")))
+}
+
+func TestMustRegexFindAllGlobal(t *testing.T) {
+	type args struct {
+		regex, s string
+		n        int
+	}
+	cases := []struct {
+		expected int
+		args     args
+	}{
+		{1, args{"a{2}", "aa", -1}},
+		{1, args{"a{2}", "aaaaaaaa", 1}},
+		{2, args{"a{2}", "aaaa", -1}},
+		{0, args{"a{2}", "none", -1}},
+	}
+
+	for _, c := range cases {
+		res, err := mustRegexFindAllGlobal(c.args.regex, c.args.n, c.args.s)
+		if err != nil {
+			t.Errorf("regexFindAllGlobal test case %v failed with err %s", c, err)
+		}
+		assert.Equal(t, c.expected, len(res), "case %#v", c.args)
+	}
+}
+
 func TestRegexFindl(t *testing.T) {
 	regex := "fo.?"
 	assert.Equal(t, "foo", regexFind(regex, "foorbar"))
@@ -128,6 +160,35 @@ func TestMustRegexReplaceAll(t *testing.T) {
 	}
 }
 
+func TestRegexReplaceAllGlobal(t *testing.T) {
+	regex := "a(x*)b"
+	assert.Equal(t, "-T-T-", regexReplaceAllGlobal(regex, "T", "-ab-axxb-"))
+	assert.Equal(t, "--xx-", regexReplaceAllGlobal(regex, "$1", "-ab-axxb-"))
+	assert.Equal(t, "---", regexReplaceAllGlobal(regex, "$1W", "-ab-axxb-"))
+	assert.Equal(t, "-W-xxW-", regexReplaceAllGlobal(regex, "${1}W", "-ab-axxb-"))
+}
+
+func TestMustRegexReplaceAllGlobal(t *testing.T) {
+	type args struct{ regex, s, repl string }
+	cases := []struct {
+		expected string
+		args     args
+	}{
+		{"-T-T-", args{"a(x*)b", "-ab-axxb-", "T"}},
+		{"--xx-", args{"a(x*)b", "-ab-axxb-", "$1"}},
+		{"---", args{"a(x*)b", "-ab-axxb-", "$1W"}},
+		{"-W-xxW-", args{"a(x*)b", "-ab-axxb-", "${1}W"}},
+	}
+
+	for _, c := range cases {
+		res, err := mustRegexReplaceAllGlobal(c.args.regex, c.args.repl, c.args.s)
+		if err != nil {
+			t.Errorf("regexReplaceAllGlobal test case %v failed with err %s", c, err)
+		}
+		assert.Equal(t, c.expected, res, "case %#v", c.args)
+	}
+}
+
 func TestRegexReplaceAllLiteral(t *testing.T) {
 	regex := "a(x*)b"
 	assert.Equal(t, "-T-T-", regexReplaceAllLiteral(regex, "-ab-axxb-", "T"))
@@ -150,6 +211,33 @@ func TestMustRegexReplaceAllLiteral(t *testing.T) {
 		res, err := mustRegexReplaceAllLiteral(c.args.regex, c.args.s, c.args.repl)
 		if err != nil {
 			t.Errorf("regexReplaceAllLiteral test case %v failed with err %s", c, err)
+		}
+		assert.Equal(t, c.expected, res, "case %#v", c.args)
+	}
+}
+
+func TestRegexReplaceAllLiteralGlobal(t *testing.T) {
+	regex := "a(x*)b"
+	assert.Equal(t, "-T-T-", regexReplaceAllLiteralGlobal(regex, "T", "-ab-axxb-"))
+	assert.Equal(t, "-$1-$1-", regexReplaceAllLiteralGlobal(regex, "$1", "-ab-axxb-"))
+	assert.Equal(t, "-${1}-${1}-", regexReplaceAllLiteralGlobal(regex, "${1}", "-ab-axxb-"))
+}
+
+func TestMustRegexReplaceAllLiteralGlobal(t *testing.T) {
+	type args struct{ regex, s, repl string }
+	cases := []struct {
+		expected string
+		args     args
+	}{
+		{"-T-T-", args{"a(x*)b", "-ab-axxb-", "T"}},
+		{"-$1-$1-", args{"a(x*)b", "-ab-axxb-", "$1"}},
+		{"-${1}-${1}-", args{"a(x*)b", "-ab-axxb-", "${1}"}},
+	}
+
+	for _, c := range cases {
+		res, err := mustRegexReplaceAllLiteralGlobal(c.args.regex, c.args.repl, c.args.s)
+		if err != nil {
+			t.Errorf("regexReplaceAllLiteralGlobal test case %v failed with err %s", c, err)
 		}
 		assert.Equal(t, c.expected, res, "case %#v", c.args)
 	}
@@ -197,7 +285,56 @@ func TestMustRegexSplit(t *testing.T) {
 	}
 }
 
+func TestRegexSplitGlobal(t *testing.T) {
+	regex := "a"
+	assert.Equal(t, 4, len(regexSplitGlobal(regex, -1, "banana")))
+	assert.Equal(t, 0, len(regexSplitGlobal(regex, 0, "banana")))
+	assert.Equal(t, 1, len(regexSplitGlobal(regex, 1, "banana")))
+	assert.Equal(t, 2, len(regexSplitGlobal(regex, 2, "banana")))
+
+	regex = "z+"
+	assert.Equal(t, 2, len(regexSplitGlobal(regex, -1, "pizza")))
+	assert.Equal(t, 0, len(regexSplitGlobal(regex, 0, "pizza")))
+	assert.Equal(t, 1, len(regexSplitGlobal(regex, 1, "pizza")))
+	assert.Equal(t, 2, len(regexSplitGlobal(regex, 2, "pizza")))
+}
+
+func TestMustRegexSplitGlobal(t *testing.T) {
+	type args struct {
+		regex, s string
+		n        int
+	}
+	cases := []struct {
+		expected int
+		args     args
+	}{
+		{4, args{"a", "banana", -1}},
+		{0, args{"a", "banana", 0}},
+		{1, args{"a", "banana", 1}},
+		{2, args{"a", "banana", 2}},
+		{2, args{"z+", "pizza", -1}},
+		{0, args{"z+", "pizza", 0}},
+		{1, args{"z+", "pizza", 1}},
+		{2, args{"z+", "pizza", 2}},
+	}
+
+	for _, c := range cases {
+		res, err := mustRegexSplitGlobal(c.args.regex, c.args.n, c.args.s)
+		if err != nil {
+			t.Errorf("regexSplitGlobal test case %v failed with err %s", c, err)
+		}
+		assert.Equal(t, c.expected, len(res), "case %#v", c.args)
+	}
+}
+
 func TestRegexQuoteMeta(t *testing.T) {
 	assert.Equal(t, "1\\.2\\.3", regexQuoteMeta("1.2.3"))
 	assert.Equal(t, "pretzel", regexQuoteMeta("pretzel"))
+}
+
+func TestRegexGlobalFunctionsInPipeline(t *testing.T) {
+	assert.NoError(t, runt(`{{"-ab-axxb-" | regexReplaceAllGlobal "a(x*)b" "${1}W"}}`, "-W-xxW-"))
+	assert.NoError(t, runt(`{{"-ab-axxb-" | regexReplaceAllLiteralGlobal "a(x*)b" "${1}"}}`, "-${1}-${1}-"))
+	assert.NoError(t, runt(`{{"pizza" | regexSplitGlobal "z+" -1 | join ","}}`, "pi,a"))
+	assert.NoError(t, runt(`{{"foorbar" | regexFindAllGlobal "fo.?" -1 | join ","}}`, "foo"))
 }

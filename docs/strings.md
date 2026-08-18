@@ -392,6 +392,20 @@ The above produces `[2 4 6 8]`
 `regexFindAll` panics if there is a problem and `mustRegexFindAll` returns an error to the
 template engine if there is a problem.
 
+## regexFindAllGlobal, mustRegexFindAllGlobal
+
+Identical to [regexFindAll](#regexfindall-mustregexfindall), except the input string is the last
+argument instead of the second, so it can be used at the end of a pipeline:
+
+```
+"123456789" | regexFindAllGlobal "[2,4,6,8]" -1
+```
+
+The above produces `[2 4 6 8]`
+
+`regexFindAllGlobal` panics if there is a problem and `mustRegexFindAllGlobal` returns an error to
+the template engine if there is a problem.
+
 ## regexFind, mustRegexFind
 
 Return the first (left most) match of the regular expression in the input string
@@ -419,6 +433,20 @@ The above produces `-W-xxW-`
 `regexReplaceAll` panics if there is a problem and `mustRegexReplaceAll` returns an error to the
 template engine if there is a problem.
 
+## regexReplaceAllGlobal, mustRegexReplaceAllGlobal
+
+Identical to [regexReplaceAll](#regexreplaceall-mustregexreplaceall), except the input string is
+the last argument instead of the second, so it can be used at the end of a pipeline:
+
+```
+"-ab-axxb-" | regexReplaceAllGlobal "a(x*)b" "${1}W"
+```
+
+The above produces `-W-xxW-`
+
+`regexReplaceAllGlobal` panics if there is a problem and `mustRegexReplaceAllGlobal` returns an
+error to the template engine if there is a problem.
+
 ## regexReplaceAllLiteral, mustRegexReplaceAllLiteral
 
 Returns a copy of the input string, replacing matches of the Regexp with the replacement string replacement
@@ -433,6 +461,21 @@ The above produces `-${1}-${1}-`
 `regexReplaceAllLiteral` panics if there is a problem and `mustRegexReplaceAllLiteral` returns an error to the
 template engine if there is a problem.
 
+## regexReplaceAllLiteralGlobal, mustRegexReplaceAllLiteralGlobal
+
+Identical to [regexReplaceAllLiteral](#regexreplacealliteral-mustregexreplacealliteral), except
+the input string is the last argument instead of the second, so it can be used at the end of a
+pipeline:
+
+```
+"-ab-axxb-" | regexReplaceAllLiteralGlobal "a(x*)b" "${1}"
+```
+
+The above produces `-${1}-${1}-`
+
+`regexReplaceAllLiteralGlobal` panics if there is a problem and
+`mustRegexReplaceAllLiteralGlobal` returns an error to the template engine if there is a problem.
+
 ## regexSplit, mustRegexSplit
 
 Slices the input string into substrings separated by the expression and returns a slice of the substrings between those expression matches. The last parameter `n` determines the number of substrings to return, where `-1` means return all matches
@@ -444,6 +487,20 @@ regexSplit "z+" "pizza" -1
 The above produces `[pi a]`
 
 `regexSplit` panics if there is a problem and `mustRegexSplit` returns an error to the
+template engine if there is a problem.
+
+## regexSplitGlobal, mustRegexSplitGlobal
+
+Identical to [regexSplit](#regexsplit-mustregexsplit), except the input string is the last
+argument instead of the second, so it can be used at the end of a pipeline:
+
+```
+"pizza" | regexSplitGlobal "z+" -1
+```
+
+The above produces `[pi a]`
+
+`regexSplitGlobal` panics if there is a problem and `mustRegexSplitGlobal` returns an error to the
 template engine if there is a problem.
 
 ## regexQuoteMeta
