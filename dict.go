@@ -1,6 +1,9 @@
 package sprig
 
 import (
+	"fmt"
+	"reflect"
+
 	"dario.cat/mergo"
 	"github.com/mitchellh/copystructure"
 )
@@ -37,14 +40,29 @@ func pluck(key string, d ...map[string]interface{}) []interface{} {
 	return res
 }
 
-func keys(dicts ...map[string]interface{}) []string {
+// keys returns the string keys of one or more maps. Unlike most sprig dict
+// functions, it accepts maps with any value type (e.g. map[string]string,
+// map[string]*MyStruct), not just map[string]interface{}, since text/template
+// performs static argument type-checking and would otherwise reject any map
+// whose value type isn't exactly interface{}.
+func keys(dicts ...interface{}) ([]string, error) {
 	k := []string{}
 	for _, dict := range dicts {
-		for key := range dict {
-			k = append(k, key)
+		v := reflect.ValueOf(dict)
+		if v.Kind() == reflect.Ptr {
+			v = v.Elem()
+		}
+		if v.Kind() != reflect.Map {
+			return nil, fmt.Errorf("keys: argument must be a map, got %T", dict)
+		}
+		for _, mk := range v.MapKeys() {
+			if mk.Kind() != reflect.String {
+				return nil, fmt.Errorf("keys: map key type must be string, got %s", mk.Kind())
+			}
+			k = append(k, mk.String())
 		}
 	}
-	return k
+	return k, nil
 }
 
 func pick(dict map[string]interface{}, keys ...string) map[string]interface{} {
