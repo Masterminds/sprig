@@ -82,6 +82,42 @@ func TestKeys(t *testing.T) {
 	}
 }
 
+func TestKeysNonInterfaceMaps(t *testing.T) {
+	// keys must accept maps whose value type isn't interface{} (e.g.
+	// map[string]string, map[string]int), since Go's text/template does
+	// static argument type-checking and would otherwise reject them before
+	// the function body ever runs. See #455.
+	tests := []struct {
+		tpl    string
+		expect string
+		vars   interface{}
+	}{
+		{
+			tpl:    `{{ .M | keys | sortAlpha }}`,
+			expect: "[bar foo]",
+			vars:   map[string]interface{}{"M": map[string]string{"foo": "1", "bar": "2"}},
+		},
+		{
+			tpl:    `{{ .M | keys | sortAlpha }}`,
+			expect: "[bar foo]",
+			vars:   map[string]interface{}{"M": map[string]int{"foo": 1, "bar": 2}},
+		},
+	}
+	for _, tt := range tests {
+		if err := runtv(tt.tpl, tt.expect, tt.vars); err != nil {
+			t.Error(err)
+		}
+	}
+}
+
+func TestKeysNonMapErrors(t *testing.T) {
+	tpl := `{{ .M | keys }}`
+	_, err := runRaw(tpl, map[string]interface{}{"M": "not a map"})
+	if err == nil {
+		t.Error("expected an error when keys is given a non-map argument")
+	}
+}
+
 func TestPick(t *testing.T) {
 	tests := map[string]string{
 		`{{- $d := dict "one" 1 "two" 222222 }}{{ pick $d "two" | len -}}`:               "1",
