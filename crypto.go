@@ -33,6 +33,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/spf13/cast"
 	bcrypt_lib "golang.org/x/crypto/bcrypt"
 	"golang.org/x/crypto/scrypt"
 )
@@ -134,7 +135,9 @@ var templateCharacters = map[byte]string{
 	'x': "AEIOUaeiouBCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz0123456789!@#$%^&*()",
 }
 
-func derivePassword(counter uint32, passwordType, password, user, site string) string {
+func derivePassword(counterInput interface{}, passwordType, password, user, site string) string {
+	counter := cast.ToUint32(counterInput)
+
 	var templates = passwordTypeTemplates[passwordType]
 	if templates == nil {
 		return fmt.Sprintf("cannot find password template %s", passwordType)

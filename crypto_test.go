@@ -124,6 +124,28 @@ func TestDerivePassword(t *testing.T) {
 	}
 }
 
+func TestDerivePasswordCounterTypes(t *testing.T) {
+	// Regression test: the counter argument must accept any integer type,
+	// not just uint32, so it can be sourced from a `range` index.
+	const want = "ZedaFaxcZaso9*"
+
+	expectations := []string{
+		`{{derivePassword 1 "long" "password" "user" "example.com"}}`,
+		`{{$c := 1}}{{derivePassword $c "long" "password" "user" "example.com"}}`,
+		`{{range $i, $e := (list "one")}}{{derivePassword (add $i 1) "long" "password" "user" "example.com"}}{{end}}`,
+	}
+
+	for _, tpl := range expectations {
+		out, err := runRaw(tpl, nil)
+		if err != nil {
+			t.Error(err)
+		}
+		if 0 != strings.Compare(out, want) {
+			t.Error("Generated password does not match for", tpl)
+		}
+	}
+}
+
 // NOTE(bacongobbler): this test is really _slow_ because of how long it takes to compute
 // and generate a new crypto key.
 func TestGenPrivateKey(t *testing.T) {
