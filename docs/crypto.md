@@ -77,6 +77,9 @@ some shared "master password" constraints. The algorithm for this is
 derivePassword 1 "long" "password" "user" "example.com"
 ```
 
+The counter argument accepts any integer type (e.g. `int`, `int64`, `uint32`), so it
+can be supplied directly from a `range` index without an explicit conversion.
+
 Note that it is considered insecure to store the parts directly in the template.
 
 ## genPrivateKey
