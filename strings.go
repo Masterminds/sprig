@@ -175,6 +175,11 @@ func strval(v interface{}) string {
 	switch v := v.(type) {
 	case string:
 		return v
+	case *string:
+		if v == nil {
+			return ""
+		}
+		return *v
 	case []byte:
 		return string(v)
 	case error:

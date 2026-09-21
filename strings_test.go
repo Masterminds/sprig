@@ -146,6 +146,14 @@ func TestToString(t *testing.T) {
 	}
 }
 
+func TestToStringPointers(t *testing.T) {
+	value := "pointer"
+	assert.NoError(t, runtv(`{{ toString .Value }}`, "pointer", map[string]interface{}{"Value": &value}))
+
+	var nilValue *string
+	assert.NoError(t, runtv(`{{ toString .Value }}`, "", map[string]interface{}{"Value": nilValue}))
+}
+
 func TestToStrings(t *testing.T) {
 	tpl := `{{ $s := list 1 2 3 | toStrings }}{{ index $s 1 | kindOf }}`
 	assert.NoError(t, runt(tpl, "string"))
