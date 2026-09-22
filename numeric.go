@@ -114,7 +114,8 @@ func round(a interface{}, p int, rOpt ...float64) float64 {
 
 	var round float64
 	pow := math.Pow(10, places)
-	digit := pow * val
+	// Round the product before Modf subtracts its integer part.
+	digit := float64(pow * val)
 	_, div := math.Modf(digit)
 	if div >= roundOn {
 		round = math.Ceil(digit)
