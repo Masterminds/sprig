@@ -234,6 +234,15 @@ The above returns `true` because `catch` has the prefix `cat`.
 These functions wrap a string in double quotes (`quote`) or single quotes
 (`squote`).
 
+`quote` formats each value with Go's `%q` verb, so the contents are escaped
+with Go string syntax. That makes the result safe to embed in generated Go
+code. Helm often recommends `quote` when rendering YAML string values; note
+that Go `%q` escaping is not identical to YAML or JSON string rules in every
+edge case.
+
+`squote` wraps each value in single quotes using plain `%v` formatting and
+does not escape quotes or other special characters inside the value.
+
 ## cat
 
 The `cat` function concatenates multiple strings together into one, separating
