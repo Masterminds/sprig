@@ -298,6 +298,15 @@ func TestRound(t *testing.T) {
 	assert.Equal(t, 123.0, round(123.49999999, 0))
 	assert.Equal(t, 123.23, round(123.2329999, 2, .3))
 	assert.Equal(t, 123.24, round(123.233, 2, .3))
+	// A negative fraction below the threshold rounds toward zero.
+	// -1.25 is exact in float64. Floor would return -2.
+	assert.Equal(t, -1.0, round(-1.25, 0))
+	assert.Equal(t, -2.0, round(-1.5, 0))
+	assert.Equal(t, -2.0, round(-1.75, 0))
+	assert.Equal(t, -123.0, round(-123.49999999, 0))
+	assert.Equal(t, -124.0, round(-123.500001, 0))
+	assert.Equal(t, -123.23, round(-123.2329999, 2, .3))
+	assert.Equal(t, -123.24, round(-123.233, 2, .3))
 }
 
 func TestRandomInt(t *testing.T) {

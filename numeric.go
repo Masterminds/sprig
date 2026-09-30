@@ -115,8 +115,12 @@ func round(a interface{}, p int, rOpt ...float64) float64 {
 	var round float64
 	pow := math.Pow(10, places)
 	digit := pow * val
+	// Modf keeps the sign of the fraction. A negative fraction below the
+	// threshold rounds toward zero, matching the positive side.
 	_, div := math.Modf(digit)
 	if div >= roundOn {
+		round = math.Ceil(digit)
+	} else if div < 0 && div > -roundOn {
 		round = math.Ceil(digit)
 	} else {
 		round = math.Floor(digit)
