@@ -74,6 +74,22 @@ This returns 3mo
 durationRound "2400h10m5s"
 ```
 
+## timeRound
+
+Rounds a given timestamp to the nearest duration multiple. Duration can be a string (e.g. `"15m"`, `"1h"`) or `time.Duration`, and the date can be a `time.Time` or string.
+
+Round the current time to the nearest 15 minutes:
+
+```
+now | timeRound "15m"
+```
+
+Round to the nearest hour:
+
+```
+timeRound "1h" .CreatedAt
+```
+
 ## unixEpoch
 
 Returns the seconds since the unix epoch for a `time.Time`.

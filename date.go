@@ -1,8 +1,11 @@
 package sprig
 
 import (
+	"errors"
 	"strconv"
 	"time"
+
+	"github.com/spf13/cast"
 )
 
 // Given a format and a date, format the date string.
@@ -149,4 +152,48 @@ func mustToDate(fmt, str string) (time.Time, error) {
 
 func unixEpoch(date time.Time) string {
 	return strconv.FormatInt(date.Unix(), 10)
+}
+
+func timeRound(duration interface{}, date interface{}) (time.Time, error) {
+	var d time.Duration
+	switch v := duration.(type) {
+	case time.Duration:
+		d = v
+	case *time.Duration:
+		if v == nil {
+			return time.Time{}, errors.New("duration cannot be nil")
+		}
+		d = *v
+	case string:
+		var err error
+		d, err = time.ParseDuration(v)
+		if err != nil {
+			return time.Time{}, err
+		}
+	default:
+		dur, err := cast.ToDurationE(v)
+		if err != nil {
+			return time.Time{}, err
+		}
+		d = dur
+	}
+
+	var t time.Time
+	switch v := date.(type) {
+	case time.Time:
+		t = v
+	case *time.Time:
+		if v == nil {
+			return time.Time{}, errors.New("date cannot be nil")
+		}
+		t = *v
+	default:
+		var err error
+		t, err = cast.ToTimeE(v)
+		if err != nil {
+			return time.Time{}, err
+		}
+	}
+
+	return t.Round(d), nil
 }

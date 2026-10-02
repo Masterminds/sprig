@@ -3,6 +3,9 @@ package sprig
 import (
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestHtmlDate(t *testing.T) {
@@ -145,3 +148,87 @@ func TestDateMustModifyReturnsErr(t *testing.T) {
 		t.Error("expected err, got nil")
 	}
 }
+
+func TestTimeRound(t *testing.T) {
+	tm1, err := time.Parse("2006-01-02 15:04:05", "2023-05-01 10:07:00")
+	require.NoError(t, err)
+
+	tm2, err := time.Parse("2006-01-02 15:04:05", "2023-05-01 10:08:00")
+	require.NoError(t, err)
+
+	tm3, err := time.Parse("2006-01-02 15:04:05", "2023-05-01 10:35:00")
+	require.NoError(t, err)
+
+	tm4, err := time.Parse("2006-01-02 15:04:05", "2023-05-01 10:20:00")
+	require.NoError(t, err)
+
+	// Direct call tests with string duration and time.Time
+	res, err := timeRound("15m", tm1)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.Format("2006-01-02 15:04:05"))
+
+	res, err = timeRound("15m", tm2)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:15:00", res.Format("2006-01-02 15:04:05"))
+
+	res, err = timeRound("1h", tm3)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 11:00:00", res.Format("2006-01-02 15:04:05"))
+
+	res, err = timeRound("1h", tm4)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.Format("2006-01-02 15:04:05"))
+
+	// Direct call with time.Duration
+	res, err = timeRound(15*time.Minute, tm1)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.Format("2006-01-02 15:04:05"))
+
+	dur := 15 * time.Minute
+	res, err = timeRound(&dur, tm1)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.Format("2006-01-02 15:04:05"))
+
+	// Direct call with pointer to time.Time
+	res, err = timeRound("15m", &tm1)
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.Format("2006-01-02 15:04:05"))
+
+	// Direct call with string date (RFC3339)
+	res, err = timeRound("15m", "2023-05-01T10:07:00Z")
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:00:00", res.UTC().Format("2006-01-02 15:04:05"))
+
+	// Direct call with string date (standard layout)
+	res, err = timeRound("15m", "2023-05-01 10:08:00")
+	require.NoError(t, err)
+	assert.Equal(t, "2023-05-01 10:15:00", res.Format("2006-01-02 15:04:05"))
+
+	// Template pipeline execution
+	assert.NoError(t, runtv(`{{ .Time | timeRound "15m" | date "15:04:05" }}`, "10:00:00", map[string]interface{}{"Time": tm1}))
+	assert.NoError(t, runtv(`{{ .Time | timeRound "15m" | date "15:04:05" }}`, "10:15:00", map[string]interface{}{"Time": tm2}))
+	assert.NoError(t, runtv(`{{ timeRound "1h" .Time | date "15:04:05" }}`, "11:00:00", map[string]interface{}{"Time": tm3}))
+	assert.NoError(t, runtv(`{{ time_round "15m" .Time | date "15:04:05" }}`, "10:00:00", map[string]interface{}{"Time": tm1}))
+
+	// Template with string date input
+	assert.NoError(t, runt(`{{ "2023-05-01T10:07:00Z" | timeRound "15m" | date "15:04:05" }}`, "10:00:00"))
+	assert.NoError(t, runt(`{{ timeRound "1h" "2023-05-01T10:35:00Z" | date "15:04:05" }}`, "11:00:00"))
+
+	// Error handling tests
+	_, err = timeRound("invalid_duration", tm1)
+	assert.Error(t, err)
+
+	_, err = timeRound("15m", "invalid_date")
+	assert.Error(t, err)
+
+	_, err = timeRound((*time.Duration)(nil), tm1)
+	assert.Error(t, err)
+
+	_, err = timeRound("15m", (*time.Time)(nil))
+	assert.Error(t, err)
+
+	// Template execution error on invalid inputs
+	assert.Error(t, runtv(`{{ .Time | timeRound "invalid" }}`, "", map[string]interface{}{"Time": tm1}))
+	assert.Error(t, runt(`{{ "invalid_date" | timeRound "15m" }}`, ""))
+}
+
