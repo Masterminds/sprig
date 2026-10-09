@@ -272,6 +272,7 @@ var genericMap = map[string]interface{}{
 
 	// Network:
 	"getHostByName": getHostByName,
+	"joinHostPort":  joinHostPort,
 
 	// Paths:
 	"base":  path.Base,
