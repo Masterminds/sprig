@@ -114,6 +114,31 @@ $ca := buildCustomCert "base64-encoded-ca-crt" "base64-encoded-ca-key"
 Note that the returned object can be passed to the `genSignedCert` function
 to sign a certificate using this CA.
 
+## Certificate subject
+
+The `genCA`, `genCAWithKey`, `genSelfSignedCert`, `genSelfSignedCertWithKey`,
+`genSignedCert` and `genSignedCertWithKey` functions take the certificate
+subject as their first parameter. It is either:
+
+- a string, used as the subject's common name (CN), or
+- a dict with any of the following keys:
+  - `commonName` (string)
+  - `serialNumber` (string)
+  - `organization`, `organizationalUnit`, `country`, `province`, `locality`,
+    `streetAddress`, `postalCode` (a string or a list of strings)
+
+Unknown keys cause an error, so a typo such as `organisation` does not silently
+produce a certificate without an organization. Multiple values of the same field
+may be reordered in the encoded certificate.
+
+For example, a Kubernetes admin client certificate needs an organization in
+addition to the common name:
+
+```
+$ca := genCA "kubernetes-ca" 365
+$cert := genSignedCert (dict "commonName" "admin" "organization" (list "system:masters")) nil nil 365 $ca
+```
+
 ## genCA
 
 The `genCA` function generates a new, self-signed x509 certificate authority using a
@@ -121,7 +146,7 @@ The `genCA` function generates a new, self-signed x509 certificate authority usi
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Cert validity duration in days
 
 It returns an object with the following attributes:
@@ -145,7 +170,7 @@ given private key.
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Cert validity duration in days
 - Private key (PEM-encoded); DSA keys are not supported
 
@@ -170,7 +195,7 @@ The `genSelfSignedCert` function generates a new, self-signed x509 certificate u
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Optional list of IPs; may be nil
 - Optional list of alternate DNS names; may be nil
 - Cert validity duration in days
@@ -193,7 +218,7 @@ given private key.
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Optional list of IPs; may be nil
 - Optional list of alternate DNS names; may be nil
 - Cert validity duration in days
@@ -217,7 +242,7 @@ specified CA, using a 2048-bit RSA private key.
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Optional list of IPs; may be nil
 - Optional list of alternate DNS names; may be nil
 - Cert validity duration in days
@@ -237,7 +262,7 @@ specified CA, using a given private key.
 
 It takes the following parameters:
 
-- Subject's common name (cn)
+- Subject: a common name (cn) string, or a dict of subject fields (see [Certificate subject](#certificate-subject))
 - Optional list of IPs; may be nil
 - Optional list of alternate DNS names; may be nil
 - Cert validity duration in days
