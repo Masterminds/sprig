@@ -2,6 +2,7 @@ package sprig
 
 import (
 	"crypto/x509"
+	"crypto/x509/pkix"
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
@@ -432,6 +433,140 @@ func testGenSignedCert(t *testing.T, caKeyAlgo, certKeyAlgo *string) {
 	assert.Contains(t, cert.DNSNames, dns1)
 	assert.Contains(t, cert.DNSNames, dns2)
 	assert.False(t, cert.IsCA)
+}
+
+func parseCertFromTemplate(t *testing.T, tpl string) *x509.Certificate {
+	t.Helper()
+	return parseCertFromTemplateWithVars(t, tpl, nil)
+}
+
+func parseCertFromTemplateWithVars(t *testing.T, tpl string, vars interface{}) *x509.Certificate {
+	t.Helper()
+	out, err := runRaw(tpl, vars)
+	if !assert.NoError(t, err) {
+		t.FailNow()
+	}
+	decodedCert, _ := pem.Decode([]byte(out))
+	if !assert.NotNil(t, decodedCert) {
+		t.FailNow()
+	}
+	cert, err := x509.ParseCertificate(decodedCert.Bytes)
+	if !assert.NoError(t, err) {
+		t.FailNow()
+	}
+	return cert
+}
+
+func TestGenCAWithSubjectDict(t *testing.T) {
+	for _, genCAExpr := range []string{"genCA", `genPrivateKey "ecdsa" | genCAWithKey`} {
+		t.Run(genCAExpr, func(t *testing.T) {
+			tpl := fmt.Sprintf(`{{- $subject := dict "commonName" "foo-ca" "organization" "Acme" "country" (list "US" "CA") }}
+{{- $ca := %s $subject 365 }}
+{{ $ca.Cert }}
+`, genCAExpr)
+			cert := parseCertFromTemplate(t, tpl)
+			assert.Equal(t, "foo-ca", cert.Subject.CommonName)
+			assert.Equal(t, []string{"Acme"}, cert.Subject.Organization)
+			assert.ElementsMatch(t, []string{"US", "CA"}, cert.Subject.Country)
+			assert.True(t, cert.IsCA)
+		})
+	}
+}
+
+func TestGenSelfSignedCertWithSubjectDict(t *testing.T) {
+	for _, genExpr := range []string{"genSelfSignedCert", `genPrivateKey "ecdsa" | genSelfSignedCertWithKey`} {
+		t.Run(genExpr, func(t *testing.T) {
+			tpl := fmt.Sprintf(`{{- $cert := %s (dict "commonName" "foo.com" "organizationalUnit" "web") nil nil 365 }}
+{{ $cert.Cert }}
+`, genExpr)
+			cert := parseCertFromTemplate(t, tpl)
+			assert.Equal(t, "foo.com", cert.Subject.CommonName)
+			assert.Equal(t, []string{"web"}, cert.Subject.OrganizationalUnit)
+		})
+	}
+}
+
+func TestGenSignedCertWithSubjectDict(t *testing.T) {
+	for _, genExpr := range []string{"genSignedCert", `genPrivateKey "ecdsa" | genSignedCertWithKey`} {
+		t.Run(genExpr, func(t *testing.T) {
+			// Kubernetes admin client certificate.
+			tpl := fmt.Sprintf(`{{- $ca := genCA "kubernetes" 365 }}
+{{- $cert := %s (dict "commonName" "admin" "organization" (list "system:masters")) nil nil 365 $ca }}
+{{ $cert.Cert }}
+`, genExpr)
+			cert := parseCertFromTemplate(t, tpl)
+			assert.Equal(t, "admin", cert.Subject.CommonName)
+			assert.Equal(t, []string{"system:masters"}, cert.Subject.Organization)
+			assert.Equal(t, "kubernetes", cert.Issuer.CommonName)
+			assert.False(t, cert.IsCA)
+		})
+	}
+}
+
+func TestGenSignedCertWithSubjectFromValues(t *testing.T) {
+	// Values as decoded from YAML, e.g. by Helm's fromYaml or a values file.
+	vars := map[string]interface{}{
+		"subject": map[string]interface{}{
+			"commonName":    "foo.com",
+			"organization":  []interface{}{"Acme", "Example"},
+			"locality":      "Springfield",
+			"province":      "IL",
+			"streetAddress": "742 Evergreen Terrace",
+			"postalCode":    "12345",
+			"serialNumber":  "42",
+		},
+	}
+	tpl := `{{- $ca := genCA "foo-ca" 365 }}
+{{- $cert := genSignedCert .subject nil nil 365 $ca }}
+{{ $cert.Cert }}
+`
+	cert := parseCertFromTemplateWithVars(t, tpl, vars)
+	assert.Equal(t, "foo.com", cert.Subject.CommonName)
+	assert.ElementsMatch(t, []string{"Acme", "Example"}, cert.Subject.Organization)
+	assert.Equal(t, []string{"Springfield"}, cert.Subject.Locality)
+	assert.Equal(t, []string{"IL"}, cert.Subject.Province)
+	assert.Equal(t, []string{"742 Evergreen Terrace"}, cert.Subject.StreetAddress)
+	assert.Equal(t, []string{"12345"}, cert.Subject.PostalCode)
+	assert.Equal(t, "42", cert.Subject.SerialNumber)
+}
+
+func TestGenCertSubjectErrors(t *testing.T) {
+	tests := map[string]string{
+		`genCA (dict "commonName" "foo" "organisation" "Acme") 365`:         "unknown field organisation",
+		`genCA (dict "commonName" 1) 365`:                                   "subject field commonName: 1 is not a string",
+		`genCA (dict "organization" (list "Acme" 1)) 365`:                   "subject field organization: 1 is not a string",
+		`genCA (dict "organization" 1) 365`:                                 "subject field organization: 1 is not a string or a list",
+		`genCA 1 365`:                                                       "subject: 1 is not a string or a dict",
+		`genSelfSignedCert (dict "bogus" "x") nil nil 365`:                  "unknown field bogus",
+		`genSignedCert (dict "bogus" "x") nil nil 365 (genCA "foo-ca" 365)`: "unknown field bogus",
+	}
+	for expr, expected := range tests {
+		t.Run(expr, func(t *testing.T) {
+			_, err := runRaw(fmt.Sprintf(`{{ %s }}`, expr), nil)
+			if assert.Error(t, err) {
+				assert.Contains(t, err.Error(), expected)
+			}
+		})
+	}
+}
+
+func TestGetSubject(t *testing.T) {
+	name, err := getSubject("foo")
+	assert.NoError(t, err)
+	assert.Equal(t, pkix.Name{CommonName: "foo"}, name)
+
+	name, err = getSubject(map[string]interface{}{
+		"commonName":   "admin",
+		"organization": []string{"system:masters"},
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, pkix.Name{
+		CommonName:   "admin",
+		Organization: []string{"system:masters"},
+	}, name)
+
+	_, err = getSubject(nil)
+	assert.Error(t, err)
 }
 
 func TestEncryptDecryptAES(t *testing.T) {

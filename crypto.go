@@ -28,6 +28,7 @@ import (
 	"io"
 	"math/big"
 	"net"
+	"sort"
 	"time"
 
 	"strings"
@@ -338,7 +339,7 @@ func buildCustomCertificate(b64cert string, b64key string) (certificate, error) 
 }
 
 func generateCertificateAuthority(
-	cn string,
+	subject interface{},
 	daysValid int,
 ) (certificate, error) {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -346,11 +347,11 @@ func generateCertificateAuthority(
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
 
-	return generateCertificateAuthorityWithKeyInternal(cn, daysValid, priv)
+	return generateCertificateAuthorityWithKeyInternal(subject, daysValid, priv)
 }
 
 func generateCertificateAuthorityWithPEMKey(
-	cn string,
+	subject interface{},
 	daysValid int,
 	privPEM string,
 ) (certificate, error) {
@@ -358,17 +359,17 @@ func generateCertificateAuthorityWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateCertificateAuthorityWithKeyInternal(cn, daysValid, priv)
+	return generateCertificateAuthorityWithKeyInternal(subject, daysValid, priv)
 }
 
 func generateCertificateAuthorityWithKeyInternal(
-	cn string,
+	subject interface{},
 	daysValid int,
 	priv crypto.PrivateKey,
 ) (certificate, error) {
 	ca := certificate{}
 
-	template, err := getBaseCertTemplate(cn, nil, nil, daysValid)
+	template, err := getBaseCertTemplate(subject, nil, nil, daysValid)
 	if err != nil {
 		return ca, err
 	}
@@ -384,7 +385,7 @@ func generateCertificateAuthorityWithKeyInternal(
 }
 
 func generateSelfSignedCertificate(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -393,11 +394,11 @@ func generateSelfSignedCertificate(
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(subject, ips, alternateDNS, daysValid, priv)
 }
 
 func generateSelfSignedCertificateWithPEMKey(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -407,11 +408,11 @@ func generateSelfSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSelfSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, priv)
+	return generateSelfSignedCertificateWithKeyInternal(subject, ips, alternateDNS, daysValid, priv)
 }
 
 func generateSelfSignedCertificateWithKeyInternal(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -419,7 +420,7 @@ func generateSelfSignedCertificateWithKeyInternal(
 ) (certificate, error) {
 	cert := certificate{}
 
-	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
+	template, err := getBaseCertTemplate(subject, ips, alternateDNS, daysValid)
 	if err != nil {
 		return cert, err
 	}
@@ -430,7 +431,7 @@ func generateSelfSignedCertificateWithKeyInternal(
 }
 
 func generateSignedCertificate(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -440,11 +441,11 @@ func generateSignedCertificate(
 	if err != nil {
 		return certificate{}, fmt.Errorf("error generating rsa key: %s", err)
 	}
-	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(subject, ips, alternateDNS, daysValid, ca, priv)
 }
 
 func generateSignedCertificateWithPEMKey(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -455,11 +456,11 @@ func generateSignedCertificateWithPEMKey(
 	if err != nil {
 		return certificate{}, fmt.Errorf("parsing private key: %s", err)
 	}
-	return generateSignedCertificateWithKeyInternal(cn, ips, alternateDNS, daysValid, ca, priv)
+	return generateSignedCertificateWithKeyInternal(subject, ips, alternateDNS, daysValid, ca, priv)
 }
 
 func generateSignedCertificateWithKeyInternal(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
@@ -487,7 +488,7 @@ func generateSignedCertificateWithKeyInternal(
 		)
 	}
 
-	template, err := getBaseCertTemplate(cn, ips, alternateDNS, daysValid)
+	template, err := getBaseCertTemplate(subject, ips, alternateDNS, daysValid)
 	if err != nil {
 		return cert, err
 	}
@@ -543,11 +544,15 @@ func getCertAndKey(
 }
 
 func getBaseCertTemplate(
-	cn string,
+	subject interface{},
 	ips []interface{},
 	alternateDNS []interface{},
 	daysValid int,
 ) (*x509.Certificate, error) {
+	name, err := getSubject(subject)
+	if err != nil {
+		return nil, err
+	}
 	ipAddresses, err := getNetIPs(ips)
 	if err != nil {
 		return nil, err
@@ -563,20 +568,110 @@ func getBaseCertTemplate(
 	}
 	return &x509.Certificate{
 		SerialNumber: serialNumber,
-		Subject: pkix.Name{
-			CommonName: cn,
-		},
-		IPAddresses: ipAddresses,
-		DNSNames:    dnsNames,
-		NotBefore:   time.Now(),
-		NotAfter:    time.Now().Add(time.Hour * 24 * time.Duration(daysValid)),
-		KeyUsage:    x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+		Subject:      name,
+		IPAddresses:  ipAddresses,
+		DNSNames:     dnsNames,
+		NotBefore:    time.Now(),
+		NotAfter:     time.Now().Add(time.Hour * 24 * time.Duration(daysValid)),
+		KeyUsage:     x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
 		ExtKeyUsage: []x509.ExtKeyUsage{
 			x509.ExtKeyUsageServerAuth,
 			x509.ExtKeyUsageClientAuth,
 		},
 		BasicConstraintsValid: true,
 	}, nil
+}
+
+// getSubject builds a certificate subject from either a string, used as the
+// common name, or a dict of subject fields.
+func getSubject(subject interface{}) (pkix.Name, error) {
+	switch s := subject.(type) {
+	case string:
+		return pkix.Name{CommonName: s}, nil
+	case map[string]interface{}:
+		return getSubjectFromDict(s)
+	default:
+		return pkix.Name{}, fmt.Errorf(
+			"error parsing subject: %v is not a string or a dict",
+			subject,
+		)
+	}
+}
+
+func getSubjectFromDict(subject map[string]interface{}) (pkix.Name, error) {
+	name := pkix.Name{}
+	stringFields := map[string]*string{
+		"commonName":   &name.CommonName,
+		"serialNumber": &name.SerialNumber,
+	}
+	listFields := map[string]*[]string{
+		"country":            &name.Country,
+		"organization":       &name.Organization,
+		"organizationalUnit": &name.OrganizationalUnit,
+		"locality":           &name.Locality,
+		"province":           &name.Province,
+		"streetAddress":      &name.StreetAddress,
+		"postalCode":         &name.PostalCode,
+	}
+
+	// Sort keys so that errors are deterministic.
+	keys := make([]string, 0, len(subject))
+	for k := range subject {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		v := subject[k]
+		if field, ok := stringFields[k]; ok {
+			str, ok := v.(string)
+			if !ok {
+				return pkix.Name{}, fmt.Errorf(
+					"error parsing subject field %s: %v is not a string",
+					k, v,
+				)
+			}
+			*field = str
+			continue
+		}
+		if field, ok := listFields[k]; ok {
+			strs, err := getSubjectFieldStrs(k, v)
+			if err != nil {
+				return pkix.Name{}, err
+			}
+			*field = strs
+			continue
+		}
+		return pkix.Name{}, fmt.Errorf("error parsing subject: unknown field %s", k)
+	}
+	return name, nil
+}
+
+func getSubjectFieldStrs(key string, value interface{}) ([]string, error) {
+	switch v := value.(type) {
+	case string:
+		return []string{v}, nil
+	case []string:
+		return v, nil
+	case []interface{}:
+		strs := make([]string, len(v))
+		for i, item := range v {
+			str, ok := item.(string)
+			if !ok {
+				return nil, fmt.Errorf(
+					"error parsing subject field %s: %v is not a string",
+					key, item,
+				)
+			}
+			strs[i] = str
+		}
+		return strs, nil
+	default:
+		return nil, fmt.Errorf(
+			"error parsing subject field %s: %v is not a string or a list",
+			key, value,
+		)
+	}
 }
 
 func getNetIPs(ips []interface{}) ([]net.IP, error) {
