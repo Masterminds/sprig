@@ -29,6 +29,9 @@ func urlParse(v string) map[string]interface{} {
 	dict["host"] = parsedURL.Host
 	dict["hostname"] = parsedURL.Hostname()
 	dict["path"] = parsedURL.Path
+	if parsedURL.RawPath != "" {
+		dict["rawPath"] = parsedURL.RawPath
+	}
 	dict["query"] = parsedURL.RawQuery
 	dict["opaque"] = parsedURL.Opaque
 	dict["fragment"] = parsedURL.Fragment
@@ -47,6 +50,7 @@ func urlJoin(d map[string]interface{}) string {
 		Scheme:   dictGetOrEmpty(d, "scheme"),
 		Host:     dictGetOrEmpty(d, "host"),
 		Path:     dictGetOrEmpty(d, "path"),
+		RawPath:  dictGetOrEmpty(d, "rawPath"),
 		RawQuery: dictGetOrEmpty(d, "query"),
 		Opaque:   dictGetOrEmpty(d, "opaque"),
 		Fragment: dictGetOrEmpty(d, "fragment"),

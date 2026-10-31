@@ -85,3 +85,24 @@ func TestUrlJoin(t *testing.T) {
 	}
 
 }
+
+func TestUrlParseJoinEscapedPath(t *testing.T) {
+	for _, input := range []string{
+		"https://example.com/a%2Fb",
+		"https://example.com/a%2fb",
+		"https://example.com/%252F/a%2Fb?key=a%2Fb#fragment",
+		"/a%2Fb",
+	} {
+		t.Run(input, func(t *testing.T) {
+			parts := urlParse(input)
+			assert.Equal(t, input, urlJoin(parts))
+			assert.NoError(t, runtv(`{{ urlParse . | urlJoin }}`, input, input))
+		})
+	}
+}
+
+func TestUrlJoinUpdatedEscapedPath(t *testing.T) {
+	parts := urlParse("https://example.com/a%2Fb")
+	parts["path"] = "/new path"
+	assert.Equal(t, "https://example.com/new%20path", urlJoin(parts))
+}
