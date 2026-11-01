@@ -27,6 +27,37 @@ func TestSubstr(t *testing.T) {
 	}
 }
 
+func TestSubstr_runes(t *testing.T) {
+	tpl := `{{"😞-Hello World-😞" | substr 0 5 }}`
+	if err := runt(tpl, "😞-Hel"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{"中文字" | substr 1 2 }}`
+	if err := runt(tpl, "文"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{"中文字" | substr 0 2 }}`
+	if err := runt(tpl, "中文"); err != nil {
+		t.Error(err)
+	}
+}
+
+func TestSubstr_offsetsOutOfRange(t *testing.T) {
+	// these used to panic with a slice bounds out of range
+	tpl := `{{"abcdef" | substr -1 -1 }}`
+	if err := runt(tpl, "abcdef"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{"abcdef" | substr 5 2 }}`
+	if err := runt(tpl, "f"); err != nil {
+		t.Error(err)
+	}
+	tpl = `{{"abc" | substr 10 20 }}`
+	if err := runt(tpl, ""); err != nil {
+		t.Error(err)
+	}
+}
+
 func TestSubstr_shorterString(t *testing.T) {
 	tpl := `{{"foo" | substr 0 10 }}`
 	if err := runt(tpl, "foo"); err != nil {
