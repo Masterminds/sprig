@@ -225,12 +225,23 @@ func splitn(sep string, n int, orig string) map[string]string {
 // If start is >= 0 and end < 0 or end bigger than s length, this calls string[start:]
 //
 // Otherwise, this calls string[start, end].
+//
+// Offsets count runes, not bytes, so the result never splits a character, and they
+// are clamped instead of panicking: a start past the end gives an empty string and
+// an end before start gives string[start:].
 func substring(start, end int, s string) string {
+	runes := []rune(s)
 	if start < 0 {
-		return s[:end]
+		if end < 0 || end > len(runes) {
+			end = len(runes)
+		}
+		return string(runes[:end])
 	}
-	if end < 0 || end > len(s) {
-		return s[start:]
+	if start > len(runes) {
+		start = len(runes)
 	}
-	return s[start:end]
+	if end < 0 || end > len(runes) || end < start {
+		return string(runes[start:])
+	}
+	return string(runes[start:end])
 }
