@@ -175,6 +175,14 @@ func TestSortAlpha(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestSortAlphaDoesNotModifyInput(t *testing.T) {
+	assert.NoError(t, runt(`{{ $list := splitList " " "c a b" }}{{ sortAlpha $list }} {{ $list }}`, "[a b c] [c a b]"))
+	assert.NoError(t, runtv(`{{ sortAlpha . }} {{ . }}`, "[a b c] [c a b]", []string{"c", "a", "b"}))
+	assert.NoError(t, runtv(`{{ sortAlpha . | toJson }}`, "null", []string(nil)))
+	assert.NoError(t, runtv(`{{ sortAlpha . | toJson }}`, "[]", []string{}))
+}
+
 func TestBase64EncodeDecode(t *testing.T) {
 	magicWord := "coffee"
 	expect := base64.StdEncoding.EncodeToString([]byte(magicWord))

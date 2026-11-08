@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"slices"
 	"sort"
 )
 
@@ -235,7 +236,7 @@ func sortAlpha(list interface{}) []string {
 	k := reflect.Indirect(reflect.ValueOf(list)).Kind()
 	switch k {
 	case reflect.Slice, reflect.Array:
-		a := strslice(list)
+		a := slices.Clone(strslice(list))
 		s := sort.StringSlice(a)
 		s.Sort()
 		return s
