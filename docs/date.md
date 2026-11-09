@@ -84,15 +84,22 @@ now | unixEpoch
 
 ## dateModify, mustDateModify
 
-The `dateModify` takes a modification and a date and returns the timestamp.
+The `dateModify` function takes a duration string followed by a date and returns
+the date with that duration added.
+
+The duration uses Go's [time.ParseDuration](https://pkg.go.dev/time#ParseDuration)
+syntax, with units `ns`, `us` (or `µs`), `ms`, `s`, `m`, and `h`. Durations can
+include a sign, fractional values, and multiple units, such as `"-1.5h"` or
+`"2h30m"`. The `d` unit is unsupported. Use `"-24h"` to subtract 24 hours.
 
 Subtract an hour and thirty minutes from the current time:
 
 ```
-now | date_modify "-1.5h"
+now | dateModify "-1.5h"
 ```
 
-If the modification format is wrong `dateModify` will return the date unmodified. `mustDateModify` will return an error otherwise.
+If the duration string is invalid, `dateModify` returns the date unmodified,
+while `mustDateModify` returns an error.
 
 ## htmlDate
 
