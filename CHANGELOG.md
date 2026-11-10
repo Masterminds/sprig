@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added `flatten` to turn nested lists into a one-dimensional list.
+
 ## Release 3.3.0 (2024-08-29)
 
 ### Added

@@ -362,3 +362,33 @@ func TestConcat(t *testing.T) {
 		assert.NoError(t, runt(tpl, expect))
 	}
 }
+
+func TestFlatten(t *testing.T) {
+	tests := map[string]string{
+		`{{ flatten (list) }}`:                                               "[]",
+		`{{ flatten (list 1 2 3) }}`:                                         "[1 2 3]",
+		`{{ list (list "a" "b" "c") 1 2 3 | flatten }}`:                      "[a b c 1 2 3]",
+		`{{ flatten (list 1 (list 2 (list 3)) (list) 4) }}`:                  "[1 2 3 4]",
+		`{{ flatten (list nil false 0 "" (dict "a" (list 1 2))) | toJson }}`: `[null,false,0,"",{"a":[1,2]}]`,
+	}
+	for tpl, expect := range tests {
+		assert.NoError(t, runt(tpl, expect))
+	}
+}
+
+func TestFlattenTypedLists(t *testing.T) {
+	var empty []int
+	input := []interface{}{[2]int{1, 2}, []string{"a", "b"}, empty, []interface{}{3}}
+	assert.Equal(t, []interface{}{1, 2, "a", "b", 3}, flatten(input))
+	assert.Equal(t, []interface{}{}, flatten(empty))
+	assert.Equal(t, []interface{}{1, 2}, flatten([2]int{1, 2}))
+	assert.Panics(t, func() { flatten("not a list") })
+	assert.Panics(t, func() { flatten(nil) })
+	assert.Error(t, runt(`{{ flatten 1 }}`, ""))
+	assert.Error(t, runt(`{{ flatten nil }}`, ""))
+
+	source := []int{1, 2}
+	result := flatten([]interface{}{source, 3})
+	result[0] = 99
+	assert.Equal(t, []int{1, 2}, source)
+}
