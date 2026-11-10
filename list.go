@@ -462,3 +462,23 @@ func concat(lists ...interface{}) interface{} {
 	}
 	return res
 }
+
+func flatten(list interface{}) []interface{} {
+	value := reflect.ValueOf(list)
+	switch value.Kind() {
+	case reflect.Slice, reflect.Array:
+		result := make([]interface{}, 0, value.Len())
+		for i := 0; i < value.Len(); i++ {
+			item := value.Index(i).Interface()
+			switch reflect.ValueOf(item).Kind() {
+			case reflect.Slice, reflect.Array:
+				result = append(result, flatten(item)...)
+			default:
+				result = append(result, item)
+			}
+		}
+		return result
+	default:
+		panic(fmt.Sprintf("Cannot flatten type %s as list", value.Kind()))
+	}
+}

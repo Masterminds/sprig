@@ -81,6 +81,21 @@ concat $myList ( list 6 7 ) ( list 8 )
 
 The above would produce `[1 2 3 4 5 6 7 8]`. `$myList` would remain unaltered.
 
+## flatten
+
+Flatten nested lists into a new one-dimensional list, preserving element order.
+
+```
+list (list "a" "b" "c") 1 (list 2 (list 3)) | flatten
+```
+
+The above produces `[a b c 1 2 3]`. Empty nested lists contribute no elements.
+Scalar values (including `nil`, `false`, and `0`) and dictionaries are preserved;
+values inside dictionaries are not flattened. The input lists are not modified.
+
+`flatten` accepts Go slices and arrays, including typed slices and arrays.
+It panics if the input is not a list, causing template execution to fail.
+
 ## reverse, mustReverse
 
 Produce a new list with the reversed elements of the given list.
