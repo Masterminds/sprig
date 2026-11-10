@@ -2,7 +2,6 @@ package sprig
 
 import (
 	"fmt"
-	"math"
 	"reflect"
 	"sort"
 )
@@ -25,7 +24,7 @@ func push(list interface{}, v interface{}) []interface{} {
 }
 
 func mustPush(list interface{}, v interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -55,7 +54,7 @@ func prepend(list interface{}, v interface{}) []interface{} {
 func mustPrepend(list interface{}, v interface{}) ([]interface{}, error) {
 	//return append([]interface{}{v}, list...)
 
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -83,23 +82,26 @@ func chunk(size int, list interface{}) [][]interface{} {
 }
 
 func mustChunk(size int, list interface{}) ([][]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	if size <= 0 {
+		return nil, fmt.Errorf("chunk size must be greater than 0")
+	}
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
 
 		l := l2.Len()
 
-		cs := int(math.Floor(float64(l-1)/float64(size)) + 1)
+		cs := l / size
+		if l%size != 0 {
+			cs++
+		}
 		nl := make([][]interface{}, cs)
 
 		for i := 0; i < cs; i++ {
 			clen := size
-			if i == cs-1 {
-				clen = int(math.Floor(math.Mod(float64(l), float64(size))))
-				if clen == 0 {
-					clen = size
-				}
+			if remaining := l - i*size; remaining < clen {
+				clen = remaining
 			}
 
 			nl[i] = make([]interface{}, clen)
@@ -127,7 +129,7 @@ func last(list interface{}) interface{} {
 }
 
 func mustLast(list interface{}) (interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -153,7 +155,7 @@ func first(list interface{}) interface{} {
 }
 
 func mustFirst(list interface{}) (interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -179,7 +181,7 @@ func rest(list interface{}) []interface{} {
 }
 
 func mustRest(list interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -210,7 +212,7 @@ func initial(list interface{}) []interface{} {
 }
 
 func mustInitial(list interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -253,7 +255,7 @@ func reverse(v interface{}) []interface{} {
 }
 
 func mustReverse(v interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(v).Kind()
+	tp := reflect.ValueOf(v).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(v)
@@ -281,7 +283,7 @@ func compact(list interface{}) []interface{} {
 }
 
 func mustCompact(list interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -312,7 +314,7 @@ func uniq(list interface{}) []interface{} {
 }
 
 func mustUniq(list interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -352,7 +354,7 @@ func without(list interface{}, omit ...interface{}) []interface{} {
 }
 
 func mustWithout(list interface{}, omit ...interface{}) ([]interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
@@ -420,15 +422,12 @@ func slice(list interface{}, indices ...interface{}) interface{} {
 }
 
 func mustSlice(list interface{}, indices ...interface{}) (interface{}, error) {
-	tp := reflect.TypeOf(list).Kind()
+	tp := reflect.ValueOf(list).Kind()
 	switch tp {
 	case reflect.Slice, reflect.Array:
 		l2 := reflect.ValueOf(list)
 
 		l := l2.Len()
-		if l == 0 {
-			return nil, nil
-		}
 
 		var start, end int
 		if len(indices) > 0 {
@@ -438,6 +437,22 @@ func mustSlice(list interface{}, indices ...interface{}) (interface{}, error) {
 			end = l
 		} else {
 			end = toInt(indices[1])
+		}
+		limit := l
+		if tp == reflect.Slice {
+			limit = l2.Cap()
+		}
+		if start < 0 || end < start || end > limit {
+			return nil, fmt.Errorf("slice bounds out of range [%d:%d] with capacity %d", start, end, limit)
+		}
+		if l == 0 && start == 0 && end == 0 {
+			return nil, nil
+		}
+		if tp == reflect.Array {
+			// Arrays passed through an interface are not addressable.
+			array := reflect.New(l2.Type()).Elem()
+			array.Set(l2)
+			l2 = array
 		}
 
 		return l2.Slice(start, end).Interface(), nil
