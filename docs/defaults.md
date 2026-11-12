@@ -138,7 +138,10 @@ The above returns unescaped JSON string representation of `.Item`.
 
 The `ternary` function takes two values, and a test value. If the test value is
 true, the first value will be returned. If the test value is empty, the second
-value will be returned. This is similar to the c ternary operator.
+value will be returned.
+
+Both values are evaluated before `ternary` is called, including the value that
+is not selected. If evaluating either value causes an error, template execution stops.
 
 ### true test value
 
@@ -167,3 +170,16 @@ false | ternary "foo" "bar"
 ```
 
 The above returns `"bar"`.
+
+Use an `if`/`else` block when an expression must only be evaluated conditionally.
+For example, this checks the length of `.Items` before reading its third element:
+
+<!-- {% raw %} -->
+```
+{{- if gt (len .Items) 2 -}}
+  {{- index .Items 2 -}}
+{{- else -}}
+  no third item
+{{- end -}}
+```
+<!-- {% endraw %} -->
